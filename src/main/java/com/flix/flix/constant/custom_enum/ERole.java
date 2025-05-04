@@ -15,12 +15,20 @@ public enum ERole {
         this.description = description;
     }
 
+    public static String getValidRoles() {
+        String validRoles = "";
+        for (ERole role : values()) {
+            validRoles += role.description + ", ";
+        }
+        return validRoles.substring(0, validRoles.length() - 2);
+    }
+
     public static ERole findByDescription(String description){
         for (ERole role : values()){
             if (role.description.equalsIgnoreCase(description)){
                 return role;
             }
         }
-        throw new IllegalArgumentException("Invalid role description: " + description);
+        throw new IllegalArgumentException("Invalid role description: " + description + ". Valid roles: " + getValidRoles());
     }
 }

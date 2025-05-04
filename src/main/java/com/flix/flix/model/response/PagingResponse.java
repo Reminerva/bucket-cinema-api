@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PagingRespose {
+public class PagingResponse {
     private Integer totalPages;
     private Long totalElement;
     private Integer page;

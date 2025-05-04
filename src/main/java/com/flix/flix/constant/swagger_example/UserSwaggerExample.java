@@ -1,6 +1,6 @@
-package com.flix.flix.constant;
+package com.flix.flix.constant.swagger_example;
 
-public class ResponseExampleSwaggerBash {        
+public class UserSwaggerExample {        
     public final static String SIGN_UP_SUCCESS = """
                                                 {
                                                     "code": 201,

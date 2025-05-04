@@ -15,5 +15,5 @@ public class CommonResponse<T> {
     private int code;
     private String message;
     private T data;
-    private PagingRespose paging;
+    private PagingResponse paging;
 }

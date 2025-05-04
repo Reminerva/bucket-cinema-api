@@ -37,4 +37,5 @@ public class DbBash {
     public static final String PRODUCT_SCHEDULING_NOT_MATCH = "Product scheduling not match";
     public static final String PRODUCT_NOT_MATCH = "Product not match";
 
+    public static final String UNAUTHORIZED = "Unauthorized";
 }

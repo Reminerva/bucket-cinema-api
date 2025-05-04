@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flix.flix.constant.ApiBash;
 import com.flix.flix.service.impl.RedisTokenBlackListService;
 
@@ -22,6 +23,7 @@ public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTokenBlackListService redisTokenBlackListService;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,7 +32,7 @@ public class SecurityConfiguration {
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll() 
                 .requestMatchers(ApiBash.AUTH + "/**", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
                 .anyRequest().authenticated())
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTokenBlackListService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, redisTokenBlackListService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

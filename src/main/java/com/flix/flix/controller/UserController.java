@@ -1,16 +1,21 @@
 package com.flix.flix.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flix.flix.constant.ApiBash;
-import com.flix.flix.constant.ResponseExampleSwaggerBash;
-import com.flix.flix.model.request.UserRequest;
+import com.flix.flix.constant.swagger_example.UserSwaggerExample;
+import com.flix.flix.model.request.LoginRequest;
+import com.flix.flix.model.request.NewAdminRequest;
+import com.flix.flix.model.request.NewUserRequest;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
@@ -46,7 +51,7 @@ public class UserController {
                 description = "Product created successfully",
                 content = @Content(
                     mediaType = "application/json",
-                    examples = @ExampleObject(value = ResponseExampleSwaggerBash.SIGN_UP_SUCCESS)
+                    examples = @ExampleObject(value = UserSwaggerExample.SIGN_UP_SUCCESS)
                 )
             ),
             @ApiResponse(
@@ -54,28 +59,39 @@ public class UserController {
                 description = "Invalid request",
                 content = @Content(
                     mediaType = "application/json",
-                    examples = @ExampleObject(value = ResponseExampleSwaggerBash.SIGN_UP_FAILED)
+                    examples = @ExampleObject(value = UserSwaggerExample.SIGN_UP_FAILED)
                 )
             )
         }
     )
-    @PostMapping(ApiBash.USER_SIGN_UP)
-    public ResponseEntity<CommonResponse<SignupResponse>> createUser(
+    @PostMapping(ApiBash.ADMIN_SIGN_UP)
+    public ResponseEntity<CommonResponse<SignupResponse>> signupAdmin(
             @Valid 
             @RequestBody
             @Schema(example = "{ \"email\": \"admin@example.com\", \"password\": \"SecureAdmin123\" }")
-            UserRequest userRequest,
+            NewAdminRequest request,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+            String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
+                
             CommonResponse<SignupResponse> response = CommonResponse.<SignupResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(ApiBash.SIGN_UP_FAILED)
+                .message(message)
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
+            NewUserRequest userRequest = NewUserRequest.builder()
+                    .email(request.getEmail())
+                    .password(request.getPassword())
+                    .role(List.of("ADMIN"))
+                    .build();
+
             SignupResponse newUser = userService.signup(userRequest);
             CommonResponse<SignupResponse> response = CommonResponse.<SignupResponse>builder()
                 .code(HttpStatus.CREATED.value())
@@ -103,7 +119,7 @@ public class UserController {
                 description = "Product created successfully",
                 content = @Content(
                     mediaType = "application/json",
-                    examples = @ExampleObject(value = ResponseExampleSwaggerBash.SIGN_IN_SUCCESS)
+                    examples = @ExampleObject(value = UserSwaggerExample.SIGN_IN_SUCCESS)
                 )
             ),
             @ApiResponse(
@@ -111,28 +127,33 @@ public class UserController {
                 description = "Invalid request",
                 content = @Content(
                     mediaType = "application/json",
-                    examples = @ExampleObject(value = ResponseExampleSwaggerBash.SIGN_IN_FAILED)
+                    examples = @ExampleObject(value = UserSwaggerExample.SIGN_IN_FAILED)
                 )
             )
         }
     )
     @PostMapping(ApiBash.SIGN_IN)
-    public ResponseEntity<CommonResponse<SigninResponse>> signinAdminAccount(
+    public ResponseEntity<CommonResponse<SigninResponse>> signin(
         @Schema(example = "{ \"email\": \"admin@example.com\", \"password\": \"SecureAdmin123\" }")
         @RequestBody
-        UserRequest userRequest,
+        LoginRequest loginRequest,
         BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            CommonResponse<SigninResponse> response = CommonResponse.<SigninResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(ApiBash.SIGN_IN_FAILED)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
         try {
-            SigninResponse userAccount = userService.signin(userRequest);
+            if (bindingResult.hasErrors()) {
+                FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                        ? fieldError.getDefaultMessage()
+                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
+                    
+                CommonResponse<SigninResponse> response = CommonResponse.<SigninResponse>builder()
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message(message)
+                    .data(null)
+                    .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+            SigninResponse userAccount = userService.signin(loginRequest);
             CommonResponse<SigninResponse> response = CommonResponse.<SigninResponse>builder()
                 .code(HttpStatus.ACCEPTED.value())
                 .message(ApiBash.SIGN_IN_SUCCESS)
@@ -150,7 +171,7 @@ public class UserController {
     }
 
     @PostMapping(ApiBash.SIGN_OUT)
-    public ResponseEntity<CommonResponse<SignoutResponse>> signoutAdminAccount(HttpServletRequest signoutRequest) {
+    public ResponseEntity<CommonResponse<SignoutResponse>> signout(HttpServletRequest signoutRequest) {
         try {
             SignoutResponse signoutResponse = userService.signout(signoutRequest);
             CommonResponse<SignoutResponse> response = CommonResponse.<SignoutResponse>builder()

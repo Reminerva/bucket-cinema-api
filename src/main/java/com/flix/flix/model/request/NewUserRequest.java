@@ -15,25 +15,9 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class NewCustomerRequest {
-
-    @NotBlank(message = "fullname is required")
-    private String fullname;
-    @NotBlank(message = "country is required")
-    private String country;
-    @NotBlank(message = "phone number is required")
-    private String phoneNumber;
-    @NotBlank(message = "city is required")
-    private String city;
-    @NotBlank(message = "gender is required")
-    private String gender;
-    private String registrationDate;
-    private String lastLogin;
-    private List<String> favGenre;
-    private List<String> likeProductId;
-    private List<String> dislikeProductId;
+@AllArgsConstructor
+public class NewUserRequest {
     @NotBlank(message = "username is required")
     @Size(min = 5, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
@@ -45,5 +29,4 @@ public class NewCustomerRequest {
     private String password;
     @NotEmpty(message = "role is required")
     private List<String> role;
-
 }

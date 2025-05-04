@@ -3,6 +3,7 @@ package com.flix.flix.constant;
 public class ApiBash {
     public static final String AUTH = "/api/v1/auth";
     public static final String USER_SIGN_UP = "/user/signup";
+    public static final String ADMIN_SIGN_UP = "/admin/signup";
     public static final String SIGN_IN = "/user/signin";
     public static final String SIGN_OUT = "/user/signout";
     public static final String PRODUCT = "/api/v1/product";
@@ -74,4 +75,8 @@ public class ApiBash {
     public static final String GET_TRANSACTION_SUCCESS = "Get transaction success";
     public static final String UPDATE_TRANSACTION_SUCCESS = "Update transaction success";
     public static final String DELETE_TRANSACTION_SUCCESS = "Delete transaction success";
+
+    public static final String HAS_ROLE_ADMIN = "hasRole('ADMIN')";
+    public static final String HAS_ROLE_CUSTOMER = "hasRole('CUSTOMER')";
+    public static final String HAS_ROLE_CASHIER = "hasRole('CASHIER')";
 }

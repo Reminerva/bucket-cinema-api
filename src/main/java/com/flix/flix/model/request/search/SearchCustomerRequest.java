@@ -1,4 +1,4 @@
-package com.flix.flix.model.response;
+package com.flix.flix.model.request.search;
 
 import java.util.List;
 
@@ -13,10 +13,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerResponse {
+public class SearchCustomerRequest {
 
-    private String id;
-    private String userId;
     private String fullname;
     private String country;
     private String phoneNumber;
@@ -24,8 +22,14 @@ public class CustomerResponse {
     private String gender;
     private String registrationDate;
     private String lastLogin;
-    private List<String> favGenre;
-    private List<String> likeProductId;
-    private List<String> dislikeProductId;
-    
+    private List<String> favGenres;
+    private String email;
+    private List<String> likeProductTitle;
+    private List<String> dislikeProductTitle;
+    private List<String> theaterName;
+
+    private Integer page;
+    private Integer size;
+    private String sortBy;
+    private String direction;
 }

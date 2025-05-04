@@ -1,5 +1,12 @@
 package com.flix.flix.entity;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ERole;
 
@@ -25,11 +32,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AppUser {
+public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
+    private String username;
 
     @Column(unique = true)
     private String email;
@@ -39,9 +49,15 @@ public class AppUser {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private ERole role;
+    private List<ERole> role;
 
     @OneToOne
     private Customer customer;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<ERole> myRole = role;
+        return myRole.stream().map(userRole -> new SimpleGrantedAuthority(userRole.name())).toList();
+    }
 
 }

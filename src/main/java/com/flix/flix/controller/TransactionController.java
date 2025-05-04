@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,7 +60,7 @@ public class TransactionController {
         }
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CommonResponse<TransactionResponse>> getById(@PathVariable String id) {
         try {
             CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
@@ -78,7 +79,7 @@ public class TransactionController {
         }
     }
 
-    @RequestMapping
+    @GetMapping
     public ResponseEntity<CommonResponse<List<TransactionResponse>>> getAllTransaction() {
         try {
             CommonResponse<List<TransactionResponse>> response = CommonResponse.<List<TransactionResponse>>builder()

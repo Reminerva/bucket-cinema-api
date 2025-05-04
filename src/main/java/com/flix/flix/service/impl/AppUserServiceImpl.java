@@ -1,5 +1,7 @@
 package com.flix.flix.service.impl;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +12,8 @@ import org.springframework.stereotype.Service;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.entity.AppUser;
-import com.flix.flix.model.request.UserRequest;
+import com.flix.flix.model.request.LoginRequest;
+import com.flix.flix.model.request.NewUserRequest;
 import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
 import com.flix.flix.model.response.SignupResponse;
@@ -39,12 +42,14 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public SignupResponse signup(UserRequest userRequest) {
+    public SignupResponse signup(NewUserRequest userRequest) {
         try {
+            List<ERole> roles = userRequest.getRole().stream().map(role -> ERole.findByDescription(role)).toList();
             AppUser user = AppUser.builder()
                 .email(userRequest.getEmail())
+                .username(userRequest.getUsername())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
-                .role(ERole.ROLE_ADMIN)
+                .role(roles)
                 .build();
 
             userRepository.saveAndFlush(user);
@@ -52,12 +57,11 @@ public class AppUserServiceImpl implements AppUserService {
             SignupResponse response = SignupResponse.builder()
                     .accountId(user.getId())
                     .email(user.getEmail())
-                    .role(user.getRole().name())
+                    .role(user.getRole().toString())
                     .build();
 
             return response;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -67,7 +71,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public SigninResponse signin(UserRequest userRequest) {
+    public SigninResponse signin(LoginRequest userRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userRequest.getEmail(), userRequest.getPassword())
@@ -81,6 +85,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .accountId(getByEmail(user.getUsername()).getId())
                 .email(user.getUsername())
                 .token(token)
+                .role(user.getAuthorities().toString())
                 .build();
     
             return response;

@@ -15,4 +15,5 @@ public class SigninResponse {
     private String accountId;
     private String email;
     private String token;
+    private String role;
 }

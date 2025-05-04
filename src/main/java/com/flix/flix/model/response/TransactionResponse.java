@@ -1,17 +1,6 @@
 package com.flix.flix.model.response;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import com.flix.flix.constant.custom_enum.EPaymentMethod;
-import com.flix.flix.constant.custom_enum.ESeat;
-import com.flix.flix.entity.Customer;
-import com.flix.flix.entity.Product;
-import com.flix.flix.entity.ProductPricing;
-import com.flix.flix.entity.ProductPricingScheduling;
-import com.flix.flix.entity.Studio;
-import com.flix.flix.entity.Theater;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,19 +1,23 @@
 package com.flix.flix.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
-import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Customer;
 import com.flix.flix.model.request.NewCustomerRequest;
+import com.flix.flix.model.request.UpdateCustomerRequest;
+import com.flix.flix.model.request.search.SearchCustomerRequest;
 import com.flix.flix.model.response.CustomerResponse;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface CustomerService {
 
-    CustomerResponse create(AppUser appUser, NewCustomerRequest newCustomerRequest);
-    List<CustomerResponse> getAll();
+    CustomerResponse create(NewCustomerRequest newCustomerRequest);
+    Page<CustomerResponse> getAll(SearchCustomerRequest searchCustomerRequest);
     Customer getCustomerById(String id);
     CustomerResponse getById(String id);
-    CustomerResponse update(String id, NewCustomerRequest newCustomerRequest);
+    CustomerResponse update(String id, UpdateCustomerRequest UpdateCustomerRequest);
+    CustomerResponse updateByCredentials(HttpServletRequest httpServletRequest, UpdateCustomerRequest UpdateCustomerRequest);
     void delete(String id);
 
 }
