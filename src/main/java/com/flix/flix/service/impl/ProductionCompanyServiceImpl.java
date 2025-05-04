@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ECountry;
+import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.entity.ProductionCompany;
 import com.flix.flix.model.request.NewProductionCompanyRequest;
 import com.flix.flix.model.response.ProductionCompanyResponse;

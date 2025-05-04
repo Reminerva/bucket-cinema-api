@@ -1,4 +1,4 @@
-package com.flix.flix.constant.customEnum;
+package com.flix.flix.constant.custom_enum;
 
 import java.util.ArrayList;
 import java.util.List;

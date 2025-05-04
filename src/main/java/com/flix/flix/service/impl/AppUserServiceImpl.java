@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ERole;
+import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.entity.AppUser;
 import com.flix.flix.model.request.UserRequest;
 import com.flix.flix.model.response.SigninResponse;

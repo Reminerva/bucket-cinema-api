@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ECountry;
+import com.flix.flix.constant.custom_enum.ECountry;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

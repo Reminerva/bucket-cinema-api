@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EPaymentMethod;
-import com.flix.flix.constant.customEnum.ESeat;
+import com.flix.flix.constant.custom_enum.EPaymentMethod;
+import com.flix.flix.constant.custom_enum.ESeat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

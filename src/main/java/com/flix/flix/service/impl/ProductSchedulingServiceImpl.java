@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ESchedule;
+import com.flix.flix.constant.custom_enum.ESchedule;
 import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.model.request.NewProductSchedulingRequest;
 import com.flix.flix.model.response.ProductSchedulingResponse;

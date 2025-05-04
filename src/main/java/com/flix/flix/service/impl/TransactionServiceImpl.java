@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EPaymentMethod;
-import com.flix.flix.constant.customEnum.ESeat;
+import com.flix.flix.constant.custom_enum.EPaymentMethod;
+import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.entity.Customer;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
@@ -54,22 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
             ProductPricing productPricing = productPricingService.getProductPricingById(transactionRequest.getProductPricingId());
             ProductScheduling productScheduling = productSchedulingService.getProductSchedulingById(transactionRequest.getProductSchedulingId());
 
-            if (studio.getTheater().getId() != theater.getId()) throw new RuntimeException(DbBash.THEATER_AND_STUDIO_NOT_MATCH);
-            for (String seat : transactionRequest.getSeats()) {
-                if (!studio.getAvailableSeat().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
-            }
-            if (studio.getProductPricingScheduling().stream()
-                    .noneMatch(productPricingScheduling ->
-                            productPricingScheduling.getProductPricing().getId().equals(productPricing.getId()))) {
-                throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_MATCH);
-            }
-            if (studio.getProductPricingScheduling().stream()
-                    .noneMatch(productPricingScheduling ->
-                            productPricingScheduling.getProductScheduling().stream()
-                                    .anyMatch(productScheduling1 ->
-                                            productScheduling1.getId().equals(productScheduling.getId())))) {
-                throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_MATCH);
-            }
+            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling);
 
             Transaction transaction = Transaction.builder()
                     .customer(customer)
@@ -123,7 +108,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(rollbackOn = Exception.class)
     public TransactionResponse update(TransactionRequest transactionRequest, String id) {
         try {
+            Studio studio = studioService.getStudioById(transactionRequest.getStudioId());
+            Theater theater = theaterService.getTheaterById(transactionRequest.getTheaterId());
+            Product product = productService.getProductById(transactionRequest.getProductId());
+            ProductPricing productPricing = productPricingService.getProductPricingById(transactionRequest.getProductPricingId());
+            ProductScheduling productScheduling = productSchedulingService.getProductSchedulingById(transactionRequest.getProductSchedulingId());
+
+            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling);
+
             Transaction transaction = getTransactionById(id);
+
             transaction.setQty(transactionRequest.getQty());
             transaction.setTax(transactionRequest.getTax());
             transaction.setPaymentStatus(transactionRequest.getPaymentStatus());
@@ -157,4 +151,30 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
         return transactionResponse;
     }
+
+    private void validateRequest(TransactionRequest transactionRequest, Theater theater, Studio studio, Product product,
+            ProductPricing productPricing, ProductScheduling productScheduling) {
+        if (studio.getTheater().getId() != theater.getId()) throw new RuntimeException(DbBash.THEATER_AND_STUDIO_NOT_MATCH);
+        for (String seat : transactionRequest.getSeats()) {
+            if (!studio.getAvailableSeat().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
+        }
+        if (studio.getProductPricingScheduling().stream()
+                .noneMatch(productPricingScheduling ->
+                        productPricingScheduling.getProductId().getId().equals(product.getId()))) {
+            throw new RuntimeException(DbBash.PRODUCT_NOT_MATCH);
+        }
+        if (studio.getProductPricingScheduling().stream()
+                .noneMatch(productPricingScheduling ->
+                        productPricingScheduling.getProductPricing().getId().equals(productPricing.getId()))) {
+            throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_MATCH);
+        }
+        if (studio.getProductPricingScheduling().stream()
+                .noneMatch(productPricingScheduling ->
+                        productPricingScheduling.getProductScheduling().stream()
+                                .anyMatch(productScheduling1 ->
+                                        productScheduling1.getId().equals(productScheduling.getId())))) {
+            throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_MATCH);
+        }
+    }
+
 }

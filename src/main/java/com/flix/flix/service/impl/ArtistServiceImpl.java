@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EArtistType;
+import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.entity.Artist;
 import com.flix.flix.model.request.NewArtistRequest;
 import com.flix.flix.model.response.ArtistResponse;

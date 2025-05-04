@@ -2,8 +2,8 @@ package com.flix.flix.model.response;
 
 import java.util.List;
 
-import com.flix.flix.constant.customEnum.ESeat;
-import com.flix.flix.constant.customEnum.EStudioSize;
+import com.flix.flix.constant.custom_enum.ESeat;
+import com.flix.flix.constant.custom_enum.EStudioSize;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -3,11 +3,9 @@ package com.flix.flix.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ESeat;
-import com.flix.flix.constant.customEnum.EStudioSize;
+import com.flix.flix.constant.custom_enum.ESeat;
+import com.flix.flix.constant.custom_enum.EStudioSize;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

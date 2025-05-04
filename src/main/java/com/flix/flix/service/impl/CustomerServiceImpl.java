@@ -8,8 +8,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EGenre;
-import com.flix.flix.constant.customEnum.EGender;
+import com.flix.flix.constant.custom_enum.EGender;
+import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Customer;
 import com.flix.flix.entity.FavGenre;

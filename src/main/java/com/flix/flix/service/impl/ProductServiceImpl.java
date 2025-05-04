@@ -8,10 +8,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ECountry;
-import com.flix.flix.constant.customEnum.EGenre;
-import com.flix.flix.constant.customEnum.ELanguage;
-import com.flix.flix.constant.customEnum.ERated;
+import com.flix.flix.constant.custom_enum.ECountry;
+import com.flix.flix.constant.custom_enum.EGenre;
+import com.flix.flix.constant.custom_enum.ELanguage;
+import com.flix.flix.constant.custom_enum.ERated;
 import com.flix.flix.entity.Artist;
 import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;

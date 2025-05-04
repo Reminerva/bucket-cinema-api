@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EGender;
+import com.flix.flix.constant.custom_enum.EGender;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;

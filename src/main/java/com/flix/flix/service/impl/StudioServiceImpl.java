@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ESeat;
-import com.flix.flix.constant.customEnum.EStudioSize;
+import com.flix.flix.constant.custom_enum.ESeat;
+import com.flix.flix.constant.custom_enum.EStudioSize;
 import com.flix.flix.entity.ProductPricingScheduling;
 import com.flix.flix.entity.Studio;
 import com.flix.flix.model.request.NewProductPricingSchedulingRequest;

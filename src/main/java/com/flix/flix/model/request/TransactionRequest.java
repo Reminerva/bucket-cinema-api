@@ -1,17 +1,6 @@
 package com.flix.flix.model.request;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import com.flix.flix.constant.customEnum.EPaymentMethod;
-import com.flix.flix.constant.customEnum.ESeat;
-import com.flix.flix.entity.Customer;
-import com.flix.flix.entity.Product;
-import com.flix.flix.entity.ProductPricing;
-import com.flix.flix.entity.ProductPricingScheduling;
-import com.flix.flix.entity.Studio;
-import com.flix.flix.entity.Theater;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

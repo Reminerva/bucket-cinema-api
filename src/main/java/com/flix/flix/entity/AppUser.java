@@ -1,7 +1,7 @@
 package com.flix.flix.entity;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ERole;
+import com.flix.flix.constant.custom_enum.ERole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

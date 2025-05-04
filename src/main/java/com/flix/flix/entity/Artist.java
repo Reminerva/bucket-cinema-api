@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.EArtistType;
+import com.flix.flix.constant.custom_enum.EArtistType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

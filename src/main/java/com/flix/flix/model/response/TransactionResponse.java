@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.flix.flix.constant.customEnum.EPaymentMethod;
-import com.flix.flix.constant.customEnum.ESeat;
+import com.flix.flix.constant.custom_enum.EPaymentMethod;
+import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.entity.Customer;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;

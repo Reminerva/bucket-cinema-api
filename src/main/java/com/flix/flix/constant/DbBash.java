@@ -35,5 +35,6 @@ public class DbBash {
     public static final String STUDIO_SEAT_NOT_MATCH = "Studio seat not match";
     public static final String PRODUCT_PRICING_NOT_MATCH = "Product pricing not match";
     public static final String PRODUCT_SCHEDULING_NOT_MATCH = "Product scheduling not match";
+    public static final String PRODUCT_NOT_MATCH = "Product not match";
 
 }

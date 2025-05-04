@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flix.flix.constant.DbBash;
-import com.flix.flix.constant.customEnum.ECountry;
-import com.flix.flix.constant.customEnum.ELanguage;
-import com.flix.flix.constant.customEnum.ERated;
+import com.flix.flix.constant.custom_enum.ECountry;
+import com.flix.flix.constant.custom_enum.ELanguage;
+import com.flix.flix.constant.custom_enum.ERated;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
