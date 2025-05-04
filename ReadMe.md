@@ -1,4 +1,4 @@
-# Flix API Documentation
+# Bucket Cinema API Documentation
 
 ## Table of Contents
 * [Introduction](#introduction)
@@ -25,7 +25,7 @@
 * [Date and Time Format](#date-and-time-format)
 
 ## Introduction
-The Flix API provides a set of RESTful endpoints for managing data related to a movie/entertainment platform.  It includes functionality for managing users, products, customers, transactions, and other related entities.
+The Bucket Cinema API provides a set of RESTful endpoints for managing data related to a movie/entertainment platform.  It includes functionality for managing users, products, customers, transactions, and other related entities.
 
 ## Getting Started
 
