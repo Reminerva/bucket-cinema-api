@@ -2,9 +2,11 @@ package com.flix.flix.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flix.flix.constant.ApiBash;
 import com.flix.flix.model.request.NewProductionCompanyRequest;
+import com.flix.flix.model.request.search.SearchProductionCompanyRequest;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.ProductionCompanyResponse;
 import com.flix.flix.service.ProductionCompanyService;
+import com.flix.flix.util.PagingUtils;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +43,14 @@ public class ProductionCompanyController {
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
+
             CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
+                .message(message)
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -63,12 +73,47 @@ public class ProductionCompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<ProductionCompanyResponse>>> getAll() {
+    public ResponseEntity<CommonResponse<List<ProductionCompanyResponse>>> getAll(
+        @RequestParam(required = false, defaultValue = "0") int page,
+        @RequestParam(required = false, defaultValue = "10") int size,
+        @RequestParam(required = false, defaultValue = "name") String sortBy,
+        @RequestParam(required = false, defaultValue = "asc") String direction,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String originCountry,
+        @RequestParam(required = false) String foundedYearMin,
+        @RequestParam(required = false) String foundedYearMax,
+        @RequestParam(required = false) String headquarters,
+        @RequestParam(required = false) String ceo,
+        @RequestParam(required = false) String createdAtMin,
+        @RequestParam(required = false) String createdAtMax,
+        @RequestParam(required = false) String updatedAtMin,
+        @RequestParam(required = false) String updatedAtMax
+
+    ) {
         try {
+            SearchProductionCompanyRequest searchProductionCompanyRequest = SearchProductionCompanyRequest.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .direction(direction)
+                .name(name)
+                .originCountry(originCountry)
+                .foundedYearMin(foundedYearMin)
+                .foundedYearMax(foundedYearMax)
+                .headquarters(headquarters)
+                .ceo(ceo)
+                .createdAtMin(createdAtMin)
+                .createdAtMax(createdAtMax)
+                .updatedAtMin(updatedAtMin)
+                .updatedAtMax(updatedAtMax)
+                .build();
+
+            Page<ProductionCompanyResponse> productionCompanyResponses = productionCompanyService.getAll(searchProductionCompanyRequest);
             CommonResponse<List<ProductionCompanyResponse>> response = CommonResponse.<List<ProductionCompanyResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.GET_ALL_PRODUCTION_COMPANY_SUCCESS)                
-                .data(productionCompanyService.getAll())
+                .data(productionCompanyResponses.getContent())
+                .paging(PagingUtils.pageToPagingResponse(productionCompanyResponses))
                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
@@ -109,9 +154,14 @@ public class ProductionCompanyController {
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
+
             CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
+                .message(message)
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

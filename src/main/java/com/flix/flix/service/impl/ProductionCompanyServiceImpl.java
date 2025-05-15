@@ -1,18 +1,24 @@
 package com.flix.flix.service.impl;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.entity.ProductionCompany;
 import com.flix.flix.model.request.NewProductionCompanyRequest;
+import com.flix.flix.model.request.search.SearchProductionCompanyRequest;
 import com.flix.flix.model.response.ProductionCompanyResponse;
 import com.flix.flix.repository.ProductionCompanyRepository;
 import com.flix.flix.service.ProductionCompanyService;
+import com.flix.flix.specification.ProductionCompanySpecification;
 import com.flix.flix.util.DateUtil;
 
 import jakarta.transaction.Transactional;
@@ -50,9 +56,19 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
     }
 
     @Override
-    public List<ProductionCompanyResponse> getAll() {
-        List<ProductionCompany> productionCompanies = productionCompanyRepository.findAll();
-        return productionCompanies.stream().map(productionCompany -> toProductionCompanyResponse(productionCompany)).toList();
+    public Page<ProductionCompanyResponse> getAll(SearchProductionCompanyRequest searchProductionCompanyRequest) {
+        try {
+            if (searchProductionCompanyRequest.getPage() <= 0 || searchProductionCompanyRequest.getSize() <= 0) {
+                searchProductionCompanyRequest.setPage(1);
+                searchProductionCompanyRequest.setSize(10);
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchProductionCompanyRequest.getDirection()), searchProductionCompanyRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchProductionCompanyRequest.getPage() - 1, searchProductionCompanyRequest.getSize(), sort);
+            Specification<ProductionCompany> specification = ProductionCompanySpecification.getSpecification(searchProductionCompanyRequest);
+            return productionCompanyRepository.findAll(specification, pageable).map(this::toProductionCompanyResponse);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

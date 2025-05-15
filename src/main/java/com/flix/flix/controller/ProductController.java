@@ -176,17 +176,17 @@ public class ProductController {
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-          FieldError fieldError = bindingResult.getFieldError();
-              String message = fieldError != null
-                  ? fieldError.getDefaultMessage()
-                  : bindingResult.getAllErrors().get(0).getDefaultMessage();
+            FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
 
-          CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-              .code(HttpStatus.BAD_REQUEST.value())
-              .message(message)
-              .data(null)
-              .build();
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(message)
+                .data(null)
+                .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         try {
             CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()

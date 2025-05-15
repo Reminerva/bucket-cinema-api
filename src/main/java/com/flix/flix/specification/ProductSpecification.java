@@ -16,8 +16,8 @@ import com.flix.flix.util.DateUtil;
 import jakarta.persistence.criteria.Predicate;
 public class ProductSpecification {
 
-  public static Specification<Product> getSpecification(SearchProductRequest request) {
-      return (root, query, cb) -> {
+    public static Specification<Product> getSpecification(SearchProductRequest request) {
+        return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (request.getTitle() != null) {
@@ -76,20 +76,20 @@ public class ProductSpecification {
                 predicates.add(root.get("movieGenre").in(genres));
             }
             if (request.getProductPricingMin() != null) {
-              predicates.add(cb.or(
-                cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMin()),
-                    cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
-                cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMin()),
-                    cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
-              ));
+                predicates.add(cb.or(
+                    cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMin()),
+                        cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
+                    cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMin()),
+                        cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
+                ));
             }
             if (request.getProductPricingMax() != null) {
-              predicates.add(cb.or(
-                  cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMax()),
-                      cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
-                  cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMax()),
-                      cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
-              ));
+                predicates.add(cb.or(
+                    cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMax()),
+                        cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
+                    cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMax()),
+                        cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
+                ));
             }        
             if (request.getLastUpdatedMin() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMin())));
@@ -98,11 +98,11 @@ public class ProductSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMax())));
             }
             if (request.getArtistsName() != null && !request.getArtistsName().isEmpty()) {
-              List<Predicate> artistPredicates = new ArrayList<>();
-              for (String name : request.getArtistsName()) {
-                  artistPredicates.add(cb.like(cb.lower(root.get("artists").get("name")), "%" + name.toLowerCase() + "%"));
-              }
-              predicates.add(cb.or(artistPredicates.toArray(new Predicate[0])));
+                List<Predicate> artistPredicates = new ArrayList<>();
+                for (String name : request.getArtistsName()) {
+                    artistPredicates.add(cb.like(cb.lower(root.get("artists").get("name")), "%" + name.toLowerCase() + "%"));
+                }
+                predicates.add(cb.or(artistPredicates.toArray(new Predicate[0])));
             }
             if (request.getProductionCompany() != null) {
                 predicates.add(cb.like(cb.lower(root.get("productionCompany").get("name")), "%" + request.getProductionCompany().toLowerCase() + "%"));
