@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
@@ -13,10 +18,12 @@ import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ELanguage;
 import com.flix.flix.constant.custom_enum.ERated;
 import com.flix.flix.entity.Artist;
+import com.flix.flix.entity.Customer;
 import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductionCompany;
 import com.flix.flix.model.request.NewProductRequest;
+import com.flix.flix.model.request.search.SearchProductRequest;
 import com.flix.flix.model.response.ProductResponse;
 import com.flix.flix.repository.ArtistRepository;
 import com.flix.flix.repository.ProductRepository;
@@ -25,6 +32,8 @@ import com.flix.flix.service.ArtistService;
 import com.flix.flix.service.MovieGenreService;
 import com.flix.flix.service.ProductService;
 import com.flix.flix.service.ProductionCompanyService;
+import com.flix.flix.specification.CustomerSpecification;
+import com.flix.flix.specification.ProductSpecification;
 import com.flix.flix.util.DateUtil;
 
 import jakarta.transaction.Transactional;
@@ -93,9 +102,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAll() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(product -> toProductResponse(product)).toList();
+    public Page<ProductResponse> getAll(SearchProductRequest searchProductRequest) {
+        try {
+            if (searchProductRequest.getPage() <= 0 || searchProductRequest.getSize() <= 0) {
+                searchProductRequest.setPage(1);
+                searchProductRequest.setSize(10);
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchProductRequest.getDirection()), searchProductRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchProductRequest.getPage() - 1, searchProductRequest.getSize(), sort);
+            Specification<Product> specification = ProductSpecification.getSpecification(searchProductRequest);
+            return productRepository.findAll(specification, pageable).map(this::toProductResponse);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
