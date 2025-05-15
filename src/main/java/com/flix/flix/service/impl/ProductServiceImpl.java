@@ -18,7 +18,6 @@ import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ELanguage;
 import com.flix.flix.constant.custom_enum.ERated;
 import com.flix.flix.entity.Artist;
-import com.flix.flix.entity.Customer;
 import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductionCompany;
@@ -32,7 +31,6 @@ import com.flix.flix.service.ArtistService;
 import com.flix.flix.service.MovieGenreService;
 import com.flix.flix.service.ProductService;
 import com.flix.flix.service.ProductionCompanyService;
-import com.flix.flix.specification.CustomerSpecification;
 import com.flix.flix.specification.ProductSpecification;
 import com.flix.flix.util.DateUtil;
 
