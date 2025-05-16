@@ -2,6 +2,11 @@ package com.flix.flix.service.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +19,8 @@ import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.entity.AppUser;
 import com.flix.flix.model.request.LoginRequest;
 import com.flix.flix.model.request.NewUserRequest;
+import com.flix.flix.model.request.search.SearchAppUserRequest;
+import com.flix.flix.model.response.AppUserResponse;
 import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
 import com.flix.flix.model.response.SignupResponse;
@@ -21,15 +28,17 @@ import com.flix.flix.repository.AppUserRepository;
 import com.flix.flix.security.JwtAuthenticationFilter;
 import com.flix.flix.security.JwtTokenProvider;
 import com.flix.flix.service.AppUserService;
+import com.flix.flix.specification.AppUserSpecification;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 
-    private final AppUserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtTokenProvider jwtTokenProvider;
@@ -38,10 +47,11 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUser getAppUserById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException(DbBash.USER_NOT_FOUND));
+        return appUserRepository.findById(id).orElseThrow(() -> new RuntimeException(DbBash.USER_NOT_FOUND));
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public SignupResponse signup(NewUserRequest userRequest) {
         try {
             List<ERole> roles = userRequest.getRole().stream().map(role -> ERole.findByDescription(role)).toList();
@@ -52,7 +62,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .role(roles)
                 .build();
 
-            userRepository.saveAndFlush(user);
+            appUserRepository.saveAndFlush(user);
 
             SignupResponse response = SignupResponse.builder()
                     .accountId(user.getId())
@@ -67,7 +77,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     public AppUser getByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return appUserRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -112,5 +122,35 @@ public class AppUserServiceImpl implements AppUserService {
             .build();
 
         return response;
+    }
+
+    @Override
+    public Page<AppUserResponse> getAll(SearchAppUserRequest searchAppUserRequest) {
+        try {
+            if (searchAppUserRequest.getPage() <= 0 || searchAppUserRequest.getSize() <= 0) {
+                searchAppUserRequest.setPage(1);
+                searchAppUserRequest.setSize(10);
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchAppUserRequest.getDirection()), searchAppUserRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchAppUserRequest.getPage() - 1, searchAppUserRequest.getSize(), sort);
+            Specification<AppUser> specification = AppUserSpecification.getSpecification(searchAppUserRequest);
+            return appUserRepository.findAll(specification, pageable).map(this::toAppUserResponse);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private AppUserResponse toAppUserResponse(AppUser appUser) {
+        try {
+            return AppUserResponse.builder()
+                .id(appUser.getId())
+                .username(appUser.getUsername())
+                .email(appUser.getEmail())
+                .role(appUser.getRole())
+                .customerFullname(appUser.getCustomer() == null ? "" : appUser.getCustomer().getFullname())
+                .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

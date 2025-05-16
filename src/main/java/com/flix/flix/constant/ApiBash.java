@@ -25,6 +25,9 @@ public class ApiBash {
     public static final String SIGN_OUT_SUCCESS = "Sign out success";
     public static final String SIGN_OUT_FAILED = "Sign out failed";
 
+    public static final String GET_ALL_USER_SUCCESS = "Get all user success!";
+    public static final String GET_ALL_USER_FAILED = "Get all user failed!";
+
     public static final String CREATE_CUSTOMER_SUCCESS = "Customer created successfully!";
     public static final String GET_CUSTOMER_SUCCESS = "Get customer success!";
     public static final String GET_ALL_CUSTOMER_SUCCESS = "Get all customer success!";

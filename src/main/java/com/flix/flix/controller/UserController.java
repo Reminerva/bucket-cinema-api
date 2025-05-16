@@ -2,6 +2,7 @@ package com.flix.flix.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,8 @@ import com.flix.flix.constant.swagger_example.UserSwaggerExample;
 import com.flix.flix.model.request.LoginRequest;
 import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewUserRequest;
+import com.flix.flix.model.request.search.SearchAppUserRequest;
+import com.flix.flix.model.response.AppUserResponse;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
@@ -32,6 +35,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @SecurityRequirement(name = "Bearer Authentication")
@@ -189,5 +195,43 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-    
+
+    @GetMapping
+    public ResponseEntity<CommonResponse<List<AppUserResponse>>> getAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "username") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String customerFullname,
+            @RequestParam(required = false) List<String> role
+    ) {
+        try {
+            SearchAppUserRequest searchAppUserRequest = SearchAppUserRequest.builder()
+                    .page(page)
+                    .size(size)
+                    .sortBy(sortBy)
+                    .direction(direction)
+                    .username(username)
+                    .email(email)
+                    .customerFullname(customerFullname)
+                    .role(role)
+                    .build();
+            Page<AppUserResponse> appUsers = userService.getAll(searchAppUserRequest);
+            CommonResponse<List<AppUserResponse>> response = CommonResponse.<List<AppUserResponse>>builder()
+                    .code(HttpStatus.OK.value())
+                    .message(ApiBash.GET_ALL_USER_SUCCESS)
+                    .data(appUsers.getContent())
+                    .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            CommonResponse<List<AppUserResponse>> response = CommonResponse.<List<AppUserResponse>>builder()
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message(ApiBash.GET_ALL_USER_FAILED+ ": " + e.getMessage())
+                    .data(null)
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 }
