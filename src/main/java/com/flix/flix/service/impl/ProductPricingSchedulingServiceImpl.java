@@ -90,17 +90,6 @@ public class ProductPricingSchedulingServiceImpl implements ProductPricingSchedu
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public ProductPricingSchedulingResponse update(String id, NewProductPricingSchedulingRequest productPricingSchedulingRequest) {
-        try {
-            
-            return null;
-        } catch (Exception e) { 
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    @Transactional(rollbackOn = Exception.class)
     public void delete(String id) {
         try {
             getProductPricingSchedulingById(id);

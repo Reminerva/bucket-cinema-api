@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public enum ERated {
 
-    RATEDD_G("G"),
-    RATEDD_PG("PG"),
-    RATEDD_PG_13("PG-13"),
-    RATEDD_R("R"),
-    RATEDD_NC_17("NC-17");
+    RATED_G("G"),
+    RATED_PG("PG"),
+    RATED_PG_13("PG-13"),
+    RATED_R("R"),
+    RATED_NC_17("NC-17");
 
     private final String description;
 

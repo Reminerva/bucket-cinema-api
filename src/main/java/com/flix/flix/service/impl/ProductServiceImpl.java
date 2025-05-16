@@ -223,28 +223,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductResponse toProductResponse(Product product) {
-        return ProductResponse.builder()
-            .id(product.getId())
-            .title(product.getTitle())
-            .duration(product.getDuration())
-            .language(product.getLanguage().getDescription())
-            .country(product.getCountry().getDescription())
-            .releaseDate(product.getReleaseDate().toString())
-            .posterUrl(product.getPosterUrl())
-            .trailerUrl(product.getTrailerUrl())
-            .rated(product.getRated().getDescription())
-            .budget(product.getBudget())
-            .synopsis(product.getSynopsis())
-            .tagline(product.getTagline())
-            .imdbRating(product.getImdbRating())
-            .rottenTomatoesRating(product.getRottenTomatoesRating())
-            .director(product.getDirector())
-            .writer(product.getWriter())
-            .producer(product.getProducer())
-            .productionCompany(product.getProductionCompany().getId())
-            .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
-            .lastUpdated(product.getLastUpdated().toString())
-            .artistId(product.getArtists().stream().map(artist -> artist.getId()).toList())
-            .build();
+        try {
+            return ProductResponse.builder()
+                .id(product.getId())
+                .title(product.getTitle())
+                .duration(product.getDuration())
+                .language(product.getLanguage().getDescription())
+                .country(product.getCountry().getDescription())
+                .releaseDate(product.getReleaseDate().toString())
+                .posterUrl(product.getPosterUrl())
+                .trailerUrl(product.getTrailerUrl())
+                .rated(product.getRated().getDescription())
+                .budget(product.getBudget())
+                .synopsis(product.getSynopsis())
+                .tagline(product.getTagline())
+                .imdbRating(product.getImdbRating())
+                .rottenTomatoesRating(product.getRottenTomatoesRating())
+                .director(product.getDirector())
+                .writer(product.getWriter())
+                .producer(product.getProducer())
+                .productionCompany(product.getProductionCompany() == null ? null : product.getProductionCompany().getId())
+                .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
+                .lastUpdated(product.getLastUpdated().toString())
+                .artistId(product.getArtists().stream().map(artist -> artist.getId()).toList())
+                .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

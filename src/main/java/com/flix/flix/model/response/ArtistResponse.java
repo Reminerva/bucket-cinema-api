@@ -1,5 +1,7 @@
 package com.flix.flix.model.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,4 +21,5 @@ public class ArtistResponse {
     private String otherName;
     private String bio;
     private String artistType;
+    private List<String> productTitle;
 }

@@ -39,20 +39,18 @@ public class Studio {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(unique = true)
+    @Column
     private String name;
 
     @Column(name = "studio_size")
     @Enumerated(EnumType.STRING)
     private EStudioSize studioSize;
 
-    @Column(name = "booked_seat")
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private List<ESeat> bookedSeat = new ArrayList<>();
 
-    @Column(name = "available_seat")
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
     @Builder.Default

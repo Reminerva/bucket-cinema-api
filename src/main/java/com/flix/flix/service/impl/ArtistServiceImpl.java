@@ -115,6 +115,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .otherName(artist.getOtherName())
                 .bio(artist.getBio())
                 .artistType(artist.getArtistType().getDescription())
+                .productTitle(artist.getInProduct() == null ? null : artist.getInProduct().stream().map(product -> product.getTitle()).toList())
                 .build();
     }
 }
