@@ -81,18 +81,40 @@ public class StudioServiceImpl implements StudioService {
     @Transactional(rollbackOn = Exception.class)
     public StudioResponse update(String id, NewStudioRequest studioRequest) {
         try {
-            List<String> availableSeatRequest = studioRequest.getAvailableSeat();
+            List<String> availableListSeatRequest = studioRequest.getAvailableSeat();
             List<String> bookedListRequest = studioRequest.getBookedSeat();
 
-            List<ESeat> availableSeat = ESeat.toESeatList(availableSeatRequest);
-
-            List<ESeat> bookedSeat = ESeat.toESeatList(bookedListRequest);
+            List<ESeat> availableSeatRequest = ESeat.toESeatList(availableListSeatRequest);
+            List<ESeat> bookedSeatRequest = ESeat.toESeatList(bookedListRequest);
 
             Studio studio = getStudioById(id);
             studio.setName(studioRequest.getName());
             studio.setStudioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()));
-            studio.setAvailableSeat(availableSeat);
-            studio.setBookedSeat(bookedSeat);
+            List<ESeat> currentAvailableSeats = studio.getAvailableSeat();
+            List<ESeat> currentBookedSeats = studio.getBookedSeat();
+
+            for (ESeat seat : availableSeatRequest) {
+                if (bookedSeatRequest.contains(seat)) {
+                    throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
+                }
+            }
+            for (ESeat seat : bookedSeatRequest) {
+                if (availableSeatRequest.contains(seat)) {
+                    throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
+                }
+            }
+
+            List<ESeat> newBookedSeats = bookedSeatRequest.stream().filter(seat -> currentAvailableSeats.contains(seat)).toList();
+            List<ESeat> newAvailableSeats = availableSeatRequest.stream().filter(seat -> currentBookedSeats.contains(seat)).toList();
+            if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !bookedSeatRequest.isEmpty()) {
+                throw new RuntimeException(DbBash.SEAT_ALREADY_BOOKED);
+            }
+
+            availableSeatRequest.removeAll(currentBookedSeats);
+            if (!availableSeatRequest.isEmpty()) availableSeatRequest.addAll(newAvailableSeats);
+
+            studio.setAvailableSeat(availableSeatRequest);
+            studio.setBookedSeat(bookedSeatRequest);
 
             List<ProductPricingScheduling> productPricingSchedulings = new ArrayList<>();
             for (NewProductPricingSchedulingRequest productPricingSchedulingRequest : studioRequest.getProductPricingScheduling()) {
@@ -107,9 +129,11 @@ public class StudioServiceImpl implements StudioService {
                 productPricingScheduling.getStudios().add(studio);
                 studio.setProductPricingScheduling(productPricingSchedulings);
             }
+            System.out.println("ASDASD6");
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
+            // e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

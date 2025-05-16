@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum EStudioSize {
 
-    STUDIO_REGULER_SMALL("Small Reguler", "A1-L16"),
-    STUDIO_REGULER_MEDIUM("Medium Reguler", "A1-N22"),
-    STUDIO_REGULER_LARGE("Large Reguler", "A1-R38");
+    STUDIO_REGULER_SMALL("Reguler Small", "A1-L16"),
+    STUDIO_REGULER_MEDIUM("Reguler Medium", "A1-N22"),
+    STUDIO_REGULER_LARGE("Reguler Large", "A1-R38");
 
     private final String description;
     private final String seat;
