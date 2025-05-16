@@ -1,17 +1,23 @@
 package com.flix.flix.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.entity.Artist;
 import com.flix.flix.model.request.NewArtistRequest;
+import com.flix.flix.model.request.search.SearchArtistRequest;
 import com.flix.flix.model.response.ArtistResponse;
 import com.flix.flix.repository.ArtistRepository;
 import com.flix.flix.service.ArtistService;
+import com.flix.flix.specification.ArtistSpecification;
 import com.flix.flix.util.DateUtil;
 
 import jakarta.transaction.Transactional;
@@ -44,9 +50,19 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public List<ArtistResponse> getAll() {
-        List<Artist> artists = artistRepository.findAll();
-        return artists.stream().map(artist -> toArtistResponse(artist)).toList();
+    public Page<ArtistResponse> getAll(SearchArtistRequest searchArtistRequest) {
+        try {
+            if (searchArtistRequest.getPage() <= 0 || searchArtistRequest.getSize() <= 0) {
+                searchArtistRequest.setPage(1);
+                searchArtistRequest.setSize(10);
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchArtistRequest.getDirection()), searchArtistRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchArtistRequest.getPage() - 1, searchArtistRequest.getSize(), sort);
+            Specification<Artist> specification = ArtistSpecification.getSpecification(searchArtistRequest);
+            return artistRepository.findAll(specification, pageable).map(this::toArtistResponse);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override

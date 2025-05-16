@@ -1,7 +1,5 @@
 package com.flix.flix.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 
 import com.flix.flix.entity.ProductionCompany;
