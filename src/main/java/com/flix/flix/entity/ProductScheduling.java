@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,6 +51,11 @@ public class ProductScheduling {
     private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToMany
+    @JoinTable(
+        name = "t_product_scheduling_studios", // Nama tabel penghubung yang Anda inginkan
+        joinColumns = @JoinColumn(name = "product_scheduling_id"), // Kolom untuk foreign key ke tabel ProductPricing
+        inverseJoinColumns = @JoinColumn(name = "studio_id") // Kolom untuk foreign key ke tabel Studio
+    )
     @Builder.Default
-    private List<ProductPricingScheduling> productPricingScheduling = new ArrayList<>();
+    private List<Studio> studios = new ArrayList<>();
 }

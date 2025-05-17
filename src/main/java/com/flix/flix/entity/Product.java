@@ -96,9 +96,6 @@ public class Product {
     @OneToMany(mappedBy = "productIdScheduling", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ProductScheduling> productSchedule = new ArrayList<>();
-    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<ProductPricingScheduling> productPricingScheduling = new ArrayList<>();
 
     @Column(name = "last_updated")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -106,7 +103,7 @@ public class Product {
     private LocalDate lastUpdated;
     @ManyToMany
     @JoinTable(
-        name = "product_artist",
+        name = "t_product_artist",
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
@@ -121,6 +118,15 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "production_company_id")
     private ProductionCompany productionCompany;
+
+    @ManyToMany
+    @JoinTable(
+        name = "t_product_theater",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "theater_id")
+    )
+    @Builder.Default
+    private List<Theater> theaters = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
     @Builder.Default

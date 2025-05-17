@@ -15,8 +15,6 @@ public class ProductPricingResponse {
     private String id;
     private Double weekdayPrice;
     private Double weekendPrice;
-    private String weekdayPriceDate;
-    private String weekendPriceDate;
-    private Boolean weekdayPriceActive;
-    private Boolean weekendPriceActive;
+    private String priceDate;
+    private Boolean isPriceActive;
 }

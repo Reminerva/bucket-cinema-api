@@ -24,5 +24,5 @@ public class NewStudioRequest {
     @NotEmpty(message = "available seat is required")
     private List<String> availableSeat;
 
-    private List<NewProductPricingSchedulingRequest> productPricingScheduling;
+    // private List<NewProductPricingSchedulingRequest> productPricingScheduling;
 }

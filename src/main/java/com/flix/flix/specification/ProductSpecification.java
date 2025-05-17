@@ -78,24 +78,30 @@ public class ProductSpecification {
             if (request.getProductPricingMin() != null) {
                 predicates.add(cb.or(
                     cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMin()),
-                        cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
+                        cb.isTrue(root.get("productPricing").get("isPriceActive"))),
                     cb.and(cb.greaterThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMin()),
-                        cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
+                        cb.isTrue(root.get("productPricing").get("isPriceActive")))
                 ));
             }
             if (request.getProductPricingMax() != null) {
                 predicates.add(cb.or(
                     cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekdayPrice"), request.getProductPricingMax()),
-                        cb.isTrue(root.get("productPricing").get("weekdayPriceActive"))),
+                        cb.isTrue(root.get("productPricing").get("isPriceActive"))),
                     cb.and(cb.lessThanOrEqualTo(root.get("productPricing").get("weekendPrice"), request.getProductPricingMax()),
-                        cb.isTrue(root.get("productPricing").get("weekendPriceActive")))
+                        cb.isTrue(root.get("productPricing").get("isPriceActive")))
                 ));
             }        
             if (request.getLastUpdatedMin() != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMin())));
+                predicates.add(cb.or(
+                    cb.greaterThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMin())),
+                    cb.greaterThanOrEqualTo(root.get("productPricing").get("priceDate"), DateUtil.parseDate(request.getLastUpdatedMin()))
+                ));
             }
             if (request.getLastUpdatedMax() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMax())));
+                predicates.add(cb.or(
+                    cb.lessThanOrEqualTo(root.get("lastUpdated"), DateUtil.parseDate(request.getLastUpdatedMax())),
+                    cb.lessThanOrEqualTo(root.get("productPricing").get("priceDate"), DateUtil.parseDate(request.getLastUpdatedMax()))
+                ));
             }
             if (request.getArtistsName() != null && !request.getArtistsName().isEmpty()) {
                 List<Predicate> artistPredicates = new ArrayList<>();

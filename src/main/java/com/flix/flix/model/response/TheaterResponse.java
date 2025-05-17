@@ -24,4 +24,16 @@ public class TheaterResponse {
     private String updatedAt;
     private Boolean oprationalStatus;
     private List<StudioResponse> studios;
+    private List<ProductResponse> nowShowing;
+    
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductResponse {
+        private String id;
+        private String title;
+        private String posterUrl;
+    }
 }

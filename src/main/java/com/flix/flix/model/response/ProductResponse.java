@@ -37,4 +37,19 @@ public class ProductResponse {
     private List<String> artistId;
     private List<String> customerLikeId;
     private List<String> customerDislikeId;
+    private List<TheaterResponse> showingOnTheaters;
+
+    @Builder
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TheaterResponse {
+        private String id;
+        private String name;
+        private String city;
+        private String address;
+        private String contactNumber;
+        private String contactEmail;
+    }
 }

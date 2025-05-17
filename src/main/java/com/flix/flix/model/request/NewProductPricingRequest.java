@@ -18,9 +18,7 @@ public class NewProductPricingRequest {
     private Double weekdayPrice;
     @Min(value = 0, message = "weekend price is required")
     private Double weekendPrice;
-    @NotBlank(message = "weekday price date is required")
-    private Boolean weekdayPriceActive;
-    private Boolean weekendPriceActive;
+    private Boolean isPriceActive;
     @NotBlank(message = "product id is required")
     private String productIdPricing;
 }

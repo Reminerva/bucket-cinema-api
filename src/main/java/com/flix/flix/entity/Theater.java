@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -59,6 +60,10 @@ public class Theater {
     @OneToMany(mappedBy = "theater")
     @Builder.Default
     private List<Studio> studios = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "theaters")
+    @Builder.Default
+    private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "theater")
     @Builder.Default

@@ -155,26 +155,26 @@ public class TransactionServiceImpl implements TransactionService {
     private void validateRequest(TransactionRequest transactionRequest, Theater theater, Studio studio, Product product,
             ProductPricing productPricing, ProductScheduling productScheduling) {
         if (studio.getTheater().getId() != theater.getId()) throw new RuntimeException(DbBash.THEATER_AND_STUDIO_NOT_MATCH);
-        for (String seat : transactionRequest.getSeats()) {
-            if (!studio.getAvailableSeat().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
-        }
-        if (studio.getProductPricingScheduling().stream()
-                .noneMatch(productPricingScheduling ->
-                        productPricingScheduling.getProductId().getId().equals(product.getId()))) {
-            throw new RuntimeException(DbBash.PRODUCT_NOT_MATCH);
-        }
-        if (studio.getProductPricingScheduling().stream()
-                .noneMatch(productPricingScheduling ->
-                        productPricingScheduling.getProductPricing().getId().equals(productPricing.getId()))) {
-            throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_MATCH);
-        }
-        if (studio.getProductPricingScheduling().stream()
-                .noneMatch(productPricingScheduling ->
-                        productPricingScheduling.getProductScheduling().stream()
-                                .anyMatch(productScheduling1 ->
-                                        productScheduling1.getId().equals(productScheduling.getId())))) {
-            throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_MATCH);
-        }
+        // for (String seat : transactionRequest.getSeats()) {
+        //     if (!studio.getAvailableSeat().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
+        // }
+        // if (studio.getProductPricingScheduling().stream()
+        //         .noneMatch(productPricingScheduling ->
+        //                 productPricingScheduling.getProductId().getId().equals(product.getId()))) {
+        //     throw new RuntimeException(DbBash.PRODUCT_NOT_MATCH);
+        // }
+        // if (studio.getProductPricingScheduling().stream()
+        //         .noneMatch(productPricingScheduling ->
+        //                 productPricingScheduling.getProductPricing().getId().equals(productPricing.getId()))) {
+        //     throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_MATCH);
+        // }
+        // if (studio.getProductPricingScheduling().stream()
+        //         .noneMatch(productPricingScheduling ->
+        //                 productPricingScheduling.getProductScheduling().stream()
+        //                         .anyMatch(productScheduling1 ->
+        //                                 productScheduling1.getId().equals(productScheduling.getId())))) {
+        //     throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_MATCH);
+        // }
     }
 
 }

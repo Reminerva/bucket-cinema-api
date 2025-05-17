@@ -21,6 +21,7 @@ import com.flix.flix.entity.Artist;
 import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductionCompany;
+import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.NewProductRequest;
 import com.flix.flix.model.request.search.SearchProductRequest;
 import com.flix.flix.model.response.ProductResponse;
@@ -224,6 +225,20 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductResponse toProductResponse(Product product) {
         try {
+            List<ProductResponse.TheaterResponse> theaterResponseList = new ArrayList<>();
+            if (product.getTheaters() != null && product.getTheaters().size() > 0) {
+                for (Theater theater : product.getTheaters()) {
+                    ProductResponse.TheaterResponse theaterResponse = ProductResponse.TheaterResponse.builder()
+                        .id(theater.getId())
+                        .name(theater.getName())
+                        .city(theater.getCity())
+                        .address(theater.getAddress())
+                        .contactNumber(theater.getContactNumber())
+                        .contactEmail(theater.getContactEmail())
+                        .build();
+                    theaterResponseList.add(theaterResponse);
+                }
+            }
             return ProductResponse.builder()
                 .id(product.getId())
                 .title(product.getTitle())
@@ -246,6 +261,7 @@ public class ProductServiceImpl implements ProductService {
                 .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
                 .lastUpdated(product.getLastUpdated().toString())
                 .artistId(product.getArtists().stream().map(artist -> artist.getId()).toList())
+                .showingOnTheaters(theaterResponseList)
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e);

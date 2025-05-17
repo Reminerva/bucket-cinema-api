@@ -31,10 +31,8 @@ public class ProductPricingServiceImpl implements ProductPricingService {
             ProductPricing productPricing = ProductPricing.builder()
                     .weekdayPrice(productPricingRequest.getWeekdayPrice())
                     .weekendPrice(productPricingRequest.getWeekendPrice())
-                    .weekdayPriceActive(true)
-                    .weekendPriceActive(true)
-                    .weekdayPriceDate(LocalDate.now())
-                    .weekendPriceDate(LocalDate.now())
+                    .isPriceActive(true)
+                    .priceDate(LocalDate.now())
                     .productIdPricing(productService.getProductById(productPricingRequest.getProductIdPricing()))
                     .build();
             return productPricingRepository.saveAndFlush(productPricing);
@@ -76,8 +74,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
                 .filter(productPricing -> 
                     productPricing.getWeekdayPrice().equals(weekdayPrice) &&
                     productPricing.getWeekendPrice().equals(weekendPrice) &&
-                    productPricing.getWeekdayPriceActive().equals(true) &&
-                    productPricing.getWeekendPriceActive().equals(true)
+                    productPricing.getIsPriceActive().equals(true)
                 ).toList();
             if (productPricingsByPrice.isEmpty()) return null;
             return productPricingsByPrice.get(0);
@@ -93,8 +90,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
             ProductPricing productPricing = getProductPricingById(id);
             productPricing.setWeekdayPrice(productPricingRequest.getWeekdayPrice());
             productPricing.setWeekendPrice(productPricingRequest.getWeekendPrice());
-            productPricing.setWeekdayPriceActive(productPricingRequest.getWeekdayPriceActive());
-            productPricing.setWeekendPriceActive(productPricingRequest.getWeekendPriceActive());
+            productPricing.setIsPriceActive(productPricingRequest.getIsPriceActive());
             return productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -105,11 +101,8 @@ public class ProductPricingServiceImpl implements ProductPricingService {
     @Transactional(rollbackOn = Exception.class)
     public void softDelete(String id) {
         try {
-            getProductPricingById(id);
-            ProductPricing productPricing = productPricingRepository.findById(id).get();
-            productPricing.setWeekdayPriceActive(false);
-            productPricing.setWeekendPriceActive(false);
-            
+            ProductPricing productPricing = getProductPricingById(id);
+            productPricing.setIsPriceActive(false);
             productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -122,10 +115,8 @@ public class ProductPricingServiceImpl implements ProductPricingService {
                 .id(productPricing.getId())
                 .weekdayPrice(productPricing.getWeekdayPrice())
                 .weekendPrice(productPricing.getWeekendPrice())
-                .weekdayPriceActive(productPricing.getWeekdayPriceActive())
-                .weekendPriceActive(productPricing.getWeekendPriceActive())
-                .weekdayPriceDate(productPricing.getWeekdayPriceDate().toString())
-                .weekendPriceDate(productPricing.getWeekendPriceDate().toString())
+                .isPriceActive(productPricing.getIsPriceActive())
+                .priceDate(productPricing.getPriceDate().toString())
                 .build();
     }
 }

@@ -112,17 +112,32 @@ public class TheaterServiceImpl implements TheaterService {
     }
 
     private TheaterResponse toTheaterResponse(Theater theater) {
-        return TheaterResponse.builder()
-            .id(theater.getId())
-            .name(theater.getName())
-            .city(theater.getCity())
-            .address(theater.getAddress())
-            .contactNumber(theater.getContactNumber())
-            .contactEmail(theater.getContactEmail())
-            .createdAt(theater.getCreatedAt().toString())
-            .updatedAt(theater.getUpdatedAt().toString())
-            .oprationalStatus(theater.getOprationalStatus())
-            .studios(theater.getStudios().stream().map(studioService::toStudioResponse).toList())
-            .build();
+        try {
+            List<TheaterResponse.ProductResponse> productResponses = new ArrayList<>();
+            if (theater.getProducts() != null && theater.getProducts().size() > 0) {
+                for (com.flix.flix.entity.Product product : theater.getProducts()) {
+                    productResponses.add(TheaterResponse.ProductResponse.builder()
+                        .id(product.getId())
+                        .title(product.getTitle())
+                        .posterUrl(product.getPosterUrl())
+                        .build());
+                }
+            }
+            return TheaterResponse.builder()
+                .id(theater.getId())
+                .name(theater.getName())
+                .city(theater.getCity())
+                .address(theater.getAddress())
+                .contactNumber(theater.getContactNumber())
+                .contactEmail(theater.getContactEmail())
+                .createdAt(theater.getCreatedAt().toString())
+                .updatedAt(theater.getUpdatedAt().toString())
+                .oprationalStatus(theater.getOprationalStatus())
+                .studios(theater.getStudios().stream().map(studioService::toStudioResponse).toList())
+                .nowShowing(productResponses)
+                .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

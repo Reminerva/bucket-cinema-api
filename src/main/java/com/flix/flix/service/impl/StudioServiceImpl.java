@@ -9,14 +9,10 @@ import org.springframework.stereotype.Service;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.constant.custom_enum.EStudioSize;
-import com.flix.flix.entity.ProductPricingScheduling;
 import com.flix.flix.entity.Studio;
-import com.flix.flix.model.request.NewProductPricingSchedulingRequest;
 import com.flix.flix.model.request.NewStudioRequest;
-import com.flix.flix.model.response.ProductPricingSchedulingResponse;
 import com.flix.flix.model.response.StudioResponse;
 import com.flix.flix.repository.StudioRepository;
-import com.flix.flix.service.ProductPricingSchedulingService;
 import com.flix.flix.service.StudioService;
 
 import jakarta.transaction.Transactional;
@@ -27,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class StudioServiceImpl implements StudioService {
 
     private final StudioRepository studioRepository;
-    private final ProductPricingSchedulingService productPricingSchedulingService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -116,20 +111,6 @@ public class StudioServiceImpl implements StudioService {
             studio.setAvailableSeat(availableSeatRequest);
             studio.setBookedSeat(bookedSeatRequest);
 
-            List<ProductPricingScheduling> productPricingSchedulings = new ArrayList<>();
-            for (NewProductPricingSchedulingRequest productPricingSchedulingRequest : studioRequest.getProductPricingScheduling()) {
-                ProductPricingScheduling productPricingScheduling = productPricingSchedulingService.getProductPricingSchedulingByAttribute(productPricingSchedulingRequest);
-    
-                if (productPricingScheduling == null) {
-                    ProductPricingSchedulingResponse productPricingSchedulingResponse = 
-                        productPricingSchedulingService.create(productPricingSchedulingRequest);
-                    productPricingScheduling = productPricingSchedulingService.getProductPricingSchedulingById(productPricingSchedulingResponse.getId());
-                }
-                productPricingSchedulings.add(productPricingScheduling);
-                productPricingScheduling.getStudios().add(studio);
-                studio.setProductPricingScheduling(productPricingSchedulings);
-            }
-            System.out.println("ASDASD6");
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
@@ -151,22 +132,16 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public StudioResponse toStudioResponse(Studio studio) {
-        List<ProductPricingSchedulingResponse> productPricingSchedulingResponses = new ArrayList<>();
-        if (studio.getProductPricingScheduling() != null) {
-            for (ProductPricingScheduling productPricingScheduling : studio.getProductPricingScheduling()) {
-                productPricingSchedulingService.toProductPricingSchedulingResponse(productPricingScheduling);
-                productPricingSchedulingResponses.add(productPricingSchedulingService.toProductPricingSchedulingResponse(productPricingScheduling));
-            }
+        try {
+            return StudioResponse.builder()
+                    .id(studio.getId())
+                    .name(studio.getName())
+                    .studioSize(studio.getStudioSize())
+                    .bookedSeat(studio.getBookedSeat())
+                    .availableSeat(studio.getAvailableSeat())
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        return StudioResponse.builder()
-                .id(studio.getId())
-                .name(studio.getName())
-                .studioSize(studio.getStudioSize())
-                .bookedSeat(studio.getBookedSeat())
-                .availableSeat(studio.getAvailableSeat())
-                .productPricingScheduling(productPricingSchedulingResponses)
-                .build();
     }
-    
 }

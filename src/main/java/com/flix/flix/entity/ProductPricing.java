@@ -12,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -37,22 +39,23 @@ public class ProductPricing {
     private Double weekdayPrice;
     @Column(name = "weekend_price")
     private Double weekendPrice;
-    @Column(name = "weekday_price_date")
-    private LocalDate weekdayPriceDate;
-    @Column(name = "weekend_price_date")
-    private LocalDate weekendPriceDate;
-    @Column(name = "weekday_price_active")
-    private Boolean weekdayPriceActive;
-    @Column(name = "weekend_price_active")
-    private Boolean weekendPriceActive;
+    @Column(name = "price_date")
+    private LocalDate priceDate;
+    @Column(name = "is_price_active")
+    private Boolean isPriceActive;
 
     @JoinColumn(name = "product_id")
     @ManyToOne
     private Product productIdPricing;
 
-    @OneToMany(mappedBy = "productPricing")
+    @ManyToMany
+    @JoinTable(
+        name = "t_product_pricing_studios", // Nama tabel penghubung yang Anda inginkan
+        joinColumns = @JoinColumn(name = "product_pricing_id"), // Kolom untuk foreign key ke tabel ProductPricing
+        inverseJoinColumns = @JoinColumn(name = "studio_id") // Kolom untuk foreign key ke tabel Studio
+    )
     @Builder.Default
-    private List<ProductPricingScheduling> productPricingScheduling = new ArrayList<>();
+    private List<Studio> studios = new ArrayList<>();
 
     @OneToMany(mappedBy = "productPricing")
     @Builder.Default

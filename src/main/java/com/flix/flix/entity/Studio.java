@@ -56,9 +56,13 @@ public class Studio {
     @Builder.Default
     private List<ESeat> availableSeat = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "studios")
     @Builder.Default
-    private List<ProductPricingScheduling> productPricingScheduling = new ArrayList<>();
+    private List<ProductPricing> productPricing = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "studios")
+    @Builder.Default
+    private List<ProductScheduling> productScheduling = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "theater_id")
