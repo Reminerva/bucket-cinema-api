@@ -31,7 +31,7 @@ public class ProductResponse {
     private String director;
     private String writer;
     private String producer;
-    private String productionCompany;
+    private String productionCompanyId;
     private List<String> movieGenre;
     private String lastUpdated;
     private List<String> artistId;

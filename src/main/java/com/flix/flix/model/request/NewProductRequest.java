@@ -62,4 +62,5 @@ public class NewProductRequest {
     private List<String> artistId;
     private List<String> customerLikeId;
     private List<String> customerDislikeId;
+    private List<String> showingOnTheaters;
 }

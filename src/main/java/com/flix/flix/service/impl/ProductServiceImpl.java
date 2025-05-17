@@ -28,6 +28,7 @@ import com.flix.flix.model.response.ProductResponse;
 import com.flix.flix.repository.ArtistRepository;
 import com.flix.flix.repository.ProductRepository;
 import com.flix.flix.repository.ProductionCompanyRepository;
+import com.flix.flix.repository.TheaterRepository;
 import com.flix.flix.service.ArtistService;
 import com.flix.flix.service.MovieGenreService;
 import com.flix.flix.service.ProductService;
@@ -48,6 +49,8 @@ public class ProductServiceImpl implements ProductService {
     private final ArtistRepository artistRepository;
     private final ProductionCompanyService productionCompanyService;
     private final ProductionCompanyRepository productionCompanyRepository;
+    private final TheaterRepository theaterRepository;
+
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -193,9 +196,26 @@ public class ProductServiceImpl implements ProductService {
             newProductionCompany.getHasProduct().add(updatedProduct);
             productionCompanyRepository.save(newProductionCompany);
 
+            List<Theater> theaters = new ArrayList<>();
+            if (updatedProduct.getTheaters() == null) updatedProduct.setTheaters(new ArrayList<>());
+            if (productRequest.getShowingOnTheaters() != null) {
+                for (String theaterId : productRequest.getShowingOnTheaters()) {
+                    Optional<Theater> theaterOptional = theaterRepository.findById(theaterId);
+                    if (theaterOptional.isEmpty()) throw new RuntimeException(DbBash.THEATER_NOT_FOUND);
+
+                    Theater theater = theaterOptional.get();
+                    if (!updatedProduct.getTheaters().contains(theater)) {
+                        theater.getProducts().add(updatedProduct);
+                        theaters.add(theater);
+                    }
+                }
+            }
+            updatedProduct.setTheaters(theaters);
+            theaterRepository.saveAllAndFlush(theaters);
+
             return toProductResponse(productRepository.saveAndFlush(updatedProduct));
         } catch (Exception e) {
-            throw new RuntimeException("Failed to update product: " + e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -257,7 +277,7 @@ public class ProductServiceImpl implements ProductService {
                 .director(product.getDirector())
                 .writer(product.getWriter())
                 .producer(product.getProducer())
-                .productionCompany(product.getProductionCompany() == null ? null : product.getProductionCompany().getId())
+                .productionCompanyId(product.getProductionCompany() == null ? null : product.getProductionCompany().getId())
                 .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
                 .lastUpdated(product.getLastUpdated().toString())
                 .artistId(product.getArtists().stream().map(artist -> artist.getId()).toList())

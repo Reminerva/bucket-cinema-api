@@ -8,11 +8,13 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.entity.Product;
 import com.flix.flix.entity.Studio;
 import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.NewTheaterRequest;
 import com.flix.flix.model.response.TheaterResponse;
 import com.flix.flix.repository.TheaterRepository;
+import com.flix.flix.service.ProductService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.service.TheaterService;
 
@@ -25,6 +27,7 @@ public class TheaterServiceImpl implements TheaterService {
     
     private final TheaterRepository theaterRepository;
     private final StudioService studioService;
+    private final ProductService productService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -92,6 +95,19 @@ public class TheaterServiceImpl implements TheaterService {
                 studios.add(studio);
             }
             theater.setStudios(studios);
+
+            List<Product> existingProducts = theater.getProducts();
+            for (Product product : existingProducts) {
+                product.getTheaters().remove(theater);
+            }
+
+            List<Product> products = new ArrayList<>();
+            for (String productId : theaterRequest.getNowShowingId()) {
+                Product product = productService.getProductById(productId);
+                product.getTheaters().add(theater);
+                products.add(product);
+            }
+            theater.setProducts(products);
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
             throw new RuntimeException(e);

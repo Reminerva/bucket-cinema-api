@@ -28,4 +28,5 @@ public class NewTheaterRequest {
     private String contactEmail;
     private Boolean oprationalStatus;
     private List<String> studiosId;
+    private List<String> nowShowingId;
 }
