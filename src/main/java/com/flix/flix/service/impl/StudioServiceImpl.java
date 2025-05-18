@@ -16,9 +16,11 @@ import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.entity.Studio;
+import com.flix.flix.entity.StudioSeatSchedule;
 import com.flix.flix.model.request.NewProductPricingRequest;
 import com.flix.flix.model.request.NewProductSchedulingRequest;
 import com.flix.flix.model.request.NewStudioRequest;
+import com.flix.flix.model.request.NewStudioSeatScheduleRequest;
 import com.flix.flix.model.response.ProductPricingResponse;
 import com.flix.flix.model.response.ProductSchedulingResponse;
 import com.flix.flix.model.response.StudioResponse;
@@ -26,6 +28,7 @@ import com.flix.flix.repository.StudioRepository;
 import com.flix.flix.service.ProductPricingService;
 import com.flix.flix.service.ProductSchedulingService;
 import com.flix.flix.service.ProductService;
+import com.flix.flix.service.StudioSeatScheduleService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.util.TimeUtil;
 
@@ -40,18 +43,19 @@ public class StudioServiceImpl implements StudioService {
     private final ProductPricingService productPricingService;
     private final ProductSchedulingService productSchedulingService;
     private final ProductService productService;
+    private final StudioSeatScheduleService studioSeatScheduleService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public StudioResponse create(NewStudioRequest studioRequest) {
         try {
-            List<String> availableSeatRequest = studioRequest.getAvailableSeat();
+            List<String> seatLayoutRequest = studioRequest.getSeatLayout();
 
-            List<ESeat> availableSeat = ESeat.toESeatList(availableSeatRequest);
+            List<ESeat> seatLayout = ESeat.toESeatList(seatLayoutRequest);
             Studio studio = Studio.builder()
                     .name(studioRequest.getName())    
                     .studioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()))
-                    .availableSeat(availableSeat)
+                    .seatLayout(seatLayout)
                     .build();
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
@@ -93,31 +97,11 @@ public class StudioServiceImpl implements StudioService {
     @Transactional(rollbackOn = Exception.class)
     public StudioResponse update(String id, NewStudioRequest studioRequest) {
         try {
-            List<String> availableListSeatRequest = studioRequest.getAvailableSeat();
-            List<String> bookedListRequest = studioRequest.getBookedSeat();
-
-            List<ESeat> availableSeatRequest = ESeat.toESeatList(availableListSeatRequest);
-            List<ESeat> bookedSeatRequest = ESeat.toESeatList(bookedListRequest);
 
             Studio studio = getStudioById(id);
             studio.setName(studioRequest.getName());
             studio.setStudioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()));
-            List<ESeat> currentAvailableSeats = studio.getAvailableSeat();
-            List<ESeat> currentBookedSeats = studio.getBookedSeat();
-
-            validateSeatRequest(availableSeatRequest, bookedSeatRequest);
-
-            List<ESeat> newBookedSeats = bookedSeatRequest.stream().filter(seat -> currentAvailableSeats.contains(seat)).toList();
-            List<ESeat> newAvailableSeats = availableSeatRequest.stream().filter(seat -> currentBookedSeats.contains(seat)).toList();
-            if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !bookedSeatRequest.isEmpty()) {
-                throw new RuntimeException(DbBash.SEAT_ALREADY_BOOKED);
-            }
-
-            availableSeatRequest.removeAll(currentBookedSeats);
-            if (!availableSeatRequest.isEmpty()) availableSeatRequest.addAll(newAvailableSeats);
-
-            studio.setAvailableSeat(availableSeatRequest);
-            studio.setBookedSeat(bookedSeatRequest);
+            // studio.setSeatLayout(ESeat.toESeatList(studioRequest.getSeatLayout()));
 
             // validasi product pricing request (dalam satu request tidak boleh ada dua product pricing berbeda dengan produt yang sama)
             Set<String> uniqueProductIdsInPricing = validateProductPricingRequest(studioRequest);
@@ -138,6 +122,21 @@ public class StudioServiceImpl implements StudioService {
             // update product scheduling
             List<ProductScheduling> newProductSchedulings = getNewProductSchedulings(studioRequest, studio);
             studio.setProductScheduling(newProductSchedulings);
+
+            // update StudioSeatSchedule
+            List<StudioSeatSchedule> newStudioSeatSchedules = new ArrayList<>();
+            for (NewStudioSeatScheduleRequest studioSeatScheduleRequest : studioRequest.getStudioSeatScheduleRequests()) {
+                if (studioSeatScheduleService.getStudioSeatScheduleByAttribute(studio.getId(), studioSeatScheduleRequest.getProductSchedulingId()) == null) {
+                    studioSeatScheduleRequest.setAvailableSeat(ESeat.toESeatStringList(studio.getSeatLayout()));
+                    studioSeatScheduleRequest.setBookedSeat(new ArrayList<>());
+                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.create(studioSeatScheduleRequest);
+                    newStudioSeatSchedules.add(studioSeatSchedule);
+                } else {
+                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.update(null, studioSeatScheduleRequest);
+                    newStudioSeatSchedules.add(studioSeatSchedule);
+                }
+            }
+            studio.setStudioSeatSchedule(newStudioSeatSchedules);
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
@@ -173,26 +172,13 @@ public class StudioServiceImpl implements StudioService {
                     .id(studio.getId())
                     .name(studio.getName())
                     .studioSize(studio.getStudioSize())
-                    .bookedSeat(studio.getBookedSeat())
-                    .availableSeat(studio.getAvailableSeat())
+                    .seatLayout(ESeat.toESeatStringList(studio.getSeatLayout()))
+                    .studioSeatSchedule(studio.getStudioSeatSchedule().stream().map(studioSeatScheduleService::toStudioSeatScheduleResponse).toList())
                     .productPricing(productPricings)
                     .productScheduling(productSchedulings)
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    private void validateSeatRequest(List<ESeat> availableSeatRequest, List<ESeat> bookedSeatRequest) {
-        for (ESeat seat : availableSeatRequest) {
-            if (bookedSeatRequest.contains(seat)) {
-                throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
-            }
-        }
-        for (ESeat seat : bookedSeatRequest) {
-            if (availableSeatRequest.contains(seat)) {
-                throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
-            }
         }
     }
 

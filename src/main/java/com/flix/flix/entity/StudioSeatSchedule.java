@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
-import com.flix.flix.constant.custom_enum.EStudioSize;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,9 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,47 +23,33 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = DbBash.STUDIO_DB)
+@Table(name = DbBash.STUDIO_SEAT_SCHEDULE_DB)
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Studio {
+public class StudioSeatSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
-    @Column
-    private String name;
-
-    @Column(name = "studio_size")
-    @Enumerated(EnumType.STRING)
-    private EStudioSize studioSize;
+    
+    @ManyToOne
+    @JoinColumn(name = "studio_id")
+    private Studio studio;
 
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private List<ESeat> seatLayout = new ArrayList<>();
+    private List<ESeat> bookedSeat = new ArrayList<>();
 
-    @OneToMany(mappedBy = "studio")
+    @ElementCollection(targetClass = ESeat.class)
+    @Enumerated(EnumType.STRING)
     @Builder.Default
-    private List<StudioSeatSchedule> studioSeatSchedule = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "studios")
-    @Builder.Default
-    private List<ProductPricing> productPricing = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "studios")
-    @Builder.Default
-    private List<ProductScheduling> productScheduling = new ArrayList<>();
+    private List<ESeat> availableSeat = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "theater_id")
-    private Theater theater;
-
-    @OneToMany(mappedBy = "studio")
-    @Builder.Default
-    private List<Transaction> transactions = new ArrayList<>();
+    @JoinColumn(name = "product_scheduling_id")
+    private ProductScheduling productScheduling;
 }

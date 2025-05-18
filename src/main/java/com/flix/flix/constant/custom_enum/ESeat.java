@@ -600,10 +600,18 @@ public enum ESeat {
         throw new IllegalArgumentException("Invalid studio seat: " + description);
     }
 
-    public static List<ESeat> toESeatList(List<String> availableSeat) {
+    public static List<ESeat> toESeatList(List<String> seats) {
         List<ESeat> seatList = new ArrayList<>();
-        for (String seat : availableSeat) {
+        for (String seat : seats) {
             seatList.add(ESeat.findByDescription(seat));
+        }
+        return seatList;
+    }
+
+    public static List<String> toESeatStringList(List<ESeat> seats) {
+        List<String> seatList = new ArrayList<>();
+        for (ESeat seat : seats) {
+            seatList.add(seat.description);
         }
         return seatList;
     }

@@ -22,7 +22,9 @@ public class FlixDataSeeder implements CommandLineRunner {
     private static final String MOVIE_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM m_movie_genre WHERE id = :id";
     private static final String THEATER_CHECK_QUERY = "SELECT COUNT(*) FROM m_theater WHERE id = :id";
     private static final String STUDIO_CHECK_QUERY = "SELECT COUNT(*) FROM m_studio WHERE id = :id";
-    private static final String AVAILABLE_SEAT_CHECK_QUERY = "SELECT COUNT(*) FROM studio_available_seat WHERE studio_id = :studio_id";
+    private static final String STUDIO_SEAT_SCHEDULE_CHECK_QUERY = "SELECT COUNT(*) FROM m_studio_seat_schedule WHERE id = :id";
+    private static final String AVAILABLE_SEAT_CHECK_QUERY = "SELECT COUNT(*) FROM studio_seat_schedule_available_seat WHERE studio_seat_schedule_id = :studio_seat_schedule_id";
+    private static final String SEAT_LAYOUT_CHECK_QUERY = "SELECT COUNT(*) FROM studio_seat_layout WHERE studio_id = :studio_id";
     private static final String PRODUCT_SCHEDULING_CHECK_QUERY = "SELECT COUNT(*) FROM m_product_scheduling WHERE id = :id";
     private static final String PRODUCT_PRICING_CHECK_QUERY = "SELECT COUNT(*) FROM m_product_pricing WHERE id = :id";
 
@@ -130,20 +132,6 @@ public class FlixDataSeeder implements CommandLineRunner {
             ).executeUpdate();
         }
 
-        // Insert AvailableSeat for Studio
-        if (isSeatDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO studio_available_seat (studio_id, available_seat) VALUES " +
-                "('studio-001', 'SEAT_A1'), ('studio-001', 'SEAT_A2'), ('studio-001', 'SEAT_B1'), ('studio-001', 'SEAT_B2')").executeUpdate();
-        }
-        if (isSeatDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio-002")) {
-            entityManager.createNativeQuery("INSERT INTO studio_available_seat (studio_id, available_seat) VALUES " +
-                "('studio-002', 'SEAT_C1'), ('studio-002', 'SEAT_C2'), ('studio-002', 'SEAT_D1')").executeUpdate();
-        }
-        if (isSeatDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio-003")) {
-            entityManager.createNativeQuery("INSERT INTO studio_available_seat (studio_id, available_seat) VALUES " +
-                "('studio-003', 'SEAT_E1'), ('studio-003', 'SEAT_E2')").executeUpdate();
-        }
-
         // Insert ProductPricing
         if (isDataAbsent(PRODUCT_PRICING_CHECK_QUERY, "pprice-001")) {
             entityManager.createNativeQuery(
@@ -163,6 +151,49 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "('psched-003', 'SCHEDULE_15_00', 'prod-002')," +
                 "('psched-004', 'SCHEDULE_18_00', 'prod-003')"
             ).executeUpdate();
+        }
+
+        // Insert StudioSeatSchedule
+        if (isDataAbsent(STUDIO_SEAT_SCHEDULE_CHECK_QUERY, "studio_seat_schedule-001")) {
+            entityManager.createNativeQuery(
+                "INSERT INTO m_studio_seat_schedule (id, studio_id, product_scheduling_id) VALUES " +
+                "('studio_seat_schedule-001', 'studio-001', 'psched-001')," +
+                "('studio_seat_schedule-002', 'studio-001', 'psched-002')," +
+                "('studio_seat_schedule-003', 'studio-002', 'psched-003')," +
+                "('studio_seat_schedule-004', 'studio-003', 'psched-004')"
+            ).executeUpdate();
+        }
+        
+        // Insert SeatLayout for Studio
+        if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-001")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+                "('studio-001', 'SEAT_A1'), ('studio-001', 'SEAT_A2'), ('studio-001', 'SEAT_B1'), ('studio-001', 'SEAT_B2')").executeUpdate();
+        }
+        if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-002")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+                "('studio-002', 'SEAT_A1'), ('studio-002', 'SEAT_A2'), ('studio-002', 'SEAT_B1'), ('studio-002', 'SEAT_B2')").executeUpdate();
+        }
+        if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-003")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+                "('studio-003', 'SEAT_C1'), ('studio-003', 'SEAT_C2'), ('studio-003', 'SEAT_D1')").executeUpdate();
+        }
+
+        // Insert AvailableSeat for StudioSeatSchedule
+        if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-001")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+                "('studio_seat_schedule-001', 'SEAT_A1'), ('studio_seat_schedule-001', 'SEAT_A2'), ('studio_seat_schedule-001', 'SEAT_B1'), ('studio_seat_schedule-001', 'SEAT_B2')").executeUpdate();
+        }
+        if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-002")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+                "('studio_seat_schedule-002', 'SEAT_A1'), ('studio_seat_schedule-002', 'SEAT_A2'), ('studio_seat_schedule-002', 'SEAT_B1'), ('studio_seat_schedule-002', 'SEAT_B2')").executeUpdate();
+        }
+        if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-003")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+                "('studio_seat_schedule-003', 'SEAT_C1'), ('studio_seat_schedule-003', 'SEAT_C2'), ('studio_seat_schedule-003', 'SEAT_D1')").executeUpdate();
+        }
+        if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-004")) {
+            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+                "('studio_seat_schedule-004', 'SEAT_E1'), ('studio_seat_schedule-004', 'SEAT_E2')").executeUpdate();
         }
 
         // Insert relations between Product and Theater
@@ -226,9 +257,16 @@ public class FlixDataSeeder implements CommandLineRunner {
         return count == 0;
     }
 
-    private boolean isSeatDataAbsent(String query, String param) {
+    private boolean isStudioSeatLayoutDataAbsent(String query, String param) {
         Long count = (Long) entityManager.createNativeQuery(query)
             .setParameter("studio_id", param)
+            .getSingleResult();
+        return count == 0;
+    }
+
+    private boolean isStudioSeatScheduleDataAbsent(String query, String param) {
+        Long count = (Long) entityManager.createNativeQuery(query)
+            .setParameter("studio_seat_schedule_id", param)
             .getSingleResult();
         return count == 0;
     }

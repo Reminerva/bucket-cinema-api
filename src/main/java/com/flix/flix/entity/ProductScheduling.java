@@ -48,6 +48,10 @@ public class ProductScheduling {
 
     @OneToMany(mappedBy = "productScheduling")
     @Builder.Default
+    private List<StudioSeatSchedule> studioSeatSchedule = new ArrayList<>();
+
+    @OneToMany(mappedBy = "productScheduling")
+    @Builder.Default
     private List<Transaction> transactions = new ArrayList<>();
 
     @ManyToMany

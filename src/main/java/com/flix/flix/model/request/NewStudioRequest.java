@@ -20,10 +20,10 @@ public class NewStudioRequest {
     private String name;
     @NotBlank(message = "studio size is required")
     private String studioSize;
-    private List<String> bookedSeat;
-    @NotEmpty(message = "available seat is required")
-    private List<String> availableSeat;
+    @NotEmpty(message = "seat layout is required")
+    private List<String> seatLayout;
 
+    private List<NewStudioSeatScheduleRequest> studioSeatScheduleRequests;
     private List<NewProductPricingRequest> productPricingRequests;
     private List<NewProductSchedulingRequest> productSchedulingRequests;
 }
