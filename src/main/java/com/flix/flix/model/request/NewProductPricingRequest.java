@@ -20,5 +20,5 @@ public class NewProductPricingRequest {
     private Double weekendPrice;
     private Boolean isPriceActive;
     @NotBlank(message = "product id is required")
-    private String productIdPricing;
+    private String productId;
 }

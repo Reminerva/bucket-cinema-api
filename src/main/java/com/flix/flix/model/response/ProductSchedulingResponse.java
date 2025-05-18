@@ -14,4 +14,5 @@ import lombok.Setter;
 public class ProductSchedulingResponse {
     private String id;
     private String schedule;
+    private String productId;
 }

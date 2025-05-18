@@ -10,8 +10,7 @@ public interface ProductPricingService {
     ProductPricing create(NewProductPricingRequest productPricingRequest);
     List<ProductPricing> getAll();
     ProductPricing getProductPricingById(String id);
-    List<ProductPricing> getProductPricingByProductId(String id);
-    ProductPricing getProductPricingByPrice(List<ProductPricing> productPricings, Double weekdayPrice, Double weekendPrice);
+    ProductPricing getProductPricingByAttribute(NewProductPricingRequest productPricingRequest);
     ProductPricing update(String id, NewProductPricingRequest productPricingRequest);
     void softDelete(String id);
     ProductPricingResponse toProductPricingResponse(ProductPricing productPricing);

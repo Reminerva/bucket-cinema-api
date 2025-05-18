@@ -16,5 +16,5 @@ public class NewProductSchedulingRequest {
     @NotBlank(message = "schedule is required")
     private String schedule;
     @NotBlank(message = "product id is required")
-    private String productIdScheduling;
+    private String productId;
 }

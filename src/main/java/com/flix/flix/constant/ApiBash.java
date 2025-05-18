@@ -43,11 +43,16 @@ public class ApiBash {
     public static final String CREATE_PRODUCT_SUCCESS = "Create product product success";
     public static final String GET_ALL_PRODUCT_SUCCESS = "Get all product product success";
     public static final String GET_PRODUCT_SUCCESS = "Get product product success";
-    public static final String GET_PRODUCT_FAILED = "Get product product failed";
     public static final String UPDATE_PRODUCT_SUCCESS = "Update product product success";
-    public static final String UPDATE_PRODUCT_FAILED = "Update product product failed";
     public static final String HARD_DELETE_PRODUCT_SUCCESS = "Hard delete product product success";
     public static final String SOFT_DELETE_PRODUCT_SUCCESS = "Soft delete product product success";
+
+    public static final String CREATE_PRODUCT_FAILED = "Create product product failed";
+    public static final String GET_ALL_PRODUCT_FAILED = "Get all product product failed";
+    public static final String GET_PRODUCT_FAILED = "Get product product failed";
+    public static final String UPDATE_PRODUCT_FAILED = "Update product product failed";
+    public static final String HARD_DELETE_PRODUCT_FAILED = "Hard delete product product failed";
+    public static final String SOFT_DELETE_PRODUCT_FAILED = "Soft delete product product failed";
 
     public static final String CREATE_PRODUCTION_COMPANY_SUCCESS = "Create production company success";
     public static final String GET_ALL_PRODUCTION_COMPANY_SUCCESS = "Get all production company success";
@@ -67,11 +72,11 @@ public class ApiBash {
     public static final String UPDATE_STUDIO_SUCCESS = "Update studio success";
     public static final String DELETE_STUDIO_SUCCESS = "Delete studio success";
 
-    public static final String CREATE_PRODUCT_PRICING_SCHEDULING_SUCCESS = "Create product pricing scheduling success";
-    public static final String GET_ALL_PRODUCT_PRICING_SCHEDULING_SUCCESS = "Get all product pricing scheduling success";
-    public static final String GET_PRODUCT_PRICING_SCHEDULING_SUCCESS = "Get product pricing scheduling success";
-    public static final String UPDATE_PRODUCT_PRICING_SCHEDULING_SUCCESS = "Update product pricing scheduling success";
-    public static final String DELETE_PRODUCT_PRICING_SCHEDULING_SUCCESS = "Delete product pricing scheduling success";
+    public static final String CREATE_STUDIO_FAILED = "Create studio failed";
+    public static final String GET_ALL_STUDIO_FAILED = "Get all studio failed";
+    public static final String GET_STUDIO_FAILED = "Get studio failed";
+    public static final String UPDATE_STUDIO_FAILED = "Update studio failed";
+    public static final String DELETE_STUDIO_FAILED = "Delete studio failed";
 
     public static final String CREATE_TRANSACTION_SUCCESS = "Create transaction success";
     public static final String GET_ALL_TRANSACTION_SUCCESS = "Get all transaction success";

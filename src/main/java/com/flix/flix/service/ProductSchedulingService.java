@@ -10,9 +10,7 @@ public interface ProductSchedulingService {
     ProductScheduling create(NewProductSchedulingRequest productSchedulingRequest);
     List<ProductScheduling> getAll();
     ProductScheduling getProductSchedulingById(String id);
-    List<ProductScheduling> getProductSchedulingByProductId(String id);
-    List<ProductScheduling> getProductSchedulingBySchedule(List<ProductScheduling> productSchedulings, String schedule);
-    List<ProductScheduling> getProductSchedulingBySchedules(List<ProductScheduling> productSchedulings, List<String> schedules);
+    ProductScheduling getProductSchedulingByAttribute(NewProductSchedulingRequest productSchedulingRequest);
     ProductScheduling update(String id, NewProductSchedulingRequest productSchedulingRequest);
     void delete(String id);
     ProductSchedulingResponse toProductSchedulingResponse(ProductScheduling productScheduling);

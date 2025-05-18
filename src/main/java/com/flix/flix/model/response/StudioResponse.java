@@ -22,5 +22,6 @@ public class StudioResponse {
     private EStudioSize studioSize;
     private List<ESeat> bookedSeat;
     private List<ESeat> availableSeat;
-    // private List<ProductPricingSchedulingResponse> productPricingScheduling;
+    private List<ProductPricingResponse> productPricing;
+    private List<ProductSchedulingResponse> productScheduling;
 }

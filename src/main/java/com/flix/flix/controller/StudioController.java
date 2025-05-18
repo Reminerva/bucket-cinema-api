@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flix.flix.constant.ApiBash;
-import com.flix.flix.entity.Studio;
 import com.flix.flix.model.request.NewStudioRequest;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.StudioResponse;
@@ -37,9 +37,13 @@ public class StudioController {
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
+                .message(ApiBash.CREATE_STUDIO_FAILED + ": " + message)
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -54,7 +58,7 @@ public class StudioController {
         } catch (Exception e) {
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.CREATE_STUDIO_FAILED + ": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -73,7 +77,7 @@ public class StudioController {
         } catch (Exception e) {
             CommonResponse<List<StudioResponse>> response = CommonResponse.<List<StudioResponse>>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.GET_ALL_STUDIO_FAILED + ": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -94,7 +98,7 @@ public class StudioController {
         } catch (Exception e) {
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.GET_STUDIO_FAILED + ": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -108,9 +112,14 @@ public class StudioController {
         BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
+
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
+                .message(ApiBash.UPDATE_STUDIO_FAILED + ": " + message)
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -125,7 +134,7 @@ public class StudioController {
         } catch (Exception e) {
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.UPDATE_STUDIO_FAILED + ": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -146,7 +155,7 @@ public class StudioController {
         } catch (Exception e) {
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.DELETE_STUDIO_FAILED + ": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

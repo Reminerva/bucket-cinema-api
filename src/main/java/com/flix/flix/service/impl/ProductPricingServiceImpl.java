@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.model.request.NewProductPricingRequest;
 import com.flix.flix.model.response.ProductPricingResponse;
@@ -33,7 +34,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
                     .weekendPrice(productPricingRequest.getWeekendPrice())
                     .isPriceActive(true)
                     .priceDate(LocalDate.now())
-                    .productIdPricing(productService.getProductById(productPricingRequest.getProductIdPricing()))
+                    .productIdPricing(productService.getProductById(productPricingRequest.getProductId()))
                     .build();
             return productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
@@ -51,36 +52,6 @@ public class ProductPricingServiceImpl implements ProductPricingService {
         Optional<ProductPricing> productPricing = productPricingRepository.findById(id);
         if (productPricing.isEmpty()) throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_FOUND);
         return productPricing.get();
-    }
-
-    @Override
-    public List<ProductPricing> getProductPricingByProductId(String id) {
-        try {
-            List<ProductPricing> productPricings = getAll();
-            List<ProductPricing> productPricingsByProductId = productPricings.stream()
-                .filter(productPricing -> 
-                    productPricing.getProductIdPricing().getId().equals(id)
-                ).toList();
-            return productPricingsByProductId;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public ProductPricing getProductPricingByPrice(List<ProductPricing> productPricings, Double weekdayPrice, Double weekendPrice) {
-        try {
-            List<ProductPricing> productPricingsByPrice = productPricings.stream()
-                .filter(productPricing -> 
-                    productPricing.getWeekdayPrice().equals(weekdayPrice) &&
-                    productPricing.getWeekendPrice().equals(weekendPrice) &&
-                    productPricing.getIsPriceActive().equals(true)
-                ).toList();
-            if (productPricingsByPrice.isEmpty()) return null;
-            return productPricingsByPrice.get(0);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -117,6 +88,18 @@ public class ProductPricingServiceImpl implements ProductPricingService {
                 .weekendPrice(productPricing.getWeekendPrice())
                 .isPriceActive(productPricing.getIsPriceActive())
                 .priceDate(productPricing.getPriceDate().toString())
+                .productId(productPricing.getProductIdPricing() == null ? null : productPricing.getProductIdPricing().getId())
                 .build();
+    }
+
+    @Override
+    public ProductPricing getProductPricingByAttribute(NewProductPricingRequest productPricingRequest) {
+        Double weekdayPrice = productPricingRequest.getWeekdayPrice();
+        Double weekendPrice = productPricingRequest.getWeekendPrice();
+        Boolean isPriceActive = productPricingRequest.getIsPriceActive();
+        Product product = productService.getProductById(productPricingRequest.getProductId());
+        Optional<ProductPricing> productPricing = productPricingRepository.findProductPricingByWeekdayPriceAndWeekendPriceAndIsPriceActiveAndProductIdPricing(weekdayPrice, weekendPrice, isPriceActive, product);
+        if (productPricing.isEmpty()) return null;
+        return productPricing.get();
     }
 }

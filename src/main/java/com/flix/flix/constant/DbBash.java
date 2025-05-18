@@ -30,11 +30,14 @@ public class DbBash {
     public static final String PRODUCT_PRICING_SCHEDULING_NOT_FOUND = "Product pricing scheduling not found";
     public static final String PRODUCT_PRICING_SCHEDULING_ALREADY_EXISTS = "Product pricing scheduling already exists";
     public static final String TRANSACTION_NOT_FOUND = "Transaction not found";
+    
+    public static final String PRODUCT_ALREADY_PRICED = "The product has already been priced in the studio";
+    public static final String PRODUCT_ALREADY_SCHEDULED = "The product has already been scheduled in exact time in the studio";
 
     public static final String THEATER_AND_STUDIO_NOT_MATCH = "Theater and studio not match";
     public static final String STUDIO_SEAT_NOT_MATCH = "Studio seat not match";
     public static final String PRODUCT_PRICING_NOT_MATCH = "Product pricing not match";
-    public static final String PRODUCT_SCHEDULING_NOT_MATCH = "Product scheduling not match";
+    public static final String PRODUCT_PRICING_AND_PRODUCT_SCHEDULING_NOT_MATCH = "Product pricing and product scheduling not match";
     public static final String PRODUCT_NOT_MATCH = "Product not match";
     public static final String BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH = "Booked seat and available seat not match (If A1 is in availableSeat, A1 cannot be in bookedSeat, vice versa)";
 

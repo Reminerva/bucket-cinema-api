@@ -30,7 +30,7 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
         try {
             ProductScheduling productScheduling = ProductScheduling.builder()
                     .schedule(ESchedule.findByDescription(productSchedulingRequest.getSchedule()))
-                    .productIdScheduling(productService.getProductById(productSchedulingRequest.getProductIdScheduling()))
+                    .productIdScheduling(productService.getProductById(productSchedulingRequest.getProductId()))
                     .build();
             return productSchedulingRepository.saveAndFlush(productScheduling);
         } catch (Exception e) {
@@ -48,34 +48,6 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
         Optional<ProductScheduling> productScheduling = productSchedulingRepository.findById(id);
         if (productScheduling.isEmpty()) throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_FOUND);
         return productScheduling.get();
-    }
-
-    @Override
-    public List<ProductScheduling> getProductSchedulingByProductId(String id) {
-        try {
-            List<ProductScheduling> productSchedulings = getAll();
-            return productSchedulings.stream().filter(productScheduling -> productScheduling.getProductIdScheduling().getId().equals(id)).toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<ProductScheduling> getProductSchedulingBySchedule(List<ProductScheduling> productSchedulings, String schedule) {
-        try {
-            return productSchedulings.stream().filter(productScheduling -> productScheduling.getSchedule().getDescription().equals(schedule)).toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<ProductScheduling> getProductSchedulingBySchedules(List<ProductScheduling> productSchedulings, List<String> schedules) {
-        try {
-            return productSchedulings.stream().filter(productScheduling -> schedules.contains(productScheduling.getSchedule().getDescription())).toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -106,6 +78,17 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
         return ProductSchedulingResponse.builder()
                 .id(productScheduling.getId())
                 .schedule(productScheduling.getSchedule().getDescription())
+                .productId(productScheduling.getProductIdScheduling() == null ? null : productScheduling.getProductIdScheduling().getId())
                 .build();
+    }
+
+    @Override
+    public ProductScheduling getProductSchedulingByAttribute(NewProductSchedulingRequest productSchedulingRequest) {
+        Optional<ProductScheduling> productScheduling = productSchedulingRepository.findProductSchedulingByScheduleAndProductIdScheduling(
+            ESchedule.findByDescription(productSchedulingRequest.getSchedule()),
+            productService.getProductById(productSchedulingRequest.getProductId())
+        );
+        if (productScheduling.isEmpty()) return null;
+        return productScheduling.get();
     }
 }
