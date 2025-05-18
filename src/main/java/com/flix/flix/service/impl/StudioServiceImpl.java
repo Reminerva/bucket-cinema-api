@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.constant.custom_enum.EStudioSize;
+import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.entity.Studio;
@@ -24,7 +25,9 @@ import com.flix.flix.model.response.StudioResponse;
 import com.flix.flix.repository.StudioRepository;
 import com.flix.flix.service.ProductPricingService;
 import com.flix.flix.service.ProductSchedulingService;
+import com.flix.flix.service.ProductService;
 import com.flix.flix.service.StudioService;
+import com.flix.flix.util.TimeUtil;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,7 @@ public class StudioServiceImpl implements StudioService {
     private final StudioRepository studioRepository;
     private final ProductPricingService productPricingService;
     private final ProductSchedulingService productSchedulingService;
+    private final ProductService productService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -118,8 +122,11 @@ public class StudioServiceImpl implements StudioService {
             // validasi product pricing request (dalam satu request tidak boleh ada dua product pricing berbeda dengan produt yang sama)
             Set<String> uniqueProductIdsInPricing = validateProductPricingRequest(studioRequest);
 
-            // validasi product scheduling request (dalam satu request tidak boleh ada dua product schedulling berbeda dengan product yang sama)
+            // validasi product scheduling request (dalam satu request tidak boleh ada dua product scheduling berbeda dengan product yang sama)
             Set<String> uniqueProductIdsInScheduling = validateProductSchedulingRequest(studioRequest);
+
+            // validasi product scheduling schedule (schedule tidak boleh tubrukan dengan durasi product)
+            validateProductSchedulingRequestSchedule(studioRequest);
 
             // validasi product pricing and scheduling (tidak boleh ada product yang hanya memilki product pricing atau product scheduling saja)
             validateProductPricingAndScheduling(uniqueProductIdsInPricing, uniqueProductIdsInScheduling);
@@ -220,6 +227,22 @@ public class StudioServiceImpl implements StudioService {
         }
 
         return uniqueProductIds;
+    }
+
+    private void validateProductSchedulingRequestSchedule(NewStudioRequest studioRequest) {
+        Long minNextScheduleInLong = 0L;
+        for (NewProductSchedulingRequest productSchedulingRequest : studioRequest.getProductSchedulingRequests()) {
+            Product product = productService.getProductById(productSchedulingRequest.getProductId());
+            Long productDuration = product.getDuration();
+            String schedule = productSchedulingRequest.getSchedule();
+            Long scheduleInLong = TimeUtil.stringToLongTimeMinutes(schedule);
+
+            if (scheduleInLong <= minNextScheduleInLong) {
+                throw new RuntimeException(DbBash.SCHEDULE_CONFLICT);
+            }
+
+            minNextScheduleInLong = scheduleInLong + productDuration;
+        }
     }
 
     private void validateProductPricingAndScheduling(Set<String> uniqueProductIdsInPricing, Set<String> uniqueProductIdsInScheduling) {
