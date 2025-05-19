@@ -45,6 +45,7 @@ public class DbBash {
 
     public static final String SCHEDULE_CONFLICT = "Schedule conflict";
 
+    public static final String INVALID_SEAT_LAYOUT = "Invalid seat layout";
     public static final String SEAT_ALREADY_BOOKED = "Seat already booked";
 
     public static final String UNAUTHORIZED = "Unauthorized";

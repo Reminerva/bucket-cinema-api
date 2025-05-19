@@ -52,8 +52,11 @@ public class StudioServiceImpl implements StudioService {
             List<String> seatLayoutRequest = studioRequest.getSeatLayout();
 
             List<ESeat> seatLayout = ESeat.toESeatList(seatLayoutRequest);
+            if (!EStudioSize.isSeatValid(seatLayout, EStudioSize.findByDescription(studioRequest.getStudioSize()))) {
+                throw new RuntimeException(DbBash.INVALID_SEAT_LAYOUT);
+            }
             Studio studio = Studio.builder()
-                    .name(studioRequest.getName())    
+                    .name(studioRequest.getName())
                     .studioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()))
                     .seatLayout(seatLayout)
                     .isActive(true)

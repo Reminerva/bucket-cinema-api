@@ -45,22 +45,24 @@ public enum EStudioSize {
         throw new IllegalArgumentException("Invalid studio seat: " + seat);
     }
 
-    public static Boolean isSeatValid(String seatDesc, EStudioSize studio) {
+    public static Boolean isSeatValid(List<ESeat> seatList, EStudioSize studio) {
         List<String> seats = List.of(studio.seat.split("-"));
         String seatAlphabetMin = seats.get(0).substring(0, 1);
         String seatAlphabetMax = seats.get(1).substring(0, 1);
         Integer seatNumberMin = Integer.parseInt(seats.get(0).substring(1));
         Integer seatNumberMax = Integer.parseInt(seats.get(1).substring(1));
         
-        if (seatDesc.substring(0,1).charAt(0) < seatAlphabetMax.charAt(0) && 
-            seatDesc.substring(0,1).charAt(0) > seatAlphabetMin.charAt(0)
-        ) {
-            if (Integer.parseInt(seatDesc.substring(1)) >= seatNumberMin && 
-                Integer.parseInt(seatDesc.substring(1)) <= seatNumberMax
+        for (ESeat seat : seatList) {
+            if (seat.getDescription().substring(0,1).charAt(0) > seatAlphabetMax.charAt(0) || 
+                seat.getDescription().substring(0,1).charAt(0) < seatAlphabetMin.charAt(0)
             ) {
-                return true;
+                if (Integer.parseInt(seat.getDescription().substring(1)) > seatNumberMax || 
+                    Integer.parseInt(seat.getDescription().substring(1)) < seatNumberMin
+                ) {
+                    return false;
+                }
             }
         }
-        return false;
+        return true;
     }
 }
