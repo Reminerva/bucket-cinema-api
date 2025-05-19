@@ -86,7 +86,7 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setContactNumber(theaterRequest.getContactNumber());
             theater.setContactEmail(theaterRequest.getContactEmail());
             theater.setUpdatedAt(LocalDate.now());
-            theater.setOprationalStatus(theaterRequest.getOprationalStatus());
+            // theater.setOprationalStatus(theaterRequest.getOprationalStatus());
 
             List<Studio> studios = new ArrayList<>();
             for (String studioId : theaterRequest.getStudiosId()) {
