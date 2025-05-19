@@ -40,10 +40,15 @@ public class DbBash {
 
     public static final String THEATER_AND_STUDIO_NOT_MATCH = "Theater and studio not match";
     public static final String STUDIO_SEAT_NOT_MATCH = "Studio seat not match";
-    public static final String PRODUCT_PRICING_NOT_MATCH = "Product pricing not match";
+    public static final String PRODUCT_AND_THEATER_NOT_MATCH = "Product and theater not match";
+    public static final String PRODUCT_AND_PRODUCT_PRICING_NOT_MATCH = "Product and product pricing not match";
+    public static final String PRODUCT_AND_PRODUCT_SCHEDULING_NOT_MATCH = "Product and product scheduling not match";
+    public static final String PRODUCT_PRICING_AND_STUDIO_NOT_MATCH = "Product pricing and studio not match";
+    public static final String PRODUCT_SCHEDULING_AND_STUDIO_NOT_MATCH = "Product scheduling and studio not match";
+    public static final String PRODUCT_SCHEDULING_NOT_MATCH = "Product scheduling not match";
     public static final String PRODUCT_PRICING_AND_PRODUCT_SCHEDULING_NOT_MATCH = "Product pricing and product scheduling not match";
-    public static final String PRODUCT_NOT_MATCH = "Product not match";
     public static final String BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH = "Booked seat and available seat not match (If A1 is in availableSeat, A1 cannot be in bookedSeat, vice versa)";
+    public static final String QTY_AND_SEAT_NOT_MATCH = "Qty and seat not match";
 
     public static final String SCHEDULE_CONFLICT = "Schedule conflict";
 
@@ -60,5 +65,8 @@ public class DbBash {
 
     public static final String USERNAME_ALREADY_EXISTS_CONSTRAINT = "m_user_username_key";
     public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
+
+    public static final String ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION = "Only cashier or customer can create transaction";
+    public static final String ONLY_ADMIN_CAN_UPDATE_TRANSACTION = "Only admin can update transaction";
 
 }

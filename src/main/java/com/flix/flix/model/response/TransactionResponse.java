@@ -16,6 +16,7 @@ import lombok.Setter;
 public class TransactionResponse {
     private String id;
     private String customerId;
+    private String employeeCashierId;
     private String theaterId;
     private String studioId;
     private String productId;
@@ -23,11 +24,13 @@ public class TransactionResponse {
     private String productSchedulingId;
     private Integer qty;
     private Integer tax;
-    private String transactionDate;
-    private Boolean paymentStatus;
+    private String transactionDateTime;
+    private String paymentStatus;
     private String paymentDateTime;
     private String paymentMethod;
     private List<String> seats;
     private String createdAt;
     private String updatedAt;
+    private Double total;
+    private String watchDate;
 }

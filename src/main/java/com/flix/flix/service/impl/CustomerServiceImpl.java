@@ -236,9 +236,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackOn = Exception.class)
     public CustomerResponse updateByCredentials(HttpServletRequest httpServletRequest, UpdateCustomerRequest UpdateCustomerRequest) {
         try {
+
             AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
-            System.out.println("ASDFKASJHJASDJK" + userAccount.getEmail());
-            System.out.println("ASDFKASJHJASDJK" + userAccount.getRole());
 
             if (!userAccount.getRole().contains(ERole.ROLE_CUSTOMER)) throw new RuntimeException(DbBash.UNAUTHORIZED);
 

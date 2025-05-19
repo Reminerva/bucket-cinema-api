@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EPaymentMethod;
+import com.flix.flix.constant.custom_enum.EPaymentStatus;
 import com.flix.flix.constant.custom_enum.ESeat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -73,13 +74,15 @@ public class Transaction {
     @Column
     private Integer tax;
 
-    @Column(name = "transaction_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Schema(type = "string", example = "2025-04-05")
-    private LocalDate transactionDate;
+    @Column(name = "transaction_date_time")
+    private LocalDateTime transactionDateTime;
+
+    @Column(name = "watch_date")
+    private LocalDate watchDate;
 
     @Column(name = "payment_status")
-    private Boolean paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private EPaymentStatus paymentStatus;
 
     @Column(name = "payment_date_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -91,11 +94,15 @@ public class Transaction {
     private EPaymentMethod paymentMethod;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private List<ESeat> seats;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
+
+    @Column(name = "expiration_date")
+    private LocalDateTime expirationDate;
 }

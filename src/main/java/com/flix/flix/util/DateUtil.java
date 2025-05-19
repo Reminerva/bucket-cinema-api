@@ -24,4 +24,8 @@ public class DateUtil {
             throw new IllegalArgumentException("Invalid date format: " + dateTime + ". Expected format: yyyy-MM-dd HH:mm:ss", e);
         }
     }
+
+    public static Boolean isWeekend(LocalDate date) {
+        return date.getDayOfWeek().getValue() == 6 || date.getDayOfWeek().getValue() == 7;
+    }
 }

@@ -1,6 +1,7 @@
 package com.flix.flix.service.impl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,26 +9,34 @@ import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EPaymentMethod;
+import com.flix.flix.constant.custom_enum.EPaymentStatus;
+import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.constant.custom_enum.ESeat;
-import com.flix.flix.entity.Customer;
+import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.entity.Studio;
+import com.flix.flix.entity.StudioSeatSchedule;
 import com.flix.flix.entity.Theater;
 import com.flix.flix.entity.Transaction;
-import com.flix.flix.model.request.TransactionRequest;
+import com.flix.flix.model.request.NewStudioSeatScheduleRequest;
+import com.flix.flix.model.request.NewTransactionRequest;
 import com.flix.flix.model.response.TransactionResponse;
 import com.flix.flix.repository.TransactionRepository;
 import com.flix.flix.service.CustomerService;
+import com.flix.flix.service.EmployeeService;
 import com.flix.flix.service.ProductPricingService;
 import com.flix.flix.service.ProductSchedulingService;
 import com.flix.flix.service.ProductService;
+import com.flix.flix.service.StudioSeatScheduleService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.service.TheaterService;
 import com.flix.flix.service.TransactionService;
 import com.flix.flix.util.DateUtil;
+import com.flix.flix.util.TokenUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -42,38 +51,63 @@ public class TransactionServiceImpl implements TransactionService {
     private final ProductService productService;
     private final ProductPricingService productPricingService;
     private final ProductSchedulingService productSchedulingService;
+    private final EmployeeService employeeService;
+    private final StudioSeatScheduleService studioSeatScheduleService;
+    private final TokenUtil tokenUtil;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public TransactionResponse create(TransactionRequest transactionRequest) {
+    public TransactionResponse create(NewTransactionRequest transactionRequest, HttpServletRequest request) {
         try {
-            Customer customer = customerService.getCustomerById(transactionRequest.getCustomerId());
+
             Theater theater = theaterService.getTheaterById(transactionRequest.getTheaterId());
             Studio studio = studioService.getStudioById(transactionRequest.getStudioId());
             Product product = productService.getProductById(transactionRequest.getProductId());
             ProductPricing productPricing = productPricingService.getProductPricingById(transactionRequest.getProductPricingId());
             ProductScheduling productScheduling = productSchedulingService.getProductSchedulingById(transactionRequest.getProductSchedulingId());
 
-            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling);
+            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling, transactionRequest.getQty(), transactionRequest.getSeats());
 
             Transaction transaction = Transaction.builder()
-                    .customer(customer)
+                    .customer(null)
+                    .employee(null)
                     .theater(theater)
                     .studio(studio)
                     .product(product)
+                    .watchDate(DateUtil.parseDate(transactionRequest.getWatchDate()))
                     .productPricing(productPricing)
                     .productScheduling(productScheduling)
                     .qty(transactionRequest.getQty())
                     .tax(transactionRequest.getTax())
-                    .transactionDate(DateUtil.parseDate(transactionRequest.getTransactionDate()))
-                    .paymentStatus(transactionRequest.getPaymentStatus())
+                    .transactionDateTime(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()))
+                    .paymentStatus(EPaymentStatus.PAYMENT_STATUS_PENDING)
                     .paymentDateTime(DateUtil.parseDateTime(transactionRequest.getPaymentDateTime()))
                     .paymentMethod(EPaymentMethod.findByDescription(transactionRequest.getPaymentMethod()))
                     .seats(ESeat.toESeatList(transactionRequest.getSeats()))
-                    .createdAt(LocalDate.now())
-                    .updatedAt(LocalDate.now())
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .expirationDate(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()).plusHours(1))
                     .build();
-            return toTransactionResponse(transactionRepository.save(transaction));
+            
+            // update studio seat
+            updateStudioSeatSchedule(studio, productScheduling, transaction);
+
+            System.out.println("NIININININ1: ");
+            AppUser appUser = tokenUtil.getAppUserByToken(request);
+            System.out.println("NIININININ2: " + appUser.getRole().toString());
+            if (appUser.getRole().contains(ERole.ROLE_CUSTOMER)) {
+                transaction.setCustomer(customerService.getCustomerById(appUser.getCustomer().getId()));
+                System.out.println("NIININININ3: " + appUser.getEmail());
+                return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
+            } else if (appUser.getRole().contains(ERole.ROLE_CASHIER)) {
+                transaction.setEmployee(employeeService.getEmployeeById(appUser.getCustomer().getId()));
+                System.out.println("NIININININ4: " + appUser.getEmail());
+                return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
+            } else {
+                System.out.println("NIININININ5: " + appUser.getEmail());
+                throw new RuntimeException(DbBash.ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION);
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -106,7 +140,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public TransactionResponse update(TransactionRequest transactionRequest, String id) {
+    public TransactionResponse update(NewTransactionRequest transactionRequest, String id, HttpServletRequest request) {
         try {
             Studio studio = studioService.getStudioById(transactionRequest.getStudioId());
             Theater theater = theaterService.getTheaterById(transactionRequest.getTheaterId());
@@ -114,23 +148,43 @@ public class TransactionServiceImpl implements TransactionService {
             ProductPricing productPricing = productPricingService.getProductPricingById(transactionRequest.getProductPricingId());
             ProductScheduling productScheduling = productSchedulingService.getProductSchedulingById(transactionRequest.getProductSchedulingId());
 
-            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling);
+            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling, transactionRequest.getQty(), transactionRequest.getSeats());
 
             Transaction transaction = getTransactionById(id);
 
+            updateStudioSeatSchedule(studio, productScheduling, transaction);
+
+            AppUser appUser = tokenUtil.getAppUserByToken(request);
+            if (!appUser.getRole().contains(ERole.ROLE_ADMIN)) {
+                throw new RuntimeException(DbBash.ONLY_ADMIN_CAN_UPDATE_TRANSACTION);
+            }
+
             transaction.setQty(transactionRequest.getQty());
             transaction.setTax(transactionRequest.getTax());
-            transaction.setPaymentStatus(transactionRequest.getPaymentStatus());
+            transaction.setTransactionDateTime(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()));
+            transaction.setWatchDate(DateUtil.parseDate(transactionRequest.getWatchDate()));
+            transaction.setProductPricing(productPricing);
+            transaction.setProductScheduling(productScheduling);
+            transaction.setStudio(studio);
+            transaction.setTheater(theater);
+            transaction.setProduct(product);
+            transaction.setPaymentStatus(EPaymentStatus.findByDescription(transactionRequest.getPaymentStatus()));
             transaction.setPaymentDateTime(DateUtil.parseDateTime(transactionRequest.getPaymentDateTime()));
             transaction.setPaymentMethod(EPaymentMethod.findByDescription(transactionRequest.getPaymentMethod()));
             transaction.setSeats(ESeat.toESeatList(transactionRequest.getSeats()));
-            return toTransactionResponse(transactionRepository.save(transaction));
+            return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private TransactionResponse toTransactionResponse(Transaction transaction) {
+        Double total = 0.0;
+        if (DateUtil.isWeekend(transaction.getWatchDate())) {
+            total = transaction.getQty() * transaction.getProductPricing().getWeekendPrice() * (1 + transaction.getTax());
+        } else {
+            total = transaction.getQty() * transaction.getProductPricing().getWeekdayPrice() * (1 + transaction.getTax());
+        }
         TransactionResponse transactionResponse = TransactionResponse.builder()
                 .id(transaction.getId())
                 .customerId(transaction.getCustomer().getId())
@@ -141,40 +195,82 @@ public class TransactionServiceImpl implements TransactionService {
                 .productSchedulingId(transaction.getProductScheduling().getId())
                 .qty(transaction.getQty())
                 .tax(transaction.getTax())
-                .transactionDate(transaction.getTransactionDate().toString())
-                .paymentStatus(transaction.getPaymentStatus())
+                .transactionDateTime(transaction.getTransactionDateTime().toString())
+                .paymentStatus(transaction.getPaymentStatus().getDescription())
                 .paymentDateTime(transaction.getPaymentDateTime().toString())
                 .paymentMethod(transaction.getPaymentMethod().getDescription())
                 .seats(transaction.getSeats().stream().map(ESeat::getDescription).toList())
                 .createdAt(transaction.getCreatedAt().toString())
                 .updatedAt(transaction.getUpdatedAt().toString())
+                .watchDate(transaction.getWatchDate().toString())
+                .total(total)
                 .build();
         return transactionResponse;
     }
 
-    private void validateRequest(TransactionRequest transactionRequest, Theater theater, Studio studio, Product product,
-            ProductPricing productPricing, ProductScheduling productScheduling) {
+    private void validateRequest(NewTransactionRequest transactionRequest, Theater theater, Studio studio, Product product,
+            ProductPricing productPricing, ProductScheduling productScheduling, Integer qty, List<String> seats) {
         if (studio.getTheater().getId() != theater.getId()) throw new RuntimeException(DbBash.THEATER_AND_STUDIO_NOT_MATCH);
-        // for (String seat : transactionRequest.getSeats()) {
-        //     if (!studio.getAvailableSeat().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
-        // }
-        // if (studio.getProductPricingScheduling().stream()
-        //         .noneMatch(productPricingScheduling ->
-        //                 productPricingScheduling.getProductId().getId().equals(product.getId()))) {
-        //     throw new RuntimeException(DbBash.PRODUCT_NOT_MATCH);
-        // }
-        // if (studio.getProductPricingScheduling().stream()
-        //         .noneMatch(productPricingScheduling ->
-        //                 productPricingScheduling.getProductPricing().getId().equals(productPricing.getId()))) {
-        //     throw new RuntimeException(DbBash.PRODUCT_PRICING_NOT_MATCH);
-        // }
-        // if (studio.getProductPricingScheduling().stream()
-        //         .noneMatch(productPricingScheduling ->
-        //                 productPricingScheduling.getProductScheduling().stream()
-        //                         .anyMatch(productScheduling1 ->
-        //                                 productScheduling1.getId().equals(productScheduling.getId())))) {
-        //     throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_MATCH);
-        // }
+        for (String seat : transactionRequest.getSeats()) {
+            if (!studio.getSeatLayout().contains(ESeat.findByDescription(seat))) throw new RuntimeException(DbBash.STUDIO_SEAT_NOT_MATCH);
+        }
+        if (theater.getStudios().stream()
+            .noneMatch(studioStream ->
+                    studioStream.getId().equals(studio.getId()))) {
+                throw new RuntimeException(DbBash.THEATER_AND_STUDIO_NOT_MATCH);
+            }
+        if (theater.getProducts().stream()
+            .noneMatch(productStream ->
+                    productStream.getId().equals(product.getId()))) {
+                throw new RuntimeException(DbBash.PRODUCT_AND_THEATER_NOT_MATCH);
+            }
+        if (studio.getProductPricing().stream()
+            .noneMatch(productPricingStream ->
+                    productPricingStream.getProductIdPricing().getId().equals(product.getId()))) {
+                throw new RuntimeException(DbBash.PRODUCT_AND_PRODUCT_PRICING_NOT_MATCH);
+            }
+        if (studio.getProductScheduling().stream()
+            .noneMatch(productSchegetProductSchedulingStream ->
+                    productSchegetProductSchedulingStream.getProductIdScheduling().getId().equals(product.getId()))) {
+                throw new RuntimeException(DbBash.PRODUCT_AND_PRODUCT_SCHEDULING_NOT_MATCH);
+            }
+        if (studio.getProductPricing().stream()
+            .noneMatch(productPricingStream ->
+                    productPricingStream.getId().equals(productPricing.getId()))) {
+                throw new RuntimeException(DbBash.PRODUCT_PRICING_AND_STUDIO_NOT_MATCH);
+            }
+        if (studio.getProductScheduling().stream()
+            .noneMatch(productSchedulingStream ->
+                    productSchedulingStream.getId().equals(productScheduling.getId()))) {
+                throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_AND_STUDIO_NOT_MATCH);
+            }
+        if (seats.size() != qty) throw new RuntimeException(DbBash.QTY_AND_SEAT_NOT_MATCH);
+    }
+
+    private void updateStudioSeatSchedule(Studio studio, ProductScheduling productScheduling, Transaction transaction) {
+        System.out.println("ASDASDASDD1");
+        StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.getStudioSeatScheduleByAttribute(studio.getId(), productScheduling.getId());
+        System.out.println("ASDASDASDD2" + studioSeatSchedule.getId() + " " + studio.getId() + " " + productScheduling.getId());
+        System.out.println("ASDASDASDD3" + studioSeatSchedule.getId() + " " + studioSeatSchedule.getStudio().getId() + " " + studioSeatSchedule.getProductScheduling().getId());
+        List<ESeat> newBookedSeat = new ArrayList<>();
+        List<ESeat> newAvailableSeat = new ArrayList<>();
+
+        newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
+        newBookedSeat.addAll(transaction.getSeats());
+        System.out.println("ASDASDASDD4");
+
+        newAvailableSeat.addAll(studioSeatSchedule.getAvailableSeat());
+        newAvailableSeat.removeAll(transaction.getSeats());
+        System.out.println("ASDASDASDD5");
+        NewStudioSeatScheduleRequest newStudioSeatScheduleRequest = NewStudioSeatScheduleRequest.builder()
+                .studioId(studio.getId())
+                .bookedSeat(ESeat.toESeatStringList(newBookedSeat))
+                .availableSeat(ESeat.toESeatStringList(newAvailableSeat))
+                .productSchedulingId(productScheduling.getId())
+                .build();
+        System.out.println("ASDASDASDD6");
+        studioSeatScheduleService.update(null, newStudioSeatScheduleRequest);
+        System.out.println("ASDASDASDD7");
     }
 
 }
