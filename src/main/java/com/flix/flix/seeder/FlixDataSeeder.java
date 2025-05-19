@@ -18,6 +18,7 @@ public class FlixDataSeeder implements CommandLineRunner {
     private static final String PRODUCTION_COMPANY_CHECK_QUERY = "SELECT COUNT(*) FROM m_production_company WHERE id = :id";
     private static final String USER_CHECK_QUERY = "SELECT COUNT(*) FROM m_user WHERE id = :id";
     private static final String CUSTOMER_CHECK_QUERY = "SELECT COUNT(*) FROM m_customer WHERE id = :id";
+    private static final String EMPLOYEE_CHECK_QUERY = "SELECT COUNT(*) FROM m_employee WHERE id = :id";
     private static final String FAV_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM m_fav_genre WHERE id = :id";
     private static final String MOVIE_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM m_movie_genre WHERE id = :id";
     private static final String THEATER_CHECK_QUERY = "SELECT COUNT(*) FROM m_theater WHERE id = :id";
@@ -74,8 +75,7 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "INSERT INTO m_user (id, username, email, password, role, customer_id) VALUES " +
                 "('user-001', 'budi', 'budi@example.com', :password, ARRAY['ROLE_CUSTOMER'], 'cust-001')," +
                 "('user-002', 'siti', 'siti@example.com', :password, ARRAY['ROLE_CUSTOMER'], 'cust-002')," +
-                "('user-003', 'john', 'john@example.com', :password, ARRAY['ROLE_CUSTOMER'], 'cust-003')," +
-                "('admin-001', 'admin', 'admin@flix.com', :password, ARRAY['ROLE_ADMIN'], NULL)"
+                "('user-003', 'john', 'john@example.com', :password, ARRAY['ROLE_CUSTOMER'], 'cust-003')" 
             ).setParameter("password", defaultPassword).executeUpdate();
         }
 
@@ -122,10 +122,37 @@ public class FlixDataSeeder implements CommandLineRunner {
             ).executeUpdate();
         }
 
+        // Insert Employee
+        if (isDataAbsent(EMPLOYEE_CHECK_QUERY, "emp-001")) {
+            entityManager.createNativeQuery(
+                "INSERT INTO m_employee (id, fullname, address, phone_number, gender, city, date_of_birth, date_of_appliment, theater_id, nik_number, is_active) VALUES " +
+                "('emp-001', 'Panda', 'Jl. Raya Bandung', '081234567890', 'GENDER_MALE', 'Bandung', '1990-01-01', NOW(), 'theater-001', '1111111111111111', TRUE)," +
+                "('emp-002', 'Beruang', 'Jl. Raya Jakarta', '089876543210', 'GENDER_FEMALE', 'Jakarta', '1995-05-05', NOW(), 'theater-001', '2222222222222222', TRUE)," +
+                "('emp-003', 'Kucing', 'Jl. Bandung Selatan', '089324823422', 'GENDER_FEMALE', 'Jakarta', '1997-12-15', NOW(), 'theater-002', '3333333333333333', TRUE)," +
+                "('emp-004', 'John Doe', '123 Main Street', '+1-555-1234', 'GENDER_MALE', 'New York', '1980-10-10', NOW(), 'theater-002', '4444444444444444', TRUE)," +
+                "('emp-005', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-001', NULL, TRUE)," +
+                "('emp-006', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-002', NULL, TRUE)"
+            ).executeUpdate();
+        }
+
+        // Insert AppUser Employee
+        if (isDataAbsent(USER_CHECK_QUERY, "useremp-001")) {
+            entityManager.createNativeQuery(
+                "INSERT INTO m_user (id, username, email, password, role, employee_id) VALUES " +
+                "('useremp-001', 'empName1', 'empName1@flix.com', :password, ARRAY['ROLE_EMPLOYEE'], 'emp-001')," +
+                "('useremp-002', 'empName2', 'empName2@flix.com', :password, ARRAY['ROLE_EMPLOYEE'], 'emp-002')," +
+                "('useremp-003', 'empName3', 'empName3@flix.com', :password, ARRAY['ROLE_EMPLOYEE'], 'emp-003')," +
+                "('useremp-004', 'empName4', 'empName4@flix.com', :password, ARRAY['ROLE_EMPLOYEE'], 'emp-004')," +
+                "('useremp-005', 'empName5', 'empName5@flix.com', :password, ARRAY['ROLE_CASHIER'], 'emp-005')," +
+                "('useremp-006', 'empName6', 'empName6@flix.com', :password, ARRAY['ROLE_CASHIER'], 'emp-006')," +
+                "('admin-001', 'admin', 'admin@flix.com', :password, ARRAY['ROLE_ADMIN'], NULL)"
+            ).setParameter("password", defaultPassword).executeUpdate();
+        }
+
         // Insert Studio
         if (isDataAbsent(STUDIO_CHECK_QUERY, "studio-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_studio (id, name, studio_size, theater_id, isActive) VALUES " +
+                "INSERT INTO m_studio (id, name, studio_size, theater_id, is_active) VALUES " +
                 "('studio-001', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-001', TRUE)," +
                 "('studio-002', 'Studio 2', 'STUDIO_REGULER_MEDIUM', 'theater-001', TRUE)," +
                 "('studio-003', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-002', TRUE)"

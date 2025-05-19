@@ -54,6 +54,9 @@ public class AppUser implements UserDetails {
     @OneToOne
     private Customer customer;
 
+    @OneToOne
+    private Employee employee;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<ERole> myRole = role;

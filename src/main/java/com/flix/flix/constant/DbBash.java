@@ -3,6 +3,7 @@ package com.flix.flix.constant;
 public class DbBash {
     public static final String USER_DB = "m_user";
     public static final String CUSTOMER_DB = "m_customer";
+    public static final String EMPLOYEE_DB = "m_employee";
     public static final String FAV_GENRE_DB = "m_fav_genre";
     public static final String MOVIE_GENRE_DB = "m_movie_genre";
     public static final String PRODUCT_DB = "m_product";
@@ -17,6 +18,7 @@ public class DbBash {
     public static final String TRANSACTION_DB = "t_transaction";
 
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+    public static final String EMPLOYEE_NOT_FOUND = "Employee not found";
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String USER_NOT_FOUND = "User not found";
     public static final String TRASACTION_NOT_FOUND = "Transaction not found";
@@ -49,4 +51,14 @@ public class DbBash {
     public static final String SEAT_ALREADY_BOOKED = "Seat already booked";
 
     public static final String UNAUTHORIZED = "Unauthorized";
+
+    public static final String NIK_NUMBER_ALREADY_EXISTS_CONSTRAINT = "m_employee_nik_number_key";
+    public static final String NIK_NUMBER_ALREADY_EXISTS = "NIK number already exists";
+
+    public static final String EMAIL_ALREADY_EXISTS_CONSTRAINT = "m_user_email_key";
+    public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
+
+    public static final String USERNAME_ALREADY_EXISTS_CONSTRAINT = "m_user_username_key";
+    public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
+
 }

@@ -44,6 +44,10 @@ public class Transaction {
     private Customer customer;
 
     @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @ManyToOne
     @JoinColumn(name = "theater_id")
     private Theater theater;
 

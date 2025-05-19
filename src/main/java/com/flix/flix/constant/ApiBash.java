@@ -2,12 +2,12 @@ package com.flix.flix.constant;
 
 public class ApiBash {
     public static final String AUTH = "/api/v1/auth";
-    public static final String USER_SIGN_UP = "/user/signup";
-    public static final String ADMIN_SIGN_UP = "/admin/signup";
+    public static final String SIGN_UP = "signup";
     public static final String SIGN_IN = "/user/signin";
     public static final String SIGN_OUT = "/user/signout";
     public static final String PRODUCT = "/api/v1/product";
     public static final String CUSTOMER = "/api/v1/customer";
+    public static final String EMPLOYEE = "/api/v1/employee";
     public static final String ARTIST = "/api/v1/artist";
     public static final String PRODUCTION_COMPANY = "/api/v1/production-company";
     public static final String THEATER = "/api/v1/theater";
@@ -33,6 +33,24 @@ public class ApiBash {
     public static final String GET_ALL_CUSTOMER_SUCCESS = "Get all customer success!";
     public static final String UPDATE_CUSTOMER_SUCCESS = "Customer updated successfully!";
     public static final String DELETE_CUSTOMER_SUCCESS = "Customer deleted successfully!";
+
+    public static final String CREATE_EMPLOYEE_SUCCESS = "Employee created successfully!";
+    public static final String GET_ALL_EMPLOYEE_SUCCESS = "Get all employee successfully!";
+    public static final String GET_EMPLOYEE_SUCCESS = "Get employee successfully!";
+    public static final String UPDATE_EMPLOYEE_SUCCESS = "Employee updated successfully!";
+    public static final String DELETE_EMPLOYEE_SUCCESS = "Employee deleted successfully!";
+
+    public static final String CREATE_EMPLOYEE_FAILED = "Create employee failed!";
+    public static final String GET_ALL_EMPLOYEE_FAILED = "Get all employee failed!";
+    public static final String GET_EMPLOYEE_FAILED = "Get employee failed!";
+    public static final String UPDATE_EMPLOYEE_FAILED = "Update employee failed!";
+    public static final String DELETE_EMPLOYEE_FAILED = "Delete employee failed!";
+
+    public static final String CREATE_ADMIN_SUCCESS = "Admin created successfully!";
+    public static final String CREATE_ADMIN_FAILED = "Admin created failed!";
+
+    public static final String CREATE_CASHIER_SUCCESS = "Cashier created successfully!";
+    public static final String CREATE_CASHIER_FAILED = "Cashier created failed!";
 
     public static final String CREATE_ARTIST_SUCCESS = "Artist created successfully!";
     public static final String GET_ALL_ARTIST_SUCCESS = "Get all artist successfully!";

@@ -59,6 +59,10 @@ public class Theater {
 
     @OneToMany(mappedBy = "theater")
     @Builder.Default
+    private List<Employee> employees = new ArrayList<>();
+
+    @OneToMany(mappedBy = "theater")
+    @Builder.Default
     private List<Studio> studios = new ArrayList<>();
 
     @ManyToMany(mappedBy = "theaters")
