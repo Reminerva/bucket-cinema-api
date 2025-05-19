@@ -52,12 +52,20 @@ public enum ELanguage {
         this.description = description;
     }
 
+    public static String getValidLanguages() {
+        String validLanguages = "";
+        for (ELanguage language : values()) {
+            validLanguages += language.description + ", ";
+        }
+        return validLanguages.substring(0, validLanguages.length() - 2);
+    }
+
     public static ELanguage findByDescription(String description) {
         for (ELanguage language : values()) {
             if (language.description.equalsIgnoreCase(description)) {
                 return language;
             }
         }
-        throw new IllegalArgumentException("Invalid language description: " + description);
+        throw new IllegalArgumentException("Invalid language description: " + description + ". Valid languages: " + getValidLanguages());
     }
 }

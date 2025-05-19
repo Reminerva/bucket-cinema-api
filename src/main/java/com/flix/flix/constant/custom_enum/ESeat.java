@@ -591,13 +591,21 @@ public enum ESeat {
         this.description = seat;
     }
 
+    public static String getValidSeats() {
+        String validSeats = "";
+        for (ESeat seat : values()) {
+            validSeats += seat.description + ", ";
+        }
+        return validSeats.substring(0, validSeats.length() - 2);
+    }
+
     public static ESeat findByDescription(String description) {
         for (ESeat seat : values()) {
             if (seat.description.equalsIgnoreCase(description)) {
                 return seat;
             }
         }
-        throw new IllegalArgumentException("Invalid studio seat: " + description);
+        throw new IllegalArgumentException("Invalid studio seat: " + description + ". Valid seats: " + getValidSeats());
     }
 
     public static List<ESeat> toESeatList(List<String> seats) {

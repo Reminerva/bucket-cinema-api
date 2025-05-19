@@ -17,12 +17,20 @@ public enum ERated {
         this.description = description;
     }
 
+    public static String getValidRatings() {
+        String validRatings = "";
+        for (ERated rating : values()) {
+            validRatings += rating.description + ", ";
+        }
+        return validRatings.substring(0, validRatings.length() - 2);
+    }
+
     public static ERated findByDescription(String description){
         for (ERated rated : values()){
             if (rated.description.equalsIgnoreCase(description)){
                 return rated;
             }
         }
-        throw new IllegalArgumentException("Invalid rated description: " + description);
+        throw new IllegalArgumentException("Invalid rated description: " + description + ". Valid ratings: " + getValidRatings());
     }
 }

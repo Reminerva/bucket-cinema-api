@@ -78,12 +78,20 @@ public enum ECountry {
         this.description = description;
     }
 
+    public static String getValidCountries() {
+        String validCountries = "";
+        for (ECountry country : values()) {
+            validCountries += country.description + ", ";
+        }
+        return validCountries.substring(0, validCountries.length() - 2);
+    }
+
     public static ECountry findByDescription(String description) {
         for (ECountry country : values()) {
             if (country.description.equalsIgnoreCase(description)) {
                 return country;
             }
         }
-        throw new IllegalArgumentException("Invalid country description: " + description);
+        throw new IllegalArgumentException("Invalid country description: " + description + ". Valid countries: " + getValidCountries());
     }
 }

@@ -1,5 +1,7 @@
 package com.flix.flix.constant.custom_enum;
 
+import java.util.List;
+
 import lombok.Getter;
 
 @Getter
@@ -17,13 +19,21 @@ public enum EStudioSize {
         this.seat = seat;
     }
 
+    public static String getValidStudioSize() {
+        String validStudios = "";
+        for (EStudioSize studio : values()) {
+            validStudios += studio.description + ", ";
+        }
+        return validStudios.substring(0, validStudios.length() - 2);
+    }
+
     public static EStudioSize findByDescription(String description) {
         for (EStudioSize studio : values()) {
             if (studio.description.equalsIgnoreCase(description)) {
                 return studio;
             }
         }
-        throw new IllegalArgumentException("Invalid studio description: " + description);
+        throw new IllegalArgumentException("Invalid studio description: " + description + ". Valid studios: " + getValidStudioSize());
     }
 
     public static EStudioSize findBySeat(String seat) {
@@ -33,5 +43,24 @@ public enum EStudioSize {
             }
         }
         throw new IllegalArgumentException("Invalid studio seat: " + seat);
+    }
+
+    public static Boolean isSeatValid(String seatDesc, EStudioSize studio) {
+        List<String> seats = List.of(studio.seat.split("-"));
+        String seatAlphabetMin = seats.get(0).substring(0, 1);
+        String seatAlphabetMax = seats.get(1).substring(0, 1);
+        Integer seatNumberMin = Integer.parseInt(seats.get(0).substring(1));
+        Integer seatNumberMax = Integer.parseInt(seats.get(1).substring(1));
+        
+        if (seatDesc.substring(0,1).charAt(0) < seatAlphabetMax.charAt(0) && 
+            seatDesc.substring(0,1).charAt(0) > seatAlphabetMin.charAt(0)
+        ) {
+            if (Integer.parseInt(seatDesc.substring(1)) >= seatNumberMin && 
+                Integer.parseInt(seatDesc.substring(1)) <= seatNumberMax
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }

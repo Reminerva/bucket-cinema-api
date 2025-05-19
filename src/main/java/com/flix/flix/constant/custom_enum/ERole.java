@@ -7,6 +7,7 @@ public enum ERole {
     
     ROLE_ADMIN("Admin"),
     ROLE_CASHIER("Cashier"),
+    ROLE_EMPLOYEE("Employee"),
     ROLE_CUSTOMER("Customer");
 
     private final String description;

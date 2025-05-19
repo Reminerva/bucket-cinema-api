@@ -78,12 +78,20 @@ public enum ESchedule {
         this.description = description;
     }
 
+    public static String getValidSchedules() {
+        String validSchedules = "";
+        for (ESchedule schedule : values()) {
+            validSchedules += schedule.description + ", ";
+        }
+        return validSchedules.substring(0, validSchedules.length() - 2);
+    }
+
     public static ESchedule findByDescription(String description) {
         for (ESchedule schedule : values()) {
             if (schedule.description.equalsIgnoreCase(description)) {
                 return schedule;
             }
         }
-        throw new IllegalArgumentException("Invalid schedule description: " + description);
+        throw new IllegalArgumentException("Invalid schedule description: " + description + ". Valid schedules: " + getValidSchedules());
     }
 }

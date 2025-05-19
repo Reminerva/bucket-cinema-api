@@ -14,13 +14,21 @@ public enum EGender {
         this.description = description;
     }
 
+    public static String getValidGenders() {
+        String validGenders = "";
+        for (EGender gender : values()) {
+            validGenders += gender.description + ", ";
+        }
+        return validGenders.substring(0, validGenders.length() - 2);
+    }
+
     public static EGender findByDescription(String description){
         for (EGender gender : values()){
             if (gender.description.equalsIgnoreCase(description)){
                 return gender;
             }
         }
-        throw new IllegalArgumentException("Invalid gender description: " + description);
+        throw new IllegalArgumentException("Invalid gender description: " + description + ". Valid genders: " + getValidGenders());
     }
     
 }

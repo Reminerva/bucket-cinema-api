@@ -16,12 +16,20 @@ public enum EPaymentMethod {
         this.description = description;
     }
 
+    public static String getValidPaymentTypes() {
+        String validPaymentTypes = "";
+        for (EPaymentMethod paymentType : values()) {
+            validPaymentTypes += paymentType.description + ", ";
+        }
+        return validPaymentTypes.substring(0, validPaymentTypes.length() - 2);
+    }
+
     public static EPaymentMethod findByDescription(String description) {
         for (EPaymentMethod paymentType : values()) {
             if (paymentType.description.equalsIgnoreCase(description)) {
                 return paymentType;
             }
         }
-        throw new IllegalArgumentException("Invalid payment type description: " + description);
+        throw new IllegalArgumentException("Invalid payment type description: " + description + ". Valid payment types: " + getValidPaymentTypes());
     }
 }

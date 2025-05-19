@@ -38,12 +38,20 @@ public enum EGenre {
         this.description = description;
     }
 
+    public static String getValidGenres() {
+        String validGenres = "";
+        for (EGenre genre : values()) {
+            validGenres += genre.description + ", ";
+        }
+        return validGenres.substring(0, validGenres.length() - 2);
+    }
+
     public static EGenre findByDescription(String description) {
         for (EGenre genre : values()) {
             if (genre.description.equalsIgnoreCase(description)) {
                 return genre;
             }
         }
-        throw new IllegalArgumentException("Invalid genre description: " + description);
+        throw new IllegalArgumentException("Invalid genre description: " + description + ". Valid genres: " + getValidGenres());
     }
 }
