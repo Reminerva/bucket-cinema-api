@@ -92,6 +92,6 @@ public enum ESchedule {
                 return schedule;
             }
         }
-        throw new IllegalArgumentException("Invalid schedule description: " + description + ". Valid schedules: " + getValidSchedules());
+        throw new IllegalArgumentException("Invalid schedule description: '" + description + "'. Valid schedules: " + getValidSchedules());
     }
 }

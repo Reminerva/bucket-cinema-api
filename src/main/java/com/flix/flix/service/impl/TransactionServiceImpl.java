@@ -1,5 +1,7 @@
 package com.flix.flix.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import com.flix.flix.constant.custom_enum.EPaymentMethod;
 import com.flix.flix.constant.custom_enum.EPaymentStatus;
 import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.constant.custom_enum.ESeat;
+import com.flix.flix.constant.custom_enum.ETax;
 import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
@@ -78,7 +81,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .productPricing(productPricing)
                     .productScheduling(productScheduling)
                     .qty(transactionRequest.getQty())
-                    .tax(transactionRequest.getTax())
+                    .tax(ETax.findByValue(transactionRequest.getTax()))
                     .transactionDateTime(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()))
                     .paymentStatus(EPaymentStatus.PAYMENT_STATUS_PENDING)
                     .paymentDateTime(DateUtil.parseDateTime(transactionRequest.getPaymentDateTime()))
@@ -109,7 +112,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -118,7 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             return transactionRepository.findAll().stream().map(transaction -> toTransactionResponse(transaction)).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -134,7 +137,7 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             return toTransactionResponse(getTransactionById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -160,7 +163,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
             transaction.setQty(transactionRequest.getQty());
-            transaction.setTax(transactionRequest.getTax());
+            transaction.setTax(ETax.findByValue(transactionRequest.getTax()));
             transaction.setTransactionDateTime(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()));
             transaction.setWatchDate(DateUtil.parseDate(transactionRequest.getWatchDate()));
             transaction.setProductPricing(productPricing);
@@ -174,17 +177,18 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setSeats(ESeat.toESeatList(transactionRequest.getSeats()));
             return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     private TransactionResponse toTransactionResponse(Transaction transaction) {
         Double total = 0.0;
         if (DateUtil.isWeekend(transaction.getWatchDate())) {
-            total = transaction.getQty() * transaction.getProductPricing().getWeekendPrice() * (1 + transaction.getTax());
+            total = (transaction.getQty() * transaction.getProductPricing().getWeekendPrice() * (1 + transaction.getTax().getValue()*0.01));
         } else {
-            total = transaction.getQty() * transaction.getProductPricing().getWeekdayPrice() * (1 + transaction.getTax());
+            total = (transaction.getQty() * transaction.getProductPricing().getWeekdayPrice() * (1 + transaction.getTax().getValue()*0.01));
         }
+        BigDecimal roundedTotal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP);
         TransactionResponse transactionResponse = TransactionResponse.builder()
                 .id(transaction.getId())
                 .customerId(transaction.getCustomer().getId())
@@ -194,7 +198,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .productPricingId(transaction.getProductPricing().getId())
                 .productSchedulingId(transaction.getProductScheduling().getId())
                 .qty(transaction.getQty())
-                .tax(transaction.getTax())
+                .tax(transaction.getTax().getValue())
                 .transactionDateTime(transaction.getTransactionDateTime().toString())
                 .paymentStatus(transaction.getPaymentStatus().getDescription())
                 .paymentDateTime(transaction.getPaymentDateTime().toString())
@@ -203,7 +207,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .createdAt(transaction.getCreatedAt().toString())
                 .updatedAt(transaction.getUpdatedAt().toString())
                 .watchDate(transaction.getWatchDate().toString())
-                .total(total)
+                .total(roundedTotal)
                 .build();
         return transactionResponse;
     }

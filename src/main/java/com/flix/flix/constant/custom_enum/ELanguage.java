@@ -66,6 +66,6 @@ public enum ELanguage {
                 return language;
             }
         }
-        throw new IllegalArgumentException("Invalid language description: " + description + ". Valid languages: " + getValidLanguages());
+        throw new IllegalArgumentException("Invalid language description: '" + description + "'. Valid languages: " + getValidLanguages());
     }
 }

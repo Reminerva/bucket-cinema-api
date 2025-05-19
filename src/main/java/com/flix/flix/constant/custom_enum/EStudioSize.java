@@ -33,7 +33,7 @@ public enum EStudioSize {
                 return studio;
             }
         }
-        throw new IllegalArgumentException("Invalid studio description: " + description + ". Valid studios: " + getValidStudioSize());
+        throw new IllegalArgumentException("Invalid studio description: '" + description + "'. Valid studios: " + getValidStudioSize());
     }
 
     public static EStudioSize findBySeat(String seat) {

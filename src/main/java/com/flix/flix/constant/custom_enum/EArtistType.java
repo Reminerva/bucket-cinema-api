@@ -30,6 +30,6 @@ public enum EArtistType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Invalid artist type description: " + description + ". Valid artist types: " + getValidTypes());
+        throw new IllegalArgumentException("Invalid artist type description: '" + description + "'. Valid artist types: " + getValidTypes());
     }
 }

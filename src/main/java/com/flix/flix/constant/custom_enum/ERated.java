@@ -31,6 +31,6 @@ public enum ERated {
                 return rated;
             }
         }
-        throw new IllegalArgumentException("Invalid rated description: " + description + ". Valid ratings: " + getValidRatings());
+        throw new IllegalArgumentException("Invalid rated description: '" + description + "'. Valid ratings: " + getValidRatings());
     }
 }

@@ -28,7 +28,7 @@ public enum EGender {
                 return gender;
             }
         }
-        throw new IllegalArgumentException("Invalid gender description: " + description + ". Valid genders: " + getValidGenders());
+        throw new IllegalArgumentException("Invalid gender description: '" + description + "'. Valid genders: " + getValidGenders());
     }
     
 }

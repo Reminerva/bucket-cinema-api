@@ -605,7 +605,7 @@ public enum ESeat {
                 return seat;
             }
         }
-        throw new IllegalArgumentException("Invalid studio seat: " + description + ". Valid seats: " + getValidSeats());
+        throw new IllegalArgumentException("Invalid studio seat: '" + description + "'. Valid seats: " + getValidSeats());
     }
 
     public static List<ESeat> toESeatList(List<String> seats) {

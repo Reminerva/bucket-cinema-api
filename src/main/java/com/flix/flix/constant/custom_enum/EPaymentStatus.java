@@ -29,7 +29,7 @@ public enum EPaymentStatus {
                 return paymentStatus;
             }
         }
-        throw new IllegalArgumentException("Invalid payment status description: " + description + ". Valid payment statuses: " + getValidPaymentStatuses());
+        throw new IllegalArgumentException("Invalid payment status description: '" + description + "'. Valid payment statuses: " + getValidPaymentStatuses());
     }
 
 }

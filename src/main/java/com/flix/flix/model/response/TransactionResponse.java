@@ -1,5 +1,6 @@
 package com.flix.flix.model.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +32,6 @@ public class TransactionResponse {
     private List<String> seats;
     private String createdAt;
     private String updatedAt;
-    private Double total;
+    private BigDecimal total;
     private String watchDate;
 }

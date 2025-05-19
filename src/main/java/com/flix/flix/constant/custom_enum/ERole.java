@@ -30,6 +30,6 @@ public enum ERole {
                 return role;
             }
         }
-        throw new IllegalArgumentException("Invalid role description: " + description + ". Valid roles: " + getValidRoles());
+        throw new IllegalArgumentException("Invalid role description: '" + description + "'. Valid roles: " + getValidRoles());
     }
 }

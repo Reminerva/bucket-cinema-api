@@ -30,6 +30,6 @@ public enum EPaymentMethod {
                 return paymentType;
             }
         }
-        throw new IllegalArgumentException("Invalid payment type description: " + description + ". Valid payment types: " + getValidPaymentTypes());
+        throw new IllegalArgumentException("Invalid payment type description: '" + description + "'. Valid payment types: " + getValidPaymentTypes());
     }
 }

@@ -92,6 +92,6 @@ public enum ECountry {
                 return country;
             }
         }
-        throw new IllegalArgumentException("Invalid country description: " + description + ". Valid countries: " + getValidCountries());
+        throw new IllegalArgumentException("Invalid country description: '" + description + "'. Valid countries: " + getValidCountries());
     }
 }

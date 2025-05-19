@@ -52,6 +52,6 @@ public enum EGenre {
                 return genre;
             }
         }
-        throw new IllegalArgumentException("Invalid genre description: " + description + ". Valid genres: " + getValidGenres());
+        throw new IllegalArgumentException("Invalid genre description: '" + description + "'. Valid genres: " + getValidGenres());
     }
 }

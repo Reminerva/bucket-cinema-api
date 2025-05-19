@@ -9,6 +9,7 @@ import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EPaymentMethod;
 import com.flix.flix.constant.custom_enum.EPaymentStatus;
 import com.flix.flix.constant.custom_enum.ESeat;
+import com.flix.flix.constant.custom_enum.ETax;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
@@ -72,7 +73,8 @@ public class Transaction {
     private Integer qty;
 
     @Column
-    private Integer tax;
+    @Enumerated(EnumType.STRING)
+    private ETax tax;
 
     @Column(name = "transaction_date_time")
     private LocalDateTime transactionDateTime;
