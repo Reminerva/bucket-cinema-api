@@ -1,0 +1,345 @@
+{
+	"info": {
+		"_postman_id": "6aa6cb1b-1822-4bb9-a73d-9dfbb06b0816",
+		"name": "PostmanCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41842110",
+		"_collection_link": "https://team99-3188.postman.co/workspace/Cinema-Bucket~7627910f-f924-4339-a728-4cb55d3c7fd7/collection/41842110-6aa6cb1b-1822-4bb9-a73d-9dfbb06b0816?action=share&source=collection_link&creator=41842110"
+	},
+	"item": [
+		{
+			"name": "signin",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"admin@flix.com\",\r\n    \"password\" : \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/auth/user/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"user",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "customer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "artist",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/artist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"artist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"The Lion King\",\r\n    \"duration\": 118,\r\n    \"language\": \"English\",\r\n    \"country\": \"United States\",\r\n    \"releaseDate\": \"1994-06-24\",\r\n    \"posterUrl\": \"https://example.com/lionking_poster.png\",\r\n    \"trailerUrl\": \"https://example.com/lionking_trailer.mp4\",\r\n    \"rated\": \"G\",\r\n    \"budget\": 45000000,\r\n    \"synopsis\": \"A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.\",\r\n    \"tagline\": \"Hakuna Matata.\",\r\n    \"imdbRating\": 8.5,\r\n    \"rottenTomatoesRating\": 93,\r\n    \"director\": \"Roger Allers, Rob Minkoff\",\r\n    \"writer\": \"Irene Mecchi, Jonathan Roberts, Linda Woolverton\",\r\n    \"producer\": \"Don Hahn\",\r\n    \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n    \"movieGenre\": [\r\n        \"Animation\",\r\n        \"Adventure\"\r\n    ],\r\n    \"artistId\": [],\r\n    \"customerLikeId\": null,\r\n    \"customerDislikeId\": null,\r\n    \"showingOnTheaters\": [\r\n        \"theater-001\",\r\n        \"theater-002\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "production-company",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/production-company",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"production-company"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "theater",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"CGV Bandung Electronic Center\",\r\n    \"city\": \"Bandung\",\r\n    \"address\": \"Jl. Purnawarman No.13-15\",\r\n    \"contactNumber\": \"022-82060901\",\r\n    \"contactEmail\": \"bec@cgv.id\",\r\n    \"oprationalStatus\": true,\r\n    \"studiosId\": [\r\n        \"studio-001\",\r\n        \"studio-002\"\r\n    ],\r\n    \"nowShowingId\": [\r\n            \"prod-001\",\r\n            \"prod-002\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/theater",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"theater"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "studio",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"Studio 1\",\r\n    \"studioSize\" : \"REGULER SMALL\",\r\n    \"seatLayout\": [\r\n        \"A1\",\r\n        \"A2\",\r\n        \"B1\",\r\n        \"B2\"\r\n    ],\r\n    \"studioSeatScheduleRequests\" : [\r\n        {\r\n            \"studioId\": \"studio-001\",\r\n            \"productSchedulingId\": \"psched-001\",\r\n            \"bookedSeat\": [\r\n                // \"A1\"\r\n            ],\r\n            \"availableSeat\": [\r\n                \"A1\",\r\n                \"A2\",\r\n                \"B1\",\r\n                \"B2\"\r\n            ]\r\n        }\r\n        ,\r\n        {\r\n            \"studioId\": \"studio-001\",\r\n            \"productSchedulingId\": \"psched-002\",\r\n            \"bookedSeat\": [\r\n                // \"A1\"\r\n            ],\r\n            \"availableSeat\": [\r\n                \"A1\",\r\n                \"A2\",\r\n                \"B1\",\r\n                \"B2\"\r\n            ]\r\n        }\r\n    ],\r\n    \"productPricingRequests\": [\r\n        {\r\n            \"weekdayPrice\": 45000.0,\r\n            \"weekendPrice\": 65000.0,\r\n            \"isPriceActive\": true,\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"weekdayPrice\": 51000.0,\r\n        //     \"weekendPrice\": 70000.0,\r\n        //     \"isPriceActive\": true,\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n    ],\r\n    \"productSchedulingRequests\": [\r\n        {\r\n            \"schedule\": \"15:00\",\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"16:00\",\r\n        //     \"productId\": \"prod-002\"\r\n        // }\r\n        ,\r\n        {\r\n            \"schedule\": \"17:00\",\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"19:00\",\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"19:00\",\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/studio/studio-001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"studio",
+						"studio-001"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

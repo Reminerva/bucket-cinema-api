@@ -145,7 +145,7 @@ public class StudioController {
     public ResponseEntity<CommonResponse<StudioResponse>> delete(@PathVariable String id) {
         try {
             StudioResponse studioResponse = studioService.getById(id);
-            studioService.delete(id);
+            studioService.softDelete(id);
             CommonResponse<StudioResponse> response = CommonResponse.<StudioResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.DELETE_STUDIO_SUCCESS)

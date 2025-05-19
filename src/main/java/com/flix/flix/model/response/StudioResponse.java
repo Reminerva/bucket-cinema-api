@@ -23,4 +23,5 @@ public class StudioResponse {
     private List<StudioSeatScheduleResponse> studioSeatSchedule;
     private List<ProductPricingResponse> productPricing;
     private List<ProductSchedulingResponse> productScheduling;
+    private Boolean isActive;
 }

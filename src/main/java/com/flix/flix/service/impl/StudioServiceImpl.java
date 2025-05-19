@@ -56,6 +56,7 @@ public class StudioServiceImpl implements StudioService {
                     .name(studioRequest.getName())    
                     .studioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()))
                     .seatLayout(seatLayout)
+                    .isActive(true)
                     .build();
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
@@ -68,6 +69,15 @@ public class StudioServiceImpl implements StudioService {
     public List<StudioResponse> getAll() {
         try {
             return studioRepository.findAll().stream().map(this::toStudioResponse).toList();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<StudioResponse> getAllActive() {
+        try {
+            return studioRepository.findAllByIsActive(true).stream().map(this::toStudioResponse).toList();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -146,10 +156,11 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void delete(String id) {
+    public void softDelete(String id) {
         try {
-            getStudioById(id);
-            studioRepository.deleteById(id);
+            Studio studio = getStudioById(id);
+            studio.setIsActive(false);
+            studioRepository.saveAndFlush(studio);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -176,6 +187,7 @@ public class StudioServiceImpl implements StudioService {
                     .studioSeatSchedule(studio.getStudioSeatSchedule().stream().map(studioSeatScheduleService::toStudioSeatScheduleResponse).toList())
                     .productPricing(productPricings)
                     .productScheduling(productSchedulings)
+                    .isActive(studio.getIsActive())
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

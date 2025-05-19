@@ -125,10 +125,10 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Studio
         if (isDataAbsent(STUDIO_CHECK_QUERY, "studio-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_studio (id, name, studio_size, theater_id) VALUES " +
-                "('studio-001', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-001')," +
-                "('studio-002', 'Studio 2', 'STUDIO_REGULER_MEDIUM', 'theater-001')," +
-                "('studio-003', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-002')"
+                "INSERT INTO m_studio (id, name, studio_size, theater_id, isActive) VALUES " +
+                "('studio-001', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-001', TRUE)," +
+                "('studio-002', 'Studio 2', 'STUDIO_REGULER_MEDIUM', 'theater-001', TRUE)," +
+                "('studio-003', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-002', TRUE)"
             ).executeUpdate();
         }
 

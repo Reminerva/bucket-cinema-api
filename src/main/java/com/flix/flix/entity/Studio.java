@@ -42,6 +42,9 @@ public class Studio {
     @Column
     private String name;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @Column(name = "studio_size")
     @Enumerated(EnumType.STRING)
     private EStudioSize studioSize;
@@ -70,4 +73,5 @@ public class Studio {
     @OneToMany(mappedBy = "studio")
     @Builder.Default
     private List<Transaction> transactions = new ArrayList<>();
+
 }
