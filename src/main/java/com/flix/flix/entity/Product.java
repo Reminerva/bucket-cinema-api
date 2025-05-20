@@ -110,9 +110,19 @@ public class Product {
     @Builder.Default
     private List<Artist> artists = new ArrayList<>();
     @ManyToMany
+    @JoinTable(
+        name = "t_product_customer_like",
+        joinColumns = @JoinColumn(name = "like_product_id"),
+        inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
     @Builder.Default
     private List<Customer> customerLike = new ArrayList<>();
     @ManyToMany
+    @JoinTable(
+        name = "t_product_customer_dislike",
+        joinColumns = @JoinColumn(name = "dislike_product_id"),
+        inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
     @Builder.Default
     private List<Customer> customerDislike = new ArrayList<>();
     @ManyToOne

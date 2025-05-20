@@ -149,13 +149,13 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
     private void validateSeatRequest(List<ESeat> availableSeatRequest, List<ESeat> bookedSeatRequest) {
         for (ESeat seat : availableSeatRequest) {
             if (bookedSeatRequest.contains(seat)) {
-                throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
+                throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_CONFLICT);
             }
         }
-        for (ESeat seat : bookedSeatRequest) {
-            if (availableSeatRequest.contains(seat)) {
-                throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH);
-            }
-        }
+        // for (ESeat seat : bookedSeatRequest) {
+        //     if (availableSeatRequest.contains(seat)) {
+        //         throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_CONFLICT);
+        //     }
+        // }
     }
 }

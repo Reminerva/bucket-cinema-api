@@ -157,6 +157,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             favGenres.removeAll(toRemove);
             // favGenreRepository.deleteAll(toRemove);
+            validateLikeDislikeProductRequest(updateCustomerRequest);
 
             if (updateCustomerRequest.getLikeProductId() != null && !updateCustomerRequest.getLikeProductId().isEmpty()) {
                 for (String productId : updateCustomerRequest.getLikeProductId()) {
@@ -200,6 +201,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    private void validateLikeDislikeProductRequest(UpdateCustomerRequest updateCustomerRequest) {
+        try {
+            for (String productId : updateCustomerRequest.getDislikeProductId()) {
+                if (updateCustomerRequest.getLikeProductId().contains(productId)) {
+                    throw new RuntimeException(DbBash.LIKE_DISLIKE_CONFLICT);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void delete(String id) {
@@ -219,10 +232,10 @@ public class CustomerServiceImpl implements CustomerService {
                     .country(customer.getCountry())
                     .phoneNumber(customer.getPhoneNumber())
                     .city(customer.getCity())  
-                    .gender(customer.getGender().toString())
+                    .gender(customer.getGender().getDescription())
                     .registrationDate(customer.getRegistrationDate().toString())
                     .lastLogin(customer.getLastLogin().toString())
-                    .favGenre(customer.getFavGenre() == null ? null : customer.getFavGenre().stream().map(fg -> fg.getFavGenre().toString()).toList())
+                    .favGenre(customer.getFavGenre() == null ? null : customer.getFavGenre().stream().map(fg -> fg.getFavGenre().getDescription()).toList())
                     .likeProductId(customer.getLikeProduct().stream().map(product -> product.getId()).toList())
                     .dislikeProductId(customer.getDislikeProduct().stream().map(product -> product.getId()).toList())
                     .build();

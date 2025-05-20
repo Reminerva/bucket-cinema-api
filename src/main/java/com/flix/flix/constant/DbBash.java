@@ -47,10 +47,11 @@ public class DbBash {
     public static final String PRODUCT_SCHEDULING_AND_STUDIO_NOT_MATCH = "Product scheduling and studio not match";
     public static final String PRODUCT_SCHEDULING_NOT_MATCH = "Product scheduling not match";
     public static final String PRODUCT_PRICING_AND_PRODUCT_SCHEDULING_NOT_MATCH = "Product pricing and product scheduling not match";
-    public static final String BOOKED_SEAT_AND_AVAILABLE_SEAT_NOT_MATCH = "Booked seat and available seat not match (If A1 is in availableSeat, A1 cannot be in bookedSeat, vice versa)";
     public static final String QTY_AND_SEAT_NOT_MATCH = "Qty and seat not match";
-
+    
     public static final String SCHEDULE_CONFLICT = "Schedule conflict";
+    public static final String BOOKED_SEAT_AND_AVAILABLE_SEAT_CONFLICT = "Booked seat and available seat conflict";
+    public static final String LIKE_DISLIKE_CONFLICT = "Like and dislike product conflict";
 
     public static final String INVALID_SEAT_LAYOUT = "Invalid seat layout";
     public static final String SEAT_ALREADY_BOOKED = "Seat already booked";
