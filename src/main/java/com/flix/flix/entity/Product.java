@@ -111,7 +111,7 @@ public class Product {
     private List<Artist> artists = new ArrayList<>();
     @ManyToMany
     @JoinTable(
-        name = "t_product_customer_like",
+        name = "t_customer_like_product",
         joinColumns = @JoinColumn(name = "like_product_id"),
         inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
@@ -119,7 +119,7 @@ public class Product {
     private List<Customer> customerLike = new ArrayList<>();
     @ManyToMany
     @JoinTable(
-        name = "t_product_customer_dislike",
+        name = "t_customer_dislike_product",
         joinColumns = @JoinColumn(name = "dislike_product_id"),
         inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
