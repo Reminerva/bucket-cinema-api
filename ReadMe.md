@@ -23,6 +23,7 @@
 * [Request and Response Format](#request-and-response-format)
 * [Error Handling](#error-handling)
 * [Date and Time Format](#date-and-time-format)
+* [ERD](#erd)
 
 ## Introduction
 The Bucket Cinema API provides a set of RESTful endpoints for managing data related to a movie/entertainment platform.  It includes functionality for managing users, products, customers, transactions, and other related entities.
@@ -142,3 +143,6 @@ http://localhost:{SERVER_PORT}/api/v1
 
 ## Date and Time Format
 * Date and time parameters should be formatted as  `yyyy-MM-dd HH:mm:ss`.
+
+## ERD
+- Visit this link to view the ERD: https://app.eraser.io/workspace/n9mFfFTEmnOXXWOSxBbY?origin=share&elements=ND0ETIWLNOAqa-I80RltPQ
