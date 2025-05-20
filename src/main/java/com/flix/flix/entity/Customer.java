@@ -17,6 +17,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -70,7 +71,8 @@ public class Customer {
     @Builder.Default
     private List<FavGenre> favGenre = new ArrayList<>();
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     @ManyToMany(mappedBy = "customerLike", cascade = {CascadeType.MERGE, CascadeType.PERSIST})

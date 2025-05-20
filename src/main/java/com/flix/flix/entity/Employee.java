@@ -66,7 +66,8 @@ public class Employee {
     @Column(name = "date_of_appliment")
     private LocalDate dateOfAppliment;
 
-    @OneToOne(mappedBy = "employee")
+    @OneToOne
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     @ManyToOne

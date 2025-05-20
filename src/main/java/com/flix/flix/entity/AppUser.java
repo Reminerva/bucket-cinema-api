@@ -51,10 +51,10 @@ public class AppUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private List<ERole> role;
 
-    @OneToOne
+    @OneToOne(mappedBy = "appUser")
     private Customer customer;
 
-    @OneToOne
+    @OneToOne(mappedBy = "appUser")
     private Employee employee;
 
     @Override

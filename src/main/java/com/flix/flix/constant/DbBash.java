@@ -11,7 +11,7 @@ public class DbBash {
     public static final String ARTIST_DB = "m_artist";
     public static final String THEATER_DB = "m_theater";
     public static final String STUDIO_DB = "m_studio";
-    public static final String STUDIO_SEAT_SCHEDULE_DB = "m_studio_seat_schedule";
+    public static final String STUDIO_SEAT_SCHEDULE_DB = "t_studio_seat_schedule";
     public static final String PRODUCT_PRICING_DB = "m_product_pricing";
     public static final String PRODUCT_SCHEDULING_DB = "m_product_scheduling";
     public static final String PRODUCT_PRICING_SCHEDULING_DB = "m_product_pricing_scheduling";

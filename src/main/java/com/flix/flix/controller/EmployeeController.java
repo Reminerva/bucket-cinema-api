@@ -64,6 +64,8 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             String message = e.getMessage();
+            if (e.getMessage().contains(DbBash.EMAIL_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.EMAIL_ALREADY_EXISTS);};
+            if (e.getMessage().contains(DbBash.USERNAME_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.USERNAME_ALREADY_EXISTS);};
             if (e.getMessage().contains(DbBash.NIK_NUMBER_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.NIK_NUMBER_ALREADY_EXISTS);};
             CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
