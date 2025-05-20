@@ -14,7 +14,7 @@
     * [Customer API](#customer-api)
     * [Product API](#product-api)
     * [Production Company API](#production-company-api)
-    * [Product Pricing and Scheduling API](#product-pricing-and-scheduling-api)
+    * [Employee API](#employee-api)
     * [Studio API](#studio-api)
     * [Theater API](#theater-api)
     * [Transaction API](#transaction-api)
@@ -86,12 +86,14 @@ http://localhost:{SERVER_PORT}/api/v1
 * `PUT /api/v1/production-company/{id}`: Update production company.
 * `DELETE /api/v1/production-company/{id}`: Delete production company.
 
-### Product Pricing and Scheduling API
-* `POST /api/v1/product-pricing-scheduling`: Create a new product pricing and scheduling entry.
-* `GET /api/v1/product-pricing-scheduling/{id}`: Get product pricing and scheduling entry by ID.
-* `GET /api/v1/product-pricing-scheduling`: Get all product pricing and scheduling entries.
-* `PUT /api/v1/product-pricing-scheduling/{id}`: Update product pricing and scheduling entry.
-* `DELETE /api/v1/product-pricing-scheduling/{id}`: Delete product pricing and scheduling entry.
+### Employee API
+* `POST /api/v1/employee`: Create a new employee.
+* `POST /api/v1/employee/cashier`: Create a new cashier.
+* `POST /api/v1/employee/admin`: Create a new admin.
+* `GET /api/v1/employee/{id}`: Get employee entry by ID.
+* `GET /api/v1/employee`: Get all employee entries.
+* `PUT /api/v1/employee/{id}`: Update employee entry.
+* `DELETE /api/v1/employee/{id}`: Delete employee entry.
 
 ### Studio API
 * `POST /api/v1/studio`: Create a new studio.
