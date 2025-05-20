@@ -143,38 +143,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public TransactionResponse update(NewTransactionRequest transactionRequest, String id, HttpServletRequest request) {
+    public TransactionResponse updatePaymentStatus(NewTransactionRequest transactionRequest, String id, HttpServletRequest request) {
         try {
-            Studio studio = studioService.getStudioById(transactionRequest.getStudioId());
-            Theater theater = theaterService.getTheaterById(transactionRequest.getTheaterId());
-            Product product = productService.getProductById(transactionRequest.getProductId());
-            ProductPricing productPricing = productPricingService.getProductPricingById(transactionRequest.getProductPricingId());
-            ProductScheduling productScheduling = productSchedulingService.getProductSchedulingById(transactionRequest.getProductSchedulingId());
-
-            validateRequest(transactionRequest, theater, studio, product, productPricing, productScheduling, transactionRequest.getQty(), transactionRequest.getSeats());
-
             Transaction transaction = getTransactionById(id);
-
-            updateStudioSeatSchedule(studio, productScheduling, transaction);
-
-            AppUser appUser = tokenUtil.getAppUserByToken(request);
-            if (!appUser.getRole().contains(ERole.ROLE_ADMIN)) {
-                throw new RuntimeException(DbBash.ONLY_ADMIN_CAN_UPDATE_TRANSACTION);
+            if (EPaymentStatus.PAYMENT_STATUS_SUCCESS.equals(EPaymentStatus.findByDescription(transactionRequest.getPaymentStatus()))) {
+                transaction.setPaymentStatus(EPaymentStatus.PAYMENT_STATUS_SUCCESS);
+            } else if (EPaymentStatus.PAYMENT_STATUS_FAILED.equals(EPaymentStatus.findByDescription(transactionRequest.getPaymentStatus()))) {
+                transaction.setPaymentStatus(EPaymentStatus.PAYMENT_STATUS_FAILED);
+                updateStudioSeatSchedule(transaction.getStudio(), transaction.getProductScheduling(), transaction);
             }
-
-            transaction.setQty(transactionRequest.getQty());
-            transaction.setTax(ETax.findByValue(transactionRequest.getTax()));
-            transaction.setTransactionDateTime(DateUtil.parseDateTime(transactionRequest.getTransactionDateTime()));
-            transaction.setWatchDate(DateUtil.parseDate(transactionRequest.getWatchDate()));
-            transaction.setProductPricing(productPricing);
-            transaction.setProductScheduling(productScheduling);
-            transaction.setStudio(studio);
-            transaction.setTheater(theater);
-            transaction.setProduct(product);
-            transaction.setPaymentStatus(EPaymentStatus.findByDescription(transactionRequest.getPaymentStatus()));
-            transaction.setPaymentDateTime(DateUtil.parseDateTime(transactionRequest.getPaymentDateTime()));
-            transaction.setPaymentMethod(EPaymentMethod.findByDescription(transactionRequest.getPaymentMethod()));
-            transaction.setSeats(ESeat.toESeatList(transactionRequest.getSeats()));
             return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -259,13 +236,20 @@ public class TransactionServiceImpl implements TransactionService {
         List<ESeat> newBookedSeat = new ArrayList<>();
         List<ESeat> newAvailableSeat = new ArrayList<>();
 
-        newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
-        newBookedSeat.addAll(transaction.getSeats());
-        System.out.println("ASDASDASDD4");
-
-        newAvailableSeat.addAll(studioSeatSchedule.getAvailableSeat());
-        newAvailableSeat.removeAll(transaction.getSeats());
-        System.out.println("ASDASDASDD5");
+        if (transaction.getPaymentStatus().equals(EPaymentStatus.PAYMENT_STATUS_PENDING)) {
+            newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
+            newBookedSeat.addAll(transaction.getSeats());
+            System.out.println("ASDASDASDD4");
+    
+            newAvailableSeat.addAll(studioSeatSchedule.getAvailableSeat());
+            newAvailableSeat.removeAll(transaction.getSeats());
+            System.out.println("ASDASDASDD5");
+        } else if (transaction.getPaymentStatus().equals(EPaymentStatus.PAYMENT_STATUS_FAILED)) {
+            newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
+            newBookedSeat.removeAll(transaction.getSeats());
+            newAvailableSeat.addAll(studioSeatSchedule.getAvailableSeat());
+            newAvailableSeat.addAll(transaction.getSeats());
+        }
         NewStudioSeatScheduleRequest newStudioSeatScheduleRequest = NewStudioSeatScheduleRequest.builder()
                 .studioId(studio.getId())
                 .bookedSeat(ESeat.toESeatStringList(newBookedSeat))

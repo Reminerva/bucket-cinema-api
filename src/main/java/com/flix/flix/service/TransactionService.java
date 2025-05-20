@@ -13,5 +13,5 @@ public interface TransactionService {
     List<TransactionResponse> getAll();
     Transaction getTransactionById(String id);
     TransactionResponse getById(String id);
-    TransactionResponse update(NewTransactionRequest transactionRequest, String id, HttpServletRequest request);
+    TransactionResponse updatePaymentStatus(NewTransactionRequest transactionRequest, String id, HttpServletRequest request);
 }

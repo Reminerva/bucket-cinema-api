@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,15 +36,20 @@ public class TheaterController {
         @Valid @RequestBody NewTheaterRequest newTheaterRequest,
         BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
         try {
+            if (bindingResult.hasErrors()) {
+                FieldError fieldError = bindingResult.getFieldError();
+                    String message = fieldError != null
+                        ? fieldError.getDefaultMessage()
+                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
+    
+                CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
+                        .code(HttpStatus.BAD_REQUEST.value())
+                        .message(message)
+                        .data(null)
+                        .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message(ApiBash.CREATE_THEATER_SUCCESS)
@@ -106,15 +112,20 @@ public class TheaterController {
         @Valid @RequestBody NewTheaterRequest newTheaterRequest,
         BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(bindingResult.getFieldError().getDefaultMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
         try {
+            if (bindingResult.hasErrors()) {
+                FieldError fieldError = bindingResult.getFieldError();
+                    String message = fieldError != null
+                        ? fieldError.getDefaultMessage()
+                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
+    
+                CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
+                        .code(HttpStatus.BAD_REQUEST.value())
+                        .message(message)
+                        .data(null)
+                        .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.UPDATE_THEATER_SUCCESS)

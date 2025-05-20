@@ -107,7 +107,7 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse<TransactionResponse>> updateTransaction(
+    public ResponseEntity<CommonResponse<TransactionResponse>> updatePaymentTransaction(
         @PathVariable String id,
         @Valid
         @RequestBody
@@ -132,7 +132,7 @@ public class TransactionController {
             CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.UPDATE_TRANSACTION_SUCCESS)
-                .data(transactionService.update(transactionRequest, id, httpServletRequest))
+                .data(transactionService.updatePaymentStatus(transactionRequest, id, httpServletRequest))
                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
