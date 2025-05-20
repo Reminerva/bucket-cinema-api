@@ -17,6 +17,7 @@ public class ApiBash {
 
     public static final String HARD_DELETE = "/hard-delete";
     public static final String SOFT_DELETE = "/soft-delete";
+    public static final String REFRESH_ALL_SEAT = "/refresh-all-seat";
     
     public static final String SIGN_UP_SUCCESS = "Sign up success";
     public static final String SIGN_UP_FAILED = "Sign up failed";
@@ -83,6 +84,14 @@ public class ApiBash {
     public static final String GET_THEATER_SUCCESS = "Get theater success";
     public static final String UPDATE_THEATER_SUCCESS = "Update theater success";
     public static final String SOFT_DELETE_THEATER_SUCCESS = "Soft delete theater success";
+    public static final String REFRESH_ALL_SEAT_SUCCESS = "Refresh all seat success";
+
+    public static final String CREATE_THEATER_FAILED = "Create theater failed";
+    public static final String GET_ALL_THEATER_FAILED = "Get all theater failed";
+    public static final String GET_THEATER_FAILED = "Get theater failed";
+    public static final String UPDATE_THEATER_FAILED = "Update theater failed";
+    public static final String SOFT_DELETE_THEATER_FAILED = "Soft delete theater failed";
+    public static final String REFRESH_ALL_SEAT_FAILED = "Refresh all seat failed";
 
     public static final String CREATE_STUDIO_SUCCESS = "Create studio success";
     public static final String GET_ALL_STUDIO_SUCCESS = "Get all studio success";

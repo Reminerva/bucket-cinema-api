@@ -1,5 +1,6 @@
 package com.flix.flix.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -164,6 +165,21 @@ public class StudioServiceImpl implements StudioService {
             Studio studio = getStudioById(id);
             studio.setIsActive(false);
             studioRepository.saveAndFlush(studio);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public StudioResponse refreshAllSeat(String id) {
+        try {
+            if (LocalDateTime.now().getHour() >= 8 && LocalDateTime.now().getHour() <= 22) throw new RuntimeException(DbBash.SEAT_CAN_ONLY_REFRESHED_AFTER_22_BEFORE_8);
+            Studio studio = getStudioById(id);
+            studio.getStudioSeatSchedule().forEach(studioSeatSchedule -> {
+                studioSeatSchedule.setAvailableSeat(ESeat.toESeatList(ESeat.toESeatStringList(studio.getSeatLayout())));
+                studioSeatSchedule.setBookedSeat(new ArrayList<>());
+            });
+            return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

@@ -46,7 +46,7 @@ public class TheaterServiceImpl implements TheaterService {
     
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class TheaterServiceImpl implements TheaterService {
         try {
             return toTheaterResponse(getTheaterById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class TheaterServiceImpl implements TheaterService {
         try {
             return theaterRepository.findAll().stream().map(this::toTheaterResponse).toList();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setProducts(products);
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -123,7 +123,19 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setUpdatedAt(LocalDate.now());
             theaterRepository.saveAndFlush(theater);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public TheaterResponse refreshAllSeat(String id) {
+        try {
+            Theater theater = getTheaterById(id);
+            theater.setUpdatedAt(LocalDate.now());
+            theater.getStudios().forEach(studio -> studioService.refreshAllSeat(studio.getId()));
+            return toTheaterResponse(theaterRepository.saveAndFlush(theater));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -153,7 +165,7 @@ public class TheaterServiceImpl implements TheaterService {
                 .nowShowing(productResponses)
                 .build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

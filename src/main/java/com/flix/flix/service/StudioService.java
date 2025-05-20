@@ -14,5 +14,6 @@ public interface StudioService {
     Studio getStudioById(String id);
     StudioResponse update(String id, NewStudioRequest studioRequest);
     void softDelete(String id);
+    StudioResponse refreshAllSeat(String id);
     StudioResponse toStudioResponse(Studio studio);
 }

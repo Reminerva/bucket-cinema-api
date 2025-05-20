@@ -104,6 +104,8 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
             List<ESeat> newAvailableSeats = availableSeatRequest.stream().filter(seat -> currentBookedSeats.contains(seat)).toList();
             if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !bookedSeatRequest.isEmpty()) {
                 throw new RuntimeException(DbBash.SEAT_ALREADY_BOOKED);
+            } else if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !availableSeatRequest.isEmpty()) {
+                throw new RuntimeException(DbBash.SEAT_ALREADY_AVAILABLE);
             }
 
             availableSeatRequest.removeAll(currentBookedSeats);

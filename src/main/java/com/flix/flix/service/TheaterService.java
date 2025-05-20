@@ -13,4 +13,5 @@ public interface TheaterService {
     List<TheaterResponse> getAll();
     TheaterResponse update(String id, NewTheaterRequest theaterRequest);
     void softDelete(String id);
+    TheaterResponse refreshAllSeat(String id);
 }

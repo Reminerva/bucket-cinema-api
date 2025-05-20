@@ -59,7 +59,7 @@ public class TheaterController {
         } catch (Exception e) {
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.CREATE_THEATER_FAILED +": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -78,14 +78,14 @@ public class TheaterController {
         } catch (Exception e) {
             CommonResponse<List<TheaterResponse>> response = CommonResponse.<List<TheaterResponse>>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.GET_ALL_THEATER_FAILED +": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CommonResponse<TheaterResponse>> getById(
         @PathVariable String id
     ) {
@@ -99,14 +99,14 @@ public class TheaterController {
         } catch (Exception e) {
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.GET_THEATER_FAILED +": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<CommonResponse<TheaterResponse>> update(
         @PathVariable String id, 
         @Valid @RequestBody NewTheaterRequest newTheaterRequest,
@@ -135,14 +135,14 @@ public class TheaterController {
         } catch (Exception e) {
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.UPDATE_THEATER_FAILED +": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponse<TheaterResponse>> delete(@PathVariable String id) {
         try {
             theaterService.softDelete(id);
@@ -155,7 +155,28 @@ public class TheaterController {
         } catch (Exception e) {
             CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
+                .message(ApiBash.SOFT_DELETE_THEATER_FAILED +": " + e.getMessage())
+                .data(null)
+                .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PutMapping("/{id}" + ApiBash.REFRESH_ALL_SEAT)
+    public ResponseEntity<CommonResponse<TheaterResponse>> refreshAllSeat(
+        @PathVariable String id
+    ) {
+        try {
+            CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.REFRESH_ALL_SEAT_SUCCESS)
+                .data(theaterService.refreshAllSeat(id))
+                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(ApiBash.REFRESH_ALL_SEAT_FAILED +": " + e.getMessage())
                 .data(null)
                 .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

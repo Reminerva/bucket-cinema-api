@@ -54,6 +54,9 @@ public class DbBash {
 
     public static final String INVALID_SEAT_LAYOUT = "Invalid seat layout";
     public static final String SEAT_ALREADY_BOOKED = "Seat already booked";
+    public static final String SEAT_ALREADY_AVAILABLE = "Seat already available";
+
+    public static final String SEAT_CAN_ONLY_REFRESHED_AFTER_22_BEFORE_8 = "Seat can only refreshed after 22.00 and before 8.00";
 
     public static final String UNAUTHORIZED = "Unauthorized";
 
