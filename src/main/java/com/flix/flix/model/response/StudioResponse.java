@@ -2,8 +2,6 @@ package com.flix.flix.model.response;
 
 import java.util.List;
 
-import com.flix.flix.constant.custom_enum.EStudioSize;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +16,7 @@ import lombok.Setter;
 public class StudioResponse {
     private String id;
     private String name;
-    private EStudioSize studioSize;
+    private String studioSize;
     private List<String> seatLayout;
     private List<StudioSeatScheduleResponse> studioSeatSchedule;
     private List<ProductPricingResponse> productPricing;

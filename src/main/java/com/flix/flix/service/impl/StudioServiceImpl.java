@@ -201,7 +201,7 @@ public class StudioServiceImpl implements StudioService {
             return StudioResponse.builder()
                     .id(studio.getId())
                     .name(studio.getName())
-                    .studioSize(studio.getStudioSize())
+                    .studioSize(studio.getStudioSize().getDescription())
                     .seatLayout(ESeat.toESeatStringList(studio.getSeatLayout()))
                     .studioSeatSchedule(studio.getStudioSeatSchedule().stream().map(studioSeatScheduleService::toStudioSeatScheduleResponse).toList())
                     .productPricing(productPricings)

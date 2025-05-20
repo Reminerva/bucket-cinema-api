@@ -127,7 +127,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
             .id(productionCompany.getId())
             .name(productionCompany.getName())
             .logoUrl(productionCompany.getLogoUrl())
-            .originCountry(productionCompany.getOriginCountry().name())
+            .originCountry(productionCompany.getOriginCountry().getDescription())
             .websiteUrl(productionCompany.getWebsiteUrl())
             .headquarters(productionCompany.getHeadquarters())
             .ceo(productionCompany.getCeo())
