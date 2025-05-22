@@ -7,6 +7,7 @@ import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.constant.custom_enum.EStudioSize;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -51,6 +52,11 @@ public class Studio {
 
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(
+        name = DbBash.STUDIO_SEAT_LAYOUT_DB,
+        joinColumns = @jakarta.persistence.JoinColumn(name = "studio_id")
+    )
+    @Column(name = "seat_layout")
     @Builder.Default
     private List<ESeat> seatLayout = new ArrayList<>();
 

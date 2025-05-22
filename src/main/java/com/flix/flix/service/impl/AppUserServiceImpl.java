@@ -59,7 +59,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .email(userRequest.getEmail())
                 .username(userRequest.getUsername())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
-                .role(roles)
+                .roles(roles)
                 .build();
 
             appUserRepository.saveAndFlush(user);
@@ -67,7 +67,7 @@ public class AppUserServiceImpl implements AppUserService {
             SignupResponse response = SignupResponse.builder()
                     .accountId(user.getId())
                     .email(user.getEmail())
-                    .role(user.getRole().toString())
+                    .role(user.getRoles().toString())
                     .build();
 
             return response;
@@ -146,7 +146,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .id(appUser.getId())
                 .username(appUser.getUsername())
                 .email(appUser.getEmail())
-                .role(appUser.getRole())
+                .role(appUser.getRoles())
                 .customerFullname(appUser.getCustomer() == null ? "" : appUser.getCustomer().getFullname())
                 .build();
         } catch (Exception e) {

@@ -7,27 +7,31 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.flix.flix.constant.DbBash;
+
 @Component
 public class FlixDataSeeder implements CommandLineRunner {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final String ARTIST_CHECK_QUERY = "SELECT COUNT(*) FROM m_artist WHERE id = :id";
-    private static final String PRODUCT_CHECK_QUERY = "SELECT COUNT(*) FROM m_product WHERE id = :id";
-    private static final String PRODUCTION_COMPANY_CHECK_QUERY = "SELECT COUNT(*) FROM m_production_company WHERE id = :id";
-    private static final String USER_CHECK_QUERY = "SELECT COUNT(*) FROM m_user WHERE id = :id";
-    private static final String CUSTOMER_CHECK_QUERY = "SELECT COUNT(*) FROM m_customer WHERE id = :id";
-    private static final String EMPLOYEE_CHECK_QUERY = "SELECT COUNT(*) FROM m_employee WHERE id = :id";
-    private static final String FAV_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM m_fav_genre WHERE id = :id";
-    private static final String MOVIE_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM m_movie_genre WHERE id = :id";
-    private static final String THEATER_CHECK_QUERY = "SELECT COUNT(*) FROM m_theater WHERE id = :id";
-    private static final String STUDIO_CHECK_QUERY = "SELECT COUNT(*) FROM m_studio WHERE id = :id";
-    private static final String STUDIO_SEAT_SCHEDULE_CHECK_QUERY = "SELECT COUNT(*) FROM t_studio_seat_schedule WHERE id = :id";
-    private static final String AVAILABLE_SEAT_CHECK_QUERY = "SELECT COUNT(*) FROM studio_seat_schedule_available_seat WHERE studio_seat_schedule_id = :studio_seat_schedule_id";
-    private static final String SEAT_LAYOUT_CHECK_QUERY = "SELECT COUNT(*) FROM studio_seat_layout WHERE studio_id = :studio_id";
-    private static final String PRODUCT_SCHEDULING_CHECK_QUERY = "SELECT COUNT(*) FROM m_product_scheduling WHERE id = :id";
-    private static final String PRODUCT_PRICING_CHECK_QUERY = "SELECT COUNT(*) FROM m_product_pricing WHERE id = :id";
+    private static final String ARTIST_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.ARTIST_DB + " WHERE id = :id";
+    private static final String ARTIST_TYPE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.ARTIST_ARTIST_TYPE_DB + " WHERE artist_id = :artist_id";
+    private static final String PRODUCT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_DB + " WHERE id = :id";
+    private static final String PRODUCTION_COMPANY_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCTION_COMPANY_DB + " WHERE id = :id";
+    private static final String USER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.USER_DB + " WHERE id = :id";
+    private static final String ROLE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.ROLE_DB + " WHERE app_user_id = :app_user_id";
+    private static final String CUSTOMER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.CUSTOMER_DB + " WHERE id = :id";
+    private static final String EMPLOYEE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.EMPLOYEE_DB + " WHERE id = :id";
+    private static final String FAV_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.FAV_GENRE_DB + " WHERE id = :id";
+    private static final String MOVIE_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.MOVIE_GENRE_DB + " WHERE id = :id";
+    private static final String THEATER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.THEATER_DB + " WHERE id = :id";
+    private static final String STUDIO_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.STUDIO_DB + " WHERE id = :id";
+    private static final String STUDIO_SEAT_SCHEDULE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.STUDIO_SEAT_SCHEDULE_DB + " WHERE id = :id";
+    private static final String AVAILABLE_SEAT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB + " WHERE studio_seat_schedule_id = :studio_seat_schedule_id";
+    private static final String SEAT_LAYOUT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.STUDIO_SEAT_LAYOUT_DB + " WHERE studio_id = :studio_id";
+    private static final String PRODUCT_SCHEDULING_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_SCHEDULING_DB + " WHERE id = :id";
+    private static final String PRODUCT_PRICING_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_PRICING_DB + " WHERE id = :id";
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +47,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert ProductionCompany
         if (isDataAbsent(PRODUCTION_COMPANY_CHECK_QUERY, "a1b2c3d4-e5f6-7890-1234-567890abcdef")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_production_company (id, name, logo_url, origin_country, website_url, founded_year, contact_email, contact_number, headquarters, ceo, description, created_at, updated_at) VALUES " +
+                "INSERT INTO " + DbBash.PRODUCTION_COMPANY_DB + " (id, name, logo_url, origin_country, website_url, founded_year, contact_email, contact_number, headquarters, ceo, description, created_at, updated_at) VALUES " +
                 "('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Marvel Studios', 'https://example.com/marvel_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.marvel.com', '1993-09-08', 'contact@marvel.com', '+1-800-MARVEL', 'Burbank, California', 'Kevin Feige', 'American film and television production company.', NOW(), NOW())," +
                 "('f9e8d7c6-b5a4-3210-fedc-ba9876543210', 'Walt Disney Pictures', 'https://example.com/disney_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.disneystudios.com', '1923-10-16', 'contact@disney.com', '+1-800-DISNEY', 'Burbank, California', 'Bob Iger', 'American film production and distribution company.', NOW(), NOW())"
             ).executeUpdate();
@@ -52,27 +56,43 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Artist
         if (isDataAbsent(ARTIST_CHECK_QUERY, "11111111-2222-3333-4444-555555555555")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_artist (id, name, place_of_birth, birth_date, other_name, bio, artist_type) VALUES " +
-                "('11111111-2222-3333-4444-555555555555', 'Robert Downey Jr.', 'New York City', '1965-04-04', NULL, 'American actor and producer.', 'TYPE_ACTOR')," +
-                "('66666666-7777-8888-9999-000000000000', 'Scarlett Johansson', 'New York City', '1984-11-22', NULL, 'American actress.', 'TYPE_ACTOR')," +
-                "('abcdef01-2345-6789-abcd-ef0123456789', 'Christopher Nolan', 'London', '1970-07-30', NULL, 'British-American film director, producer, and screenwriter.', 'TYPE_DIRECTOR')"
+                "INSERT INTO " + DbBash.ARTIST_DB + " (id, name, place_of_birth, birth_date, other_name, bio) VALUES " +
+                "('11111111-2222-3333-4444-555555555555', 'Robert Downey Jr.', 'New York City', '1965-04-04', NULL, 'American actor and producer.')," +
+                "('66666666-7777-8888-9999-000000000000', 'Scarlett Johansson', 'New York City', '1984-11-22', NULL, 'American actress.')," +
+                "('abcdef01-2345-6789-abcd-ef0123456789', 'Christopher Nolan', 'London', '1970-07-30', NULL, 'British-American film director, producer, and screenwriter.')"
             ).executeUpdate();
+        }
+
+        // Insert ArtistType for Artist
+        if (isArtistTypeDataAbsent(ARTIST_TYPE_CHECK_QUERY, "11111111-2222-3333-4444-555555555555")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.ARTIST_ARTIST_TYPE_DB + " (artist_id, artist_type) VALUES " +
+                "('11111111-2222-3333-4444-555555555555', 'TYPE_ACTOR')," + 
+                "('66666666-7777-8888-9999-000000000000', 'TYPE_ACTOR')," + 
+                "('abcdef01-2345-6789-abcd-ef0123456789', 'TYPE_DIRECTOR')").executeUpdate();
         }
 
         // Insert AppUser
         if (isDataAbsent(USER_CHECK_QUERY, "user-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_user (id, username, email, password, role) VALUES " +
-                "('user-001', 'budi', 'budi@example.com', :password, ARRAY['ROLE_CUSTOMER'])," +
-                "('user-002', 'siti', 'siti@example.com', :password, ARRAY['ROLE_CUSTOMER'])," +
-                "('user-003', 'john', 'john@example.com', :password, ARRAY['ROLE_CUSTOMER'])" 
+                "INSERT INTO " + DbBash.USER_DB + " (id, username, email, password) VALUES " +
+                "('user-001', 'budi', 'budi@example.com', :password)," +
+                "('user-002', 'siti', 'siti@example.com', :password)," +
+                "('user-003', 'john', 'john@example.com', :password)" 
             ).setParameter("password", defaultPassword).executeUpdate();
+        }
+
+        // Insert Role for AppUser
+        if (isRoleDataAbsent(ROLE_CHECK_QUERY, "user-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.ROLE_DB + " (app_user_id, role) VALUES " +
+                "('user-001', 'ROLE_CUSTOMER')," + 
+                "('user-002', 'ROLE_CUSTOMER')," + 
+                "('user-003', 'ROLE_CUSTOMER')").executeUpdate();
         }
 
         // Insert Customer
         if (isDataAbsent(CUSTOMER_CHECK_QUERY, "cust-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_customer (id, fullname, country, phone_number, city, gender, registration_date, last_login, app_user_id) VALUES " +
+                "INSERT INTO " + DbBash.CUSTOMER_DB + " (id, fullname, country, phone_number, city, gender, registration_date, last_login, app_user_id) VALUES " +
                 "('cust-001', 'Budi Santoso', 'Indonesia', '081234567890', 'Bandung', 'GENDER_MALE', NOW(), NOW(), 'user-001')," +
                 "('cust-002', 'Siti Aminah', 'Indonesia', '089876543210', 'Jakarta', 'GENDER_FEMALE', NOW(), NOW(), 'user-002')," +
                 "('cust-003', 'John Doe', 'USA', '+1-555-1234', 'New York', 'GENDER_MALE', NOW(), NOW(), 'user-003')"
@@ -82,7 +102,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Product
         if (isDataAbsent(PRODUCT_CHECK_QUERY, "prod-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_product (id, title, duration, language, country, release_date, poster_url, trailer_url, rated, budget, synopsis, tagline, imdb_rating, rotten_tomatoes_rating, director, writer, producer, last_updated, production_company_id) VALUES " +
+                "INSERT INTO " + DbBash.PRODUCT_DB + " (id, title, duration, language, country, release_date, poster_url, trailer_url, rated, budget, synopsis, tagline, imdb_rating, rotten_tomatoes_rating, director, writer, producer, last_updated, production_company_id) VALUES " +
                 "('prod-001', 'Avengers: Endgame', 181, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '2019-04-26', 'https://example.com/avengers_poster.png', 'https://example.com/avengers_trailer.mp4', 'RATED_PG_13', 356000000, 'The culmination of 22 interconnected films.', 'Part of the journey is the end.', 8.4, 94, 'Anthony Russo, Joe Russo', 'Christopher Markus, Stephen McFeely', 'Kevin Feige', NOW(), 'a1b2c3d4-e5f6-7890-1234-567890abcdef')," +
                 "('prod-002', 'The Lion King', 118, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '1994-06-24', 'https://example.com/lionking_poster.png', 'https://example.com/lionking_trailer.mp4', 'RATED_G', 45000000, 'A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.', 'Hakuna Matata.', 8.5, 93, 'Roger Allers, Rob Minkoff', 'Irene Mecchi, Jonathan Roberts, Linda Woolverton', 'Don Hahn', NOW(), 'f9e8d7c6-b5a4-3210-fedc-ba9876543210')," +
                 "('prod-003', 'Inception', 148, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '2010-07-16', 'https://example.com/inception_poster.png', 'https://example.com/inception_trailer.mp4', 'RATED_PG_13', 160000000, 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 'Your mind is the scene of the crime.', 8.8, 87, 'Christopher Nolan', 'Christopher Nolan', 'Christopher Nolan, Emma Thomas', NOW(), NULL)"
@@ -92,7 +112,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert FavGenre
         if (isDataAbsent(FAV_GENRE_CHECK_QUERY, "fav-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_fav_genre (id, customer_id, fav_genre) VALUES " +
+                "INSERT INTO " + DbBash.FAV_GENRE_DB + " (id, customer_id, fav_genre) VALUES " +
                 "('fav-001', 'cust-001', 'GENRE_ACTION')," +
                 "('fav-002', 'cust-001', 'GENRE_COMEDY')," +
                 "('fav-003', 'cust-002', 'GENRE_DRAMA')," +
@@ -103,7 +123,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert MovieGenre
         if (isDataAbsent(MOVIE_GENRE_CHECK_QUERY, "mgenre-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_movie_genre (id, product_id, genre) VALUES " +
+                "INSERT INTO "+ DbBash.MOVIE_GENRE_DB + " (id, product_id, genre) VALUES " +
                 "('mgenre-001', 'prod-001', 'GENRE_ACTION')," +
                 "('mgenre-002', 'prod-001', 'GENRE_SCIENCE_FICTION')," +
                 "('mgenre-003', 'prod-002', 'GENRE_ANIMATION')," +
@@ -116,7 +136,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Theater
         if (isDataAbsent(THEATER_CHECK_QUERY, "theater-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_theater (id, name, city, address, contact_number, contact_email, created_at, updated_at, oprational_status) VALUES " +
+                "INSERT INTO " + DbBash.THEATER_DB + " (id, name, city, address, contact_number, contact_email, created_at, updated_at, oprational_status) VALUES " +
                 "('theater-001', 'CGV Bandung Electronic Center', 'Bandung', 'Jl. Purnawarman No.13-15', '022-82060901', 'bec@cgv.id', NOW(), NOW(), TRUE)," +
                 "('theater-002', 'XXI Ciwalk', 'Bandung', 'Jl. Cihampelas Walk No.160', '022-2061021', 'ciwalk@xxi.co.id', NOW(), NOW(), TRUE)"
             ).executeUpdate();
@@ -125,21 +145,33 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert AppUser Employee
         if (isDataAbsent(USER_CHECK_QUERY, "useremp-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_user (id, username, email, password, role) VALUES " +
-                "('useremp-001', 'empName1', 'empName1@flix.com', :password, ARRAY['ROLE_EMPLOYEE'])," +
-                "('useremp-002', 'empName2', 'empName2@flix.com', :password, ARRAY['ROLE_EMPLOYEE'])," +
-                "('useremp-003', 'empName3', 'empName3@flix.com', :password, ARRAY['ROLE_EMPLOYEE'])," +
-                "('useremp-004', 'empName4', 'empName4@flix.com', :password, ARRAY['ROLE_EMPLOYEE'])," +
-                "('useremp-005', 'empName5', 'empName5@flix.com', :password, ARRAY['ROLE_CASHIER'])," +
-                "('useremp-006', 'empName6', 'empName6@flix.com', :password, ARRAY['ROLE_CASHIER'])," +
-                "('admin-001', 'admin', 'admin@flix.com', :password, ARRAY['ROLE_ADMIN'])"
+                "INSERT INTO " + DbBash.USER_DB + " (id, username, email, password) VALUES " +
+                "('useremp-001', 'empName1', 'empName1@flix.com', :password)," +
+                "('useremp-002', 'empName2', 'empName2@flix.com', :password)," +
+                "('useremp-003', 'empName3', 'empName3@flix.com', :password)," +
+                "('useremp-004', 'empName4', 'empName4@flix.com', :password)," +
+                "('useremp-005', 'empName5', 'empName5@flix.com', :password)," +
+                "('useremp-006', 'empName6', 'empName6@flix.com', :password)," +
+                "('admin-001', 'admin', 'admin@flix.com', :password)"
             ).setParameter("password", defaultPassword).executeUpdate();
+        }
+
+        // Insert Role for AppUser
+        if (isRoleDataAbsent(ROLE_CHECK_QUERY, "useremp-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.ROLE_DB + " (app_user_id, role) VALUES " +
+                "('useremp-001', 'ROLE_EMPLOYEE')," +
+                "('useremp-002', 'ROLE_EMPLOYEE')," + 
+                "('useremp-003', 'ROLE_EMPLOYEE')," +
+                "('useremp-004', 'ROLE_EMPLOYEE')," +
+                "('useremp-005', 'ROLE_CASHIER')," +
+                "('useremp-006', 'ROLE_CASHIER')," +
+                "('admin-001', 'ROLE_ADMIN')").executeUpdate();
         }
 
         // Insert Employee
         if (isDataAbsent(EMPLOYEE_CHECK_QUERY, "emp-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_employee (id, fullname, address, phone_number, gender, city, date_of_birth, date_of_appliment, theater_id, nik_number, is_active, app_user_id) VALUES " +
+                "INSERT INTO " + DbBash.EMPLOYEE_DB + " (id, fullname, address, phone_number, gender, city, date_of_birth, date_of_appliment, theater_id, nik_number, is_active, app_user_id) VALUES " +
                 "('emp-001', 'Panda', 'Jl. Raya Bandung', '081234567890', 'GENDER_MALE', 'Bandung', '1990-01-01', NOW(), 'theater-001', '1111111111111111', TRUE, 'useremp-001')," +
                 "('emp-002', 'Beruang', 'Jl. Raya Jakarta', '089876543210', 'GENDER_FEMALE', 'Jakarta', '1995-05-05', NOW(), 'theater-001', '2222222222222222', TRUE, 'useremp-002')," +
                 "('emp-003', 'Kucing', 'Jl. Bandung Selatan', '089324823422', 'GENDER_FEMALE', 'Jakarta', '1997-12-15', NOW(), 'theater-002', '3333333333333333', TRUE, 'useremp-003')," +
@@ -152,7 +184,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Studio
         if (isDataAbsent(STUDIO_CHECK_QUERY, "studio-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_studio (id, name, studio_size, theater_id, is_active) VALUES " +
+                "INSERT INTO " + DbBash.STUDIO_DB + " (id, name, studio_size, theater_id, is_active) VALUES " +
                 "('studio-001', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-001', TRUE)," +
                 "('studio-002', 'Studio 2', 'STUDIO_REGULER_MEDIUM', 'theater-001', TRUE)," +
                 "('studio-003', 'Studio 1', 'STUDIO_REGULER_SMALL', 'theater-002', TRUE)"
@@ -162,7 +194,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert ProductPricing
         if (isDataAbsent(PRODUCT_PRICING_CHECK_QUERY, "pprice-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_product_pricing (id, weekday_price, weekend_price, price_date, is_price_active, product_id) VALUES " +
+                "INSERT INTO " + DbBash.PRODUCT_PRICING_DB + " (id, weekday_price, weekend_price, price_date, is_price_active, product_id) VALUES " +
                 "('pprice-001', 50000.0, 75000.0, '2025-05-24', TRUE, 'prod-001')," +
                 "('pprice-002', 45000.0, 65000.0, '2025-05-24', TRUE, 'prod-002')," +
                 "('pprice-003', 55000.0, 80000.0, '2025-05-24', TRUE, 'prod-003')"
@@ -172,7 +204,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert ProductScheduling
         if (isDataAbsent(PRODUCT_SCHEDULING_CHECK_QUERY, "psched-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO m_product_scheduling (id, schedule, product_id) VALUES " +
+                "INSERT INTO " + DbBash.PRODUCT_SCHEDULING_DB + " (id, schedule, product_id) VALUES " +
                 "('psched-001', 'SCHEDULE_9_00', 'prod-001')," +
                 "('psched-002', 'SCHEDULE_12_30', 'prod-001')," +
                 "('psched-003', 'SCHEDULE_15_00', 'prod-002')," +
@@ -183,7 +215,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert StudioSeatSchedule
         if (isDataAbsent(STUDIO_SEAT_SCHEDULE_CHECK_QUERY, "studio_seat_schedule-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO t_studio_seat_schedule (id, studio_id, product_scheduling_id) VALUES " +
+                "INSERT INTO " + DbBash.STUDIO_SEAT_SCHEDULE_DB + " (id, studio_id, product_scheduling_id) VALUES " +
                 "('studio_seat_schedule-001', 'studio-001', 'psched-001')," +
                 "('studio_seat_schedule-002', 'studio-001', 'psched-002')," +
                 "('studio_seat_schedule-003', 'studio-002', 'psched-003')," +
@@ -193,33 +225,33 @@ public class FlixDataSeeder implements CommandLineRunner {
         
         // Insert SeatLayout for Studio
         if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_LAYOUT_DB + " (studio_id, seat_layout) VALUES " +
                 "('studio-001', 'SEAT_A1'), ('studio-001', 'SEAT_A2'), ('studio-001', 'SEAT_B1'), ('studio-001', 'SEAT_B2')").executeUpdate();
         }
         if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-002")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_LAYOUT_DB + " (studio_id, seat_layout) VALUES " +
                 "('studio-002', 'SEAT_A1'), ('studio-002', 'SEAT_A2'), ('studio-002', 'SEAT_B1'), ('studio-002', 'SEAT_B2')").executeUpdate();
         }
         if (isStudioSeatLayoutDataAbsent(SEAT_LAYOUT_CHECK_QUERY, "studio-003")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_layout (studio_id, seat_layout) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_LAYOUT_DB + " (studio_id, seat_layout) VALUES " +
                 "('studio-003', 'SEAT_C1'), ('studio-003', 'SEAT_C2'), ('studio-003', 'SEAT_D1')").executeUpdate();
         }
 
         // Insert AvailableSeat for StudioSeatSchedule
         if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-001")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB + " (studio_seat_schedule_id, available_seat) VALUES " +
                 "('studio_seat_schedule-001', 'SEAT_A1'), ('studio_seat_schedule-001', 'SEAT_A2'), ('studio_seat_schedule-001', 'SEAT_B1'), ('studio_seat_schedule-001', 'SEAT_B2')").executeUpdate();
         }
         if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-002")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB + " (studio_seat_schedule_id, available_seat) VALUES " +
                 "('studio_seat_schedule-002', 'SEAT_A1'), ('studio_seat_schedule-002', 'SEAT_A2'), ('studio_seat_schedule-002', 'SEAT_B1'), ('studio_seat_schedule-002', 'SEAT_B2')").executeUpdate();
         }
         if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-003")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB + " (studio_seat_schedule_id, available_seat) VALUES " +
                 "('studio_seat_schedule-003', 'SEAT_C1'), ('studio_seat_schedule-003', 'SEAT_C2'), ('studio_seat_schedule-003', 'SEAT_D1')").executeUpdate();
         }
         if (isStudioSeatScheduleDataAbsent(AVAILABLE_SEAT_CHECK_QUERY, "studio_seat_schedule-004")) {
-            entityManager.createNativeQuery("INSERT INTO studio_seat_schedule_available_seat (studio_seat_schedule_id, available_seat) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB + " (studio_seat_schedule_id, available_seat) VALUES " +
                 "('studio_seat_schedule-004', 'SEAT_E1'), ('studio_seat_schedule-004', 'SEAT_E2')").executeUpdate();
         }
 
@@ -280,6 +312,20 @@ public class FlixDataSeeder implements CommandLineRunner {
     private boolean isDataAbsent(String query, String param) {
         Long count = (Long) entityManager.createNativeQuery(query)
             .setParameter("id", param)
+            .getSingleResult();
+        return count == 0;
+    }
+
+    private boolean isArtistTypeDataAbsent(String query, String param) {
+        Long count = (Long) entityManager.createNativeQuery(query)
+            .setParameter("artist_id", param)
+            .getSingleResult();
+        return count == 0;
+    }
+
+    private boolean isRoleDataAbsent(String query, String param) {
+        Long count = (Long) entityManager.createNativeQuery(query)
+            .setParameter("app_user_id", param)
             .getSingleResult();
         return count == 0;
     }

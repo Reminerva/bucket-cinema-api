@@ -20,6 +20,6 @@ public class ArtistResponse {
     private String birthDate;
     private String otherName;
     private String bio;
-    private String artistType;
+    private List<String> artistTypes;
     private List<String> productTitle;
 }

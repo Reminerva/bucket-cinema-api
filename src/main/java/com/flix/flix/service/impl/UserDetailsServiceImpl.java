@@ -23,11 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser userAccount = userAccountRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Email not found"));
-        System.out.println("NIININININ: " + userAccount.getRole().toString());
+        System.out.println("NIININININ: " + userAccount.getRoles().toString());
         return new User(
             userAccount.getEmail(),
             userAccount.getPassword(),
-            Collections.singleton(new SimpleGrantedAuthority(userAccount.getRole().toString().substring(1, userAccount.getRole().toString().length() - 1)))
+            Collections.singleton(new SimpleGrantedAuthority(userAccount.getRoles().toString().substring(1, userAccount.getRoles().toString().length() - 1)))
         );
     }
 

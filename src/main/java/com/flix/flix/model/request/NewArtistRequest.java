@@ -1,6 +1,9 @@
 package com.flix.flix.model.request;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +26,7 @@ public class NewArtistRequest {
     private String otherName;
     @NotBlank(message = "bio is required")
     private String bio;
-    @NotBlank(message = "artist type is required")
-    private String artistType;
+    @NotEmpty(message = "artist type is required")
+    private List<String> artistTypes;
 
 }

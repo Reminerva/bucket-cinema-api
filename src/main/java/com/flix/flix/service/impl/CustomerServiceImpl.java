@@ -252,7 +252,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
 
-            if (!userAccount.getRole().contains(ERole.ROLE_CUSTOMER)) throw new RuntimeException(DbBash.UNAUTHORIZED);
+            if (!userAccount.getRoles().contains(ERole.ROLE_CUSTOMER)) throw new RuntimeException(DbBash.UNAUTHORIZED);
 
             return update(userAccount.getCustomer().getId(), UpdateCustomerRequest);
         } catch (Exception e) {

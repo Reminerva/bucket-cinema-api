@@ -1,5 +1,6 @@
 package com.flix.flix.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ERole;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -47,9 +50,15 @@ public class AppUser implements UserDetails {
     @Column
     private String password;
 
-    @Column
+    @ElementCollection(targetClass = ERole.class)
     @Enumerated(EnumType.STRING)
-    private List<ERole> role;
+    @CollectionTable(
+        name = "t_app_user_roles",
+        joinColumns = @jakarta.persistence.JoinColumn(name = "app_user_id")
+    )
+    @Column(name = "role")
+    @Builder.Default
+    private List<ERole> roles = new ArrayList<>();
 
     @OneToOne(mappedBy = "appUser")
     private Customer customer;
@@ -59,7 +68,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<ERole> myRole = role;
+        List<ERole> myRole = roles;
         return myRole.stream().map(userRole -> new SimpleGrantedAuthority(userRole.name())).toList();
     }
 

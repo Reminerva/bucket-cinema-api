@@ -2,6 +2,7 @@ package com.flix.flix.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,7 +13,9 @@ import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.constant.custom_enum.ETax;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -95,9 +98,15 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private EPaymentMethod paymentMethod;
 
-    @Column
+    @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
-    private List<ESeat> seats;
+    @CollectionTable(
+        name = DbBash.TRANSACTION_SEAT_DB,
+        joinColumns = @jakarta.persistence.JoinColumn(name = "transaction_id")
+    )
+    @Column(name = "seat")
+    @Builder.Default
+    private List<ESeat> seats = new ArrayList<>();
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

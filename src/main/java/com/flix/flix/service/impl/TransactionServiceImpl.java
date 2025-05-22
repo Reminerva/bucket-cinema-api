@@ -95,19 +95,14 @@ public class TransactionServiceImpl implements TransactionService {
             // update studio seat
             updateStudioSeatSchedule(studio, productScheduling, transaction);
 
-            System.out.println("NIININININ1: ");
             AppUser appUser = tokenUtil.getAppUserByToken(request);
-            System.out.println("NIININININ2: " + appUser.getRole().toString());
-            if (appUser.getRole().contains(ERole.ROLE_CUSTOMER)) {
+            if (appUser.getRoles().contains(ERole.ROLE_CUSTOMER)) {
                 transaction.setCustomer(customerService.getCustomerById(appUser.getCustomer().getId()));
-                System.out.println("NIININININ3: " + appUser.getEmail());
                 return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
-            } else if (appUser.getRole().contains(ERole.ROLE_CASHIER)) {
+            } else if (appUser.getRoles().contains(ERole.ROLE_CASHIER)) {
                 transaction.setEmployee(employeeService.getEmployeeById(appUser.getCustomer().getId()));
-                System.out.println("NIININININ4: " + appUser.getEmail());
                 return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
             } else {
-                System.out.println("NIININININ5: " + appUser.getEmail());
                 throw new RuntimeException(DbBash.ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION);
             }
 
@@ -229,21 +224,16 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void updateStudioSeatSchedule(Studio studio, ProductScheduling productScheduling, Transaction transaction) {
-        System.out.println("ASDASDASDD1");
         StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.getStudioSeatScheduleByAttribute(studio.getId(), productScheduling.getId());
-        System.out.println("ASDASDASDD2" + studioSeatSchedule.getId() + " " + studio.getId() + " " + productScheduling.getId());
-        System.out.println("ASDASDASDD3" + studioSeatSchedule.getId() + " " + studioSeatSchedule.getStudio().getId() + " " + studioSeatSchedule.getProductScheduling().getId());
         List<ESeat> newBookedSeat = new ArrayList<>();
         List<ESeat> newAvailableSeat = new ArrayList<>();
 
         if (transaction.getPaymentStatus().equals(EPaymentStatus.PAYMENT_STATUS_PENDING)) {
             newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
             newBookedSeat.addAll(transaction.getSeats());
-            System.out.println("ASDASDASDD4");
     
             newAvailableSeat.addAll(studioSeatSchedule.getAvailableSeat());
             newAvailableSeat.removeAll(transaction.getSeats());
-            System.out.println("ASDASDASDD5");
         } else if (transaction.getPaymentStatus().equals(EPaymentStatus.PAYMENT_STATUS_FAILED)) {
             newBookedSeat.addAll(studioSeatSchedule.getBookedSeat());
             newBookedSeat.removeAll(transaction.getSeats());
@@ -256,9 +246,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .availableSeat(ESeat.toESeatStringList(newAvailableSeat))
                 .productSchedulingId(productScheduling.getId())
                 .build();
-        System.out.println("ASDASDASDD6");
         studioSeatScheduleService.update(null, newStudioSeatScheduleRequest);
-        System.out.println("ASDASDASDD7");
     }
 
 }

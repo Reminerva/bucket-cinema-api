@@ -1,7 +1,8 @@
 package com.flix.flix.constant;
 
 public class DbBash {
-    public static final String USER_DB = "m_user";
+    public static final String USER_DB = "m_app_user";
+    public static final String ROLE_DB = "t_app_user_roles";
     public static final String CUSTOMER_DB = "m_customer";
     public static final String EMPLOYEE_DB = "m_employee";
     public static final String FAV_GENRE_DB = "m_fav_genre";
@@ -9,13 +10,18 @@ public class DbBash {
     public static final String PRODUCT_DB = "m_product";
     public static final String PRODUCTION_COMPANY_DB = "m_production_company";
     public static final String ARTIST_DB = "m_artist";
+    public static final String ARTIST_ARTIST_TYPE_DB = "t_artist_artist_types";
     public static final String THEATER_DB = "m_theater";
     public static final String STUDIO_DB = "m_studio";
+    public static final String STUDIO_SEAT_LAYOUT_DB = "t_studio_seat_layout";
     public static final String STUDIO_SEAT_SCHEDULE_DB = "t_studio_seat_schedule";
+    public static final String STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB = "t_studio_seat_schedule_available_seat";
+    public static final String STUDIO_SEAT_SCHEDULE_BOOKED_SEAT_DB = "t_studio_seat_schedule_booked_seat";
     public static final String PRODUCT_PRICING_DB = "m_product_pricing";
     public static final String PRODUCT_SCHEDULING_DB = "m_product_scheduling";
     public static final String PRODUCT_PRICING_SCHEDULING_DB = "m_product_pricing_scheduling";
     public static final String TRANSACTION_DB = "t_transaction";
+    public static final String TRANSACTION_SEAT_DB = "t_transaction_seat";
 
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
     public static final String EMPLOYEE_NOT_FOUND = "Employee not found";

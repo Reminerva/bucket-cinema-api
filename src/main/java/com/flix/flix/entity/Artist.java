@@ -1,12 +1,15 @@
 package com.flix.flix.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EArtistType;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,9 +52,15 @@ public class Artist {
     @Column
     private String bio;
 
+    @ElementCollection(targetClass = EArtistType.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(
+        name = DbBash.ARTIST_ARTIST_TYPE_DB,
+        joinColumns = @jakarta.persistence.JoinColumn(name = "artist_id")
+    )
     @Column(name = "artist_type")
-    private EArtistType artistType;
+    @Builder.Default
+    private List<EArtistType> artistTypes = new ArrayList<>();
 
     @ManyToMany(mappedBy = "artists")
     private List<Product> inProduct;

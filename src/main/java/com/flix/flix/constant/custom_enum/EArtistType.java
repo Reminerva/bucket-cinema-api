@@ -1,5 +1,8 @@
 package com.flix.flix.constant.custom_enum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 
 @Getter
@@ -31,5 +34,21 @@ public enum EArtistType {
             }
         }
         throw new IllegalArgumentException("Invalid artist type description: '" + description + "'. Valid artist types: " + getValidTypes());
+    }
+
+    public static List<EArtistType> toEArtistTypeList(List<String> seats) {
+        List<EArtistType> seatList = new ArrayList<>();
+        for (String seat : seats) {
+            seatList.add(EArtistType.findByDescription(seat));
+        }
+        return seatList;
+    }
+
+    public static List<String> toEArtistTypeStringList(List<EArtistType> seats) {
+        List<String> seatList = new ArrayList<>();
+        for (EArtistType seat : seats) {
+            seatList.add(seat.description);
+        }
+        return seatList;
     }
 }

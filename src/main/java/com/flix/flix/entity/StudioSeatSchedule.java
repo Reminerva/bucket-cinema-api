@@ -6,6 +6,8 @@ import java.util.List;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -41,11 +43,21 @@ public class StudioSeatSchedule {
 
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(
+        name = DbBash.STUDIO_SEAT_SCHEDULE_BOOKED_SEAT_DB,
+        joinColumns = @jakarta.persistence.JoinColumn(name = "studio_seat_schedule_id")
+    )
+    @Column(name = "booked_seat")
     @Builder.Default
     private List<ESeat> bookedSeat = new ArrayList<>();
 
     @ElementCollection(targetClass = ESeat.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(
+        name = DbBash.STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB,
+        joinColumns = @jakarta.persistence.JoinColumn(name = "studio_seat_schedule_id")
+    )
+    @Column(name = "available_seat")
     @Builder.Default
     private List<ESeat> availableSeat = new ArrayList<>();
 

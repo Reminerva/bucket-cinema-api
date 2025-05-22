@@ -39,7 +39,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .birthDate(DateUtil.parseDate(artistRequest.getBirthDate()))
                 .otherName(artistRequest.getOtherName())
                 .bio(artistRequest.getBio())
-                .artistType(EArtistType.findByDescription(artistRequest.getArtistType()))
+                .artistTypes(EArtistType.toEArtistTypeList(artistRequest.getArtistTypes()))
                 .build();
 
             return toArtistResponse(artistRepository.saveAndFlush(artist));
@@ -89,7 +89,7 @@ public class ArtistServiceImpl implements ArtistService {
                 artist.setBirthDate(DateUtil.parseDate(artistRequest.getBirthDate()));
                 artist.setOtherName(artistRequest.getOtherName());
                 artist.setBio(artistRequest.getBio());
-                artist.setArtistType(EArtistType.findByDescription(artistRequest.getArtistType()));
+                artist.setArtistTypes(EArtistType.toEArtistTypeList(artistRequest.getArtistTypes()));
             return toArtistResponse(artistRepository.saveAndFlush(artist));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -114,7 +114,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .birthDate(artist.getBirthDate().toString())
                 .otherName(artist.getOtherName())
                 .bio(artist.getBio())
-                .artistType(artist.getArtistType().getDescription())
+                .artistTypes(artist.getArtistTypes() == null ? null : EArtistType.toEArtistTypeStringList(artist.getArtistTypes()))
                 .productTitle(artist.getInProduct() == null ? null : artist.getInProduct().stream().map(product -> product.getTitle()).toList())
                 .build();
     }
