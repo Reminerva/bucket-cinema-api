@@ -62,15 +62,6 @@ public class ProductSpecification {
             if (request.getRottenTomatoesRatingMax() != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("rottenTomatoesRating"), request.getRottenTomatoesRatingMax()));
             }
-            if (request.getDirectorName() != null) {
-                predicates.add(cb.like(cb.lower(root.get("director")), "%" + request.getDirectorName().toLowerCase() + "%"));
-            }
-            if (request.getWriterName() != null) {
-                predicates.add(cb.like(cb.lower(root.get("writer")), "%" + request.getWriterName().toLowerCase() + "%"));
-            }
-            if (request.getProducerName() != null) {
-                predicates.add(cb.like(cb.lower(root.get("producer")), "%" + request.getProducerName().toLowerCase() + "%"));
-            }
             if (request.getMovieGenre() != null && !request.getMovieGenre().isEmpty()) {
                 List<EGenre> genres = request.getMovieGenre().stream().map(EGenre::findByDescription).toList();
                 predicates.add(root.get("movieGenre").in(genres));

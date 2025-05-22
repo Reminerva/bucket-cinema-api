@@ -90,9 +90,6 @@ public class ProductController {
         @RequestParam(required = false) Double imdbRatingMax,
         @RequestParam(required = false) Integer rottenTomatoesRatingMin,
         @RequestParam(required = false) Integer rottenTomatoesRatingMax,
-        @RequestParam(required = false) String directorName,
-        @RequestParam(required = false) String writerName,
-        @RequestParam(required = false) String producerName,
         @RequestParam(required = false) List<String> movieGenre,
         @RequestParam(required = false) Double productPricingMin,
         @RequestParam(required = false) Double productPricingMax,
@@ -121,9 +118,6 @@ public class ProductController {
                 .imdbRatingMax(imdbRatingMax)
                 .rottenTomatoesRatingMin(rottenTomatoesRatingMin)
                 .rottenTomatoesRatingMax(rottenTomatoesRatingMax)
-                .directorName(directorName)
-                .writerName(writerName)
-                .producerName(producerName)
                 .movieGenre(movieGenre)
                 .productPricingMin(productPricingMin)
                 .productPricingMax(productPricingMax)

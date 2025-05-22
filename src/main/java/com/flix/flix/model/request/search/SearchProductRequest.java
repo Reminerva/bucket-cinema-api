@@ -29,9 +29,6 @@ public class SearchProductRequest {
     private Double imdbRatingMax;
     private Integer rottenTomatoesRatingMin;
     private Integer rottenTomatoesRatingMax;
-    private String directorName;
-    private String writerName;
-    private String producerName;
     private List<String> movieGenre;
     private Double productPricingMin;
     private Double productPricingMax;
