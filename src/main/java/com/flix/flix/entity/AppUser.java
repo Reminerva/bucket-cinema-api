@@ -53,7 +53,7 @@ public class AppUser implements UserDetails {
     @ElementCollection(targetClass = ERole.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
-        name = "t_app_user_roles",
+        name = DbBash.APP_USER_ROLE_DB,
         joinColumns = @jakarta.persistence.JoinColumn(name = "app_user_id")
     )
     @Column(name = "role")

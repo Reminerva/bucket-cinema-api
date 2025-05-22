@@ -103,7 +103,7 @@ public class Product {
     private LocalDate lastUpdated;
     @ManyToMany
     @JoinTable(
-        name = "t_product_artist",
+        name = DbBash.PRODUCT_ARTIST_DB,
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
@@ -111,7 +111,7 @@ public class Product {
     private List<Artist> artists = new ArrayList<>();
     @ManyToMany
     @JoinTable(
-        name = "t_customer_like_product",
+        name = DbBash.PRODUCT_CUSTOMER_LIKE_DB,
         joinColumns = @JoinColumn(name = "like_product_id"),
         inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
@@ -119,7 +119,7 @@ public class Product {
     private List<Customer> customerLike = new ArrayList<>();
     @ManyToMany
     @JoinTable(
-        name = "t_customer_dislike_product",
+        name = DbBash.PRODUCT_CUSTOMER_DISLIKE_DB,
         joinColumns = @JoinColumn(name = "dislike_product_id"),
         inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
@@ -131,7 +131,7 @@ public class Product {
 
     @ManyToMany
     @JoinTable(
-        name = "t_product_theater",
+        name = DbBash.PRODUCT_THEATER_DB,
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "theater_id")
     )

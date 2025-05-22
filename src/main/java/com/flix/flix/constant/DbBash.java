@@ -2,15 +2,19 @@ package com.flix.flix.constant;
 
 public class DbBash {
     public static final String USER_DB = "m_app_user";
-    public static final String ROLE_DB = "t_app_user_roles";
+    public static final String APP_USER_ROLE_DB = "t_app_user_role";
     public static final String CUSTOMER_DB = "m_customer";
     public static final String EMPLOYEE_DB = "m_employee";
     public static final String FAV_GENRE_DB = "m_fav_genre";
     public static final String MOVIE_GENRE_DB = "m_movie_genre";
     public static final String PRODUCT_DB = "m_product";
+    public static final String PRODUCT_ARTIST_DB = "t_product_artist";
+    public static final String PRODUCT_CUSTOMER_LIKE_DB = "t_product_customer_like";
+    public static final String PRODUCT_CUSTOMER_DISLIKE_DB = "t_product_customer_dislike";
+    public static final String PRODUCT_THEATER_DB = "t_product_theater";
     public static final String PRODUCTION_COMPANY_DB = "m_production_company";
     public static final String ARTIST_DB = "m_artist";
-    public static final String ARTIST_ARTIST_TYPE_DB = "t_artist_artist_types";
+    public static final String ARTIST_ARTIST_TYPE_DB = "t_artist_artist_type";
     public static final String THEATER_DB = "m_theater";
     public static final String STUDIO_DB = "m_studio";
     public static final String STUDIO_SEAT_LAYOUT_DB = "t_studio_seat_layout";
@@ -18,8 +22,9 @@ public class DbBash {
     public static final String STUDIO_SEAT_SCHEDULE_AVAILABLE_SEAT_DB = "t_studio_seat_schedule_available_seat";
     public static final String STUDIO_SEAT_SCHEDULE_BOOKED_SEAT_DB = "t_studio_seat_schedule_booked_seat";
     public static final String PRODUCT_PRICING_DB = "m_product_pricing";
+    public static final String PRODUCT_PRICING_STUDIO_DB = "t_product_pricing_studio";
     public static final String PRODUCT_SCHEDULING_DB = "m_product_scheduling";
-    public static final String PRODUCT_PRICING_SCHEDULING_DB = "m_product_pricing_scheduling";
+    public static final String PRODUCT_SCHEDULING_STUDIO_DB = "t_product_scheduling_studio";
     public static final String TRANSACTION_DB = "t_transaction";
     public static final String TRANSACTION_SEAT_DB = "t_transaction_seat";
 

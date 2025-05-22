@@ -20,7 +20,7 @@ public class FlixDataSeeder implements CommandLineRunner {
     private static final String PRODUCT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_DB + " WHERE id = :id";
     private static final String PRODUCTION_COMPANY_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCTION_COMPANY_DB + " WHERE id = :id";
     private static final String USER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.USER_DB + " WHERE id = :id";
-    private static final String ROLE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.ROLE_DB + " WHERE app_user_id = :app_user_id";
+    private static final String ROLE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.APP_USER_ROLE_DB + " WHERE app_user_id = :app_user_id";
     private static final String CUSTOMER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.CUSTOMER_DB + " WHERE id = :id";
     private static final String EMPLOYEE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.EMPLOYEE_DB + " WHERE id = :id";
     private static final String FAV_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.FAV_GENRE_DB + " WHERE id = :id";
@@ -83,7 +83,7 @@ public class FlixDataSeeder implements CommandLineRunner {
 
         // Insert Role for AppUser
         if (isRoleDataAbsent(ROLE_CHECK_QUERY, "user-001")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.ROLE_DB + " (app_user_id, role) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.APP_USER_ROLE_DB + " (app_user_id, role) VALUES " +
                 "('user-001', 'ROLE_CUSTOMER')," + 
                 "('user-002', 'ROLE_CUSTOMER')," + 
                 "('user-003', 'ROLE_CUSTOMER')").executeUpdate();
@@ -158,7 +158,7 @@ public class FlixDataSeeder implements CommandLineRunner {
 
         // Insert Role for AppUser
         if (isRoleDataAbsent(ROLE_CHECK_QUERY, "useremp-001")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.ROLE_DB + " (app_user_id, role) VALUES " +
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.APP_USER_ROLE_DB + " (app_user_id, role) VALUES " +
                 "('useremp-001', 'ROLE_EMPLOYEE')," +
                 "('useremp-002', 'ROLE_EMPLOYEE')," + 
                 "('useremp-003', 'ROLE_EMPLOYEE')," +
@@ -256,56 +256,56 @@ public class FlixDataSeeder implements CommandLineRunner {
         }
 
         // Insert relations between Product and Theater
-        if (isRelationAbsent("t_product_theater", "product_id", "prod-001", "theater_id", "theater-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_theater (product_id, theater_id) VALUES ('prod-001', 'theater-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_THEATER_DB, "product_id", "prod-001", "theater_id", "theater-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_THEATER_DB + " (product_id, theater_id) VALUES ('prod-001', 'theater-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_theater", "product_id", "prod-002", "theater_id", "theater-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_theater (product_id, theater_id) VALUES ('prod-002', 'theater-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_THEATER_DB, "product_id", "prod-002", "theater_id", "theater-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_THEATER_DB + " (product_id, theater_id) VALUES ('prod-002', 'theater-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_theater", "product_id", "prod-002", "theater_id", "theater-002")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_theater (product_id, theater_id) VALUES ('prod-002', 'theater-002')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_THEATER_DB, "product_id", "prod-002", "theater_id", "theater-002")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_THEATER_DB + " (product_id, theater_id) VALUES ('prod-002', 'theater-002')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_theater", "product_id", "prod-003", "theater_id", "theater-002")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_theater (product_id, theater_id) VALUES ('prod-003', 'theater-002')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_THEATER_DB, "product_id", "prod-003", "theater_id", "theater-002")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_THEATER_DB + " (product_id, theater_id) VALUES ('prod-003', 'theater-002')").executeUpdate();
         }
 
         // Insert relations between ProductPricing and Studio
-        if (isRelationAbsent("t_product_pricing_studios", "product_pricing_id", "pprice-001", "studio_id", "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_pricing_studios (product_pricing_id, studio_id) VALUES ('pprice-001', 'studio-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_PRICING_STUDIO_DB, "product_pricing_id", "pprice-001", "studio_id", "studio-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_PRICING_STUDIO_DB + " (product_pricing_id, studio_id) VALUES ('pprice-001', 'studio-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_pricing_studios", "product_pricing_id", "pprice-002", "studio_id", "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_pricing_studios (product_pricing_id, studio_id) VALUES ('pprice-002', 'studio-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_PRICING_STUDIO_DB, "product_pricing_id", "pprice-002", "studio_id", "studio-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_PRICING_STUDIO_DB + " (product_pricing_id, studio_id) VALUES ('pprice-002', 'studio-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_pricing_studios", "product_pricing_id", "pprice-002", "studio_id", "studio-002")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_pricing_studios (product_pricing_id, studio_id) VALUES ('pprice-002', 'studio-002')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_PRICING_STUDIO_DB, "product_pricing_id", "pprice-002", "studio_id", "studio-002")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_PRICING_STUDIO_DB + " (product_pricing_id, studio_id) VALUES ('pprice-002', 'studio-002')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_pricing_studios", "product_pricing_id", "pprice-003", "studio_id", "studio-003")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_pricing_studios (product_pricing_id, studio_id) VALUES ('pprice-003', 'studio-003')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_PRICING_STUDIO_DB, "product_pricing_id", "pprice-003", "studio_id", "studio-003")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_PRICING_STUDIO_DB + " (product_pricing_id, studio_id) VALUES ('pprice-003', 'studio-003')").executeUpdate();
         }
 
         // Insert relations between ProductScheduling and Studio
-        if (isRelationAbsent("t_product_scheduling_studios", "product_scheduling_id", "psched-001", "studio_id", "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_scheduling_studios (product_scheduling_id, studio_id) VALUES ('psched-001', 'studio-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_SCHEDULING_STUDIO_DB, "product_scheduling_id", "psched-001", "studio_id", "studio-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_SCHEDULING_STUDIO_DB + " (product_scheduling_id, studio_id) VALUES ('psched-001', 'studio-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_scheduling_studios", "product_scheduling_id", "psched-002", "studio_id", "studio-001")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_scheduling_studios (product_scheduling_id, studio_id) VALUES ('psched-002', 'studio-001')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_SCHEDULING_STUDIO_DB, "product_scheduling_id", "psched-002", "studio_id", "studio-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_SCHEDULING_STUDIO_DB + " (product_scheduling_id, studio_id) VALUES ('psched-002', 'studio-001')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_scheduling_studios", "product_scheduling_id", "psched-003", "studio_id", "studio-002")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_scheduling_studios (product_scheduling_id, studio_id) VALUES ('psched-003', 'studio-002')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_SCHEDULING_STUDIO_DB, "product_scheduling_id", "psched-003", "studio_id", "studio-002")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_SCHEDULING_STUDIO_DB + " (product_scheduling_id, studio_id) VALUES ('psched-003', 'studio-002')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_scheduling_studios", "product_scheduling_id", "psched-004", "studio_id", "studio-003")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_scheduling_studios (product_scheduling_id, studio_id) VALUES ('psched-004', 'studio-003')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_SCHEDULING_STUDIO_DB, "product_scheduling_id", "psched-004", "studio_id", "studio-003")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_SCHEDULING_STUDIO_DB + " (product_scheduling_id, studio_id) VALUES ('psched-004', 'studio-003')").executeUpdate();
         }
 
         // Inserting relations between Product and Artist
-        if (isRelationAbsent("t_product_artist", "product_id", "prod-001", "artist_id", "11111111-2222-3333-4444-555555555555")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_artist (product_id, artist_id) VALUES ('prod-001', '11111111-2222-3333-4444-555555555555')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "11111111-2222-3333-4444-555555555555")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '11111111-2222-3333-4444-555555555555')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_artist", "product_id", "prod-001", "artist_id", "66666666-7777-8888-9999-000000000000")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_artist (product_id, artist_id) VALUES ('prod-001', '66666666-7777-8888-9999-000000000000')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "66666666-7777-8888-9999-000000000000")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '66666666-7777-8888-9999-000000000000')").executeUpdate();
         }
-        if (isRelationAbsent("t_product_artist", "product_id", "prod-003", "artist_id", "abcdef01-2345-6789-abcd-ef0123456789")) {
-            entityManager.createNativeQuery("INSERT INTO t_product_artist (product_id, artist_id) VALUES ('prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
+        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "abcdef01-2345-6789-abcd-ef0123456789")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
         }
     }
 

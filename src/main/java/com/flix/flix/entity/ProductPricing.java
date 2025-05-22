@@ -50,7 +50,7 @@ public class ProductPricing {
 
     @ManyToMany
     @JoinTable(
-        name = "t_product_pricing_studios", // Nama tabel penghubung yang Anda inginkan
+        name = DbBash.PRODUCT_PRICING_STUDIO_DB, // Nama tabel penghubung yang Anda inginkan
         joinColumns = @JoinColumn(name = "product_pricing_id"), // Kolom untuk foreign key ke tabel ProductPricing
         inverseJoinColumns = @JoinColumn(name = "studio_id") // Kolom untuk foreign key ke tabel Studio
     )
