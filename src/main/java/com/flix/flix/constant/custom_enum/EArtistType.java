@@ -11,7 +11,9 @@ public enum EArtistType {
     TYPE_DIRECTOR("Director"),
     TYPE_WRITER("Writer"),
     TYPE_ACTOR("Actor"),
-    TYPE_PRODUCER("Producer");
+    TYPE_PRODUCER("Producer"),
+    TYPE_MUSIC_DIRECTOR("Music Director"),
+    TYPE_EDITOR("Editor");
 
     private final String description;
 

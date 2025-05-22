@@ -41,12 +41,6 @@ public class NewProductRequest {
     private String tagline;
     private Double imdbRating;
     private Integer rottenTomatoesRating;
-    @NotBlank(message = "director is required")
-    private String director;
-    @NotBlank(message = "writer is required")
-    private String writer;
-    @NotBlank(message = "producer is required")
-    private String producer;
     @NotBlank(message = "production company id is required")
     private String productionCompanyId;
     @NotEmpty(message = "movie genre is required")

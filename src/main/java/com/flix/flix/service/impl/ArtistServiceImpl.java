@@ -111,7 +111,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .id(artist.getId())
                 .name(artist.getName())
                 .placeOfBirth(artist.getPlaceOfBirth())
-                .birthDate(artist.getBirthDate().toString())
+                .birthDate(artist.getBirthDate() == null ? null : artist.getBirthDate().toString())
                 .otherName(artist.getOtherName())
                 .bio(artist.getBio())
                 .artistTypes(artist.getArtistTypes() == null ? null : EArtistType.toEArtistTypeStringList(artist.getArtistTypes()))

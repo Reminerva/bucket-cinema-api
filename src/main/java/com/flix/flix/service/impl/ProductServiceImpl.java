@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ELanguage;
@@ -70,9 +71,6 @@ public class ProductServiceImpl implements ProductService {
                 .tagline(productRequest.getTagline())
                 .imdbRating(productRequest.getImdbRating())
                 .rottenTomatoesRating(productRequest.getRottenTomatoesRating())
-                .director(productRequest.getDirector())
-                .writer(productRequest.getWriter())
-                .producer(productRequest.getProducer())
                 .lastUpdated(LocalDate.now())
                 .build();
 
@@ -163,9 +161,6 @@ public class ProductServiceImpl implements ProductService {
                 .tagline(productRequest.getTagline())
                 .imdbRating(productRequest.getImdbRating())
                 .rottenTomatoesRating(productRequest.getRottenTomatoesRating())
-                .director(productRequest.getDirector())
-                .writer(productRequest.getWriter())
-                .producer(productRequest.getProducer())
                 .lastUpdated(LocalDate.now())
                 .productionCompany(newProductionCompany)
                 .build();
@@ -274,17 +269,29 @@ public class ProductServiceImpl implements ProductService {
                 .tagline(product.getTagline())
                 .imdbRating(product.getImdbRating())
                 .rottenTomatoesRating(product.getRottenTomatoesRating())
-                .director(product.getDirector())
-                .writer(product.getWriter())
-                .producer(product.getProducer())
+                .directorsId(getSecifiedsArtist(product, EArtistType.TYPE_DIRECTOR))
+                .writersId(getSecifiedsArtist(product, EArtistType.TYPE_WRITER))
+                .actorsId(getSecifiedsArtist(product, EArtistType.TYPE_ACTOR))
+                .producersId(getSecifiedsArtist(product, EArtistType.TYPE_PRODUCER))
+                .musicDirectorsId(getSecifiedsArtist(product, EArtistType.TYPE_MUSIC_DIRECTOR))
+                .editorsId(getSecifiedsArtist(product, EArtistType.TYPE_EDITOR))
                 .productionCompanyId(product.getProductionCompany() == null ? null : product.getProductionCompany().getId())
                 .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
                 .lastUpdated(product.getLastUpdated().toString())
-                .artistId(product.getArtists().stream().map(artist -> artist.getId()).toList())
                 .showingOnTheaters(theaterResponseList)
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<String> getSecifiedsArtist(Product product, EArtistType artistType) {
+        List<String> artistIds = new ArrayList<>();
+        for (Artist artist : product.getArtists()) {
+            if (artist.getArtistTypes().contains(artistType)) {
+                artistIds.add(artist.getId());
+            }
+        }
+        return artistIds;
     }
 }

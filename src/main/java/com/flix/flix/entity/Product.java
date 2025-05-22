@@ -80,12 +80,6 @@ public class Product {
     @Max(100)
     @Min(0)
     private Integer rottenTomatoesRating;
-    @Column
-    private String director;
-    @Column
-    private String writer;
-    @Column
-    private String producer;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MovieGenre> movieGenre = new ArrayList<>();
