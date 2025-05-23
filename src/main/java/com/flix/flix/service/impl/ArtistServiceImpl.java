@@ -52,15 +52,23 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public Page<ArtistResponse> getAll(SearchArtistRequest searchArtistRequest) {
         try {
-            if (searchArtistRequest.getPage() <= 0 || searchArtistRequest.getSize() <= 0) {
+            if (searchArtistRequest.getPage() <= 0) {
                 searchArtistRequest.setPage(1);
+            }
+            if (searchArtistRequest.getSize() <= 0) {
                 searchArtistRequest.setSize(10);
+            }
+            if (searchArtistRequest.getBirthDateMin() != null && searchArtistRequest.getBirthDateMax() != null) {
+                if (DateUtil.parseDate(searchArtistRequest.getBirthDateMin()).isAfter(DateUtil.parseDate(searchArtistRequest.getBirthDateMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
             }
             Sort sort = Sort.by(Sort.Direction.fromString(searchArtistRequest.getDirection()), searchArtistRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchArtistRequest.getPage() - 1, searchArtistRequest.getSize(), sort);
             Specification<Artist> specification = ArtistSpecification.getSpecification(searchArtistRequest);
             return artistRepository.findAll(specification, pageable).map(this::toArtistResponse);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

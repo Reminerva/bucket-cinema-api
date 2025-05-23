@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGender;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,10 +46,14 @@ public class Customer {
     private String fullname;
 
     @Column
-    private String country;
+    @Enumerated(EnumType.STRING)
+    private ECountry country;
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     @Column
     private String city;

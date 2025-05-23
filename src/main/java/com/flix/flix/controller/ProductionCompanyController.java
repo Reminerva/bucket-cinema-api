@@ -87,7 +87,8 @@ public class ProductionCompanyController {
         @RequestParam(required = false) String createdAtMin,
         @RequestParam(required = false) String createdAtMax,
         @RequestParam(required = false) String updatedAtMin,
-        @RequestParam(required = false) String updatedAtMax
+        @RequestParam(required = false) String updatedAtMax,
+        @RequestParam(required = false) List<String> hasProducts
 
     ) {
         try {
@@ -106,6 +107,7 @@ public class ProductionCompanyController {
                 .createdAtMax(createdAtMax)
                 .updatedAtMin(updatedAtMin)
                 .updatedAtMax(updatedAtMax)
+                .hasProducts(hasProducts)
                 .build();
 
             Page<ProductionCompanyResponse> productionCompanyResponses = productionCompanyService.getAll(searchProductionCompanyRequest);

@@ -19,7 +19,7 @@ public class SearchArtistRequest {
     private String placeOfBirth;
     private String birthDateMin;
     private String birthDateMax;
-    private String artistType;
+    private List<String> artistType;
     private List<String> inProductTitle;
 
     private Integer page;

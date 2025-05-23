@@ -108,6 +108,41 @@ public class ProductServiceImpl implements ProductService {
                 searchProductRequest.setPage(1);
                 searchProductRequest.setSize(10);
             }
+            if (searchProductRequest.getReleaseDateMin() != null && searchProductRequest.getReleaseDateMax() != null) {
+                if (DateUtil.parseDate(searchProductRequest.getReleaseDateMin()).isAfter(DateUtil.parseDate(searchProductRequest.getReleaseDateMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getLastUpdatedMin() != null && searchProductRequest.getLastUpdatedMax() != null) {
+                if (DateUtil.parseDate(searchProductRequest.getLastUpdatedMin()).isAfter(DateUtil.parseDate(searchProductRequest.getLastUpdatedMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getBudgetMin() != null && searchProductRequest.getBudgetMax() != null) {
+                if (searchProductRequest.getBudgetMin() > searchProductRequest.getBudgetMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getDurationMin() != null && searchProductRequest.getDurationMax() != null) {
+                if (searchProductRequest.getDurationMin() > searchProductRequest.getDurationMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getImdbRatingMin() != null && searchProductRequest.getImdbRatingMax() != null) {
+                if (searchProductRequest.getImdbRatingMin() > searchProductRequest.getImdbRatingMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getRottenTomatoesRatingMin() != null && searchProductRequest.getRottenTomatoesRatingMax() != null) {
+                if (searchProductRequest.getRottenTomatoesRatingMin() > searchProductRequest.getRottenTomatoesRatingMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductRequest.getProductPricingMin() != null && searchProductRequest.getProductPricingMax() != null) {
+                if (searchProductRequest.getProductPricingMin() > searchProductRequest.getProductPricingMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
             Sort sort = Sort.by(Sort.Direction.fromString(searchProductRequest.getDirection()), searchProductRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchProductRequest.getPage() - 1, searchProductRequest.getSize(), sort);
             Specification<Product> specification = ProductSpecification.getSpecification(searchProductRequest);

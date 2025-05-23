@@ -101,13 +101,16 @@ public class CustomerController {
         @RequestParam(required = false) String phoneNumber,
         @RequestParam(required = false) String city,
         @RequestParam(required = false) String gender,
-        @RequestParam(required = false) String registrationDate,
-        @RequestParam(required = false) String lastLogin,
+        @RequestParam(required = false) String registrationDateMin,
+        @RequestParam(required = false) String registrationDateMax,
+        @RequestParam(required = false) String birthDateMin,
+        @RequestParam(required = false) String birthDateMax,
+        @RequestParam(required = false) String lastLoginMin,
+        @RequestParam(required = false) String lastLoginMax,
         @RequestParam(required = false) List<String> favGenres,
         @RequestParam(required = false) String email,
         @RequestParam(required = false) List<String> likeProductTitle,
-        @RequestParam(required = false) List<String> dislikeProductTitle,
-        @RequestParam(required = false) List<String> theaterName
+        @RequestParam(required = false) List<String> dislikeProductTitle
     ){
         try {
             SearchCustomerRequest searchCustomerRequest = SearchCustomerRequest.builder()
@@ -120,13 +123,16 @@ public class CustomerController {
                 .phoneNumber(phoneNumber)
                 .city(city)
                 .gender(gender)
-                .registrationDate(registrationDate)
-                .lastLogin(lastLogin)
+                .birthDateMin(birthDateMin)
+                .birthDateMax(birthDateMax)
+                .registrationDateMin(registrationDateMin)
+                .registrationDateMax(registrationDateMax)
+                .lastLoginMin(lastLoginMin)
+                .lastLoginMax(lastLoginMax)
                 .favGenres(favGenres)
                 .email(email)
                 .likeProductTitle(likeProductTitle)
                 .dislikeProductTitle(dislikeProductTitle)
-                .theaterName(theaterName)
                 .build();
             Page<CustomerResponse> customers = customerService.getAll(searchCustomerRequest);
             CommonResponse<List<CustomerResponse>> response = CommonResponse.<List<CustomerResponse>>builder()

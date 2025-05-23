@@ -29,6 +29,8 @@ public class NewCustomerRequest {
     private String city;
     @NotBlank(message = "gender is required")
     private String gender;
+    @NotBlank(message = "birth date is required")
+    private String birthDate;
     private String registrationDate;
     private String lastLogin;
     private List<String> favGenre;

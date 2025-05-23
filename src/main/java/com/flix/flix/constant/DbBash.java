@@ -9,8 +9,8 @@ public class DbBash {
     public static final String MOVIE_GENRE_DB = "m_movie_genre";
     public static final String PRODUCT_DB = "m_product";
     public static final String PRODUCT_ARTIST_DB = "t_product_artist";
-    public static final String PRODUCT_CUSTOMER_LIKE_DB = "t_product_customer_like";
-    public static final String PRODUCT_CUSTOMER_DISLIKE_DB = "t_product_customer_dislike";
+    public static final String PRODUCT_CUSTOMER_LIKE_DB = "t_customer_like_product";
+    public static final String PRODUCT_CUSTOMER_DISLIKE_DB = "t_customer_dislike_product";
     public static final String PRODUCT_THEATER_DB = "t_product_theater";
     public static final String PRODUCTION_COMPANY_DB = "m_production_company";
     public static final String ARTIST_DB = "m_artist";
@@ -83,5 +83,7 @@ public class DbBash {
 
     public static final String ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION = "Only cashier or customer can create transaction";
     public static final String ONLY_ADMIN_CAN_UPDATE_TRANSACTION = "Only admin can update transaction";
+
+    public static final String MIN_MAX_INVALID = "Min attribute must be less than max attribute";
 
 }

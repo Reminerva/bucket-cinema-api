@@ -18,6 +18,7 @@ public class CustomerResponse {
     private String id;
     private String userId;
     private String fullname;
+    private String birthDate;
     private String country;
     private String phoneNumber;
     private String city;

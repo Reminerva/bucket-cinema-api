@@ -62,6 +62,21 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
                 searchProductionCompanyRequest.setPage(1);
                 searchProductionCompanyRequest.setSize(10);
             }
+            if (searchProductionCompanyRequest.getFoundedYearMin() != null && searchProductionCompanyRequest.getFoundedYearMax() != null) {
+                if (DateUtil.parseDate(searchProductionCompanyRequest.getFoundedYearMin()).isAfter(DateUtil.parseDate(searchProductionCompanyRequest.getFoundedYearMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductionCompanyRequest.getUpdatedAtMin() != null && searchProductionCompanyRequest.getUpdatedAtMax() != null) {
+                if (DateUtil.parseDate(searchProductionCompanyRequest.getUpdatedAtMin()).isAfter(DateUtil.parseDate(searchProductionCompanyRequest.getUpdatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchProductionCompanyRequest.getCreatedAtMin() != null && searchProductionCompanyRequest.getCreatedAtMax() != null) {
+                if (DateUtil.parseDate(searchProductionCompanyRequest.getCreatedAtMin()).isAfter(DateUtil.parseDate(searchProductionCompanyRequest.getCreatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
             Sort sort = Sort.by(Sort.Direction.fromString(searchProductionCompanyRequest.getDirection()), searchProductionCompanyRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchProductionCompanyRequest.getPage() - 1, searchProductionCompanyRequest.getSize(), sort);
             Specification<ProductionCompany> specification = ProductionCompanySpecification.getSpecification(searchProductionCompanyRequest);
@@ -137,6 +152,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
             .foundedYear(productionCompany.getFoundedYear().toString())
             .createdAt(productionCompany.getCreatedAt().toString())
             .updatedAt(productionCompany.getUpdatedAt().toString())
+            .productTitle(productionCompany.getHasProduct() == null ? null : productionCompany.getHasProduct().stream().map(product -> product.getTitle()).toList())
             .build();
     }
 

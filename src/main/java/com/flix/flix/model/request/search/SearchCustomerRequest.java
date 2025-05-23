@@ -20,13 +20,16 @@ public class SearchCustomerRequest {
     private String phoneNumber;
     private String city;
     private String gender;
-    private String registrationDate;
-    private String lastLogin;
+    private String birthDateMin;
+    private String birthDateMax;
+    private String registrationDateMin;
+    private String registrationDateMax;
+    private String lastLoginMin;
+    private String lastLoginMax;
     private List<String> favGenres;
     private String email;
     private List<String> likeProductTitle;
     private List<String> dislikeProductTitle;
-    private List<String> theaterName;
 
     private Integer page;
     private Integer size;

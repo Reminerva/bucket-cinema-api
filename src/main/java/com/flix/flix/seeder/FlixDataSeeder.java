@@ -22,6 +22,8 @@ public class FlixDataSeeder implements CommandLineRunner {
     private static final String USER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.USER_DB + " WHERE id = :id";
     private static final String ROLE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.APP_USER_ROLE_DB + " WHERE app_user_id = :app_user_id";
     private static final String CUSTOMER_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.CUSTOMER_DB + " WHERE id = :id";
+    private static final String LIKE_PRODUCT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_CUSTOMER_LIKE_DB + " WHERE customer_id = :customer_id";
+    private static final String DISLIKE_PRODUCT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_CUSTOMER_DISLIKE_DB + " WHERE customer_id = :customer_id";
     private static final String EMPLOYEE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.EMPLOYEE_DB + " WHERE id = :id";
     private static final String FAV_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.FAV_GENRE_DB + " WHERE id = :id";
     private static final String MOVIE_GENRE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.MOVIE_GENRE_DB + " WHERE id = :id";
@@ -48,8 +50,8 @@ public class FlixDataSeeder implements CommandLineRunner {
         if (isDataAbsent(PRODUCTION_COMPANY_CHECK_QUERY, "a1b2c3d4-e5f6-7890-1234-567890abcdef")) {
             entityManager.createNativeQuery(
                 "INSERT INTO " + DbBash.PRODUCTION_COMPANY_DB + " (id, name, logo_url, origin_country, website_url, founded_year, contact_email, contact_number, headquarters, ceo, description, created_at, updated_at) VALUES " +
-                "('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Marvel Studios', 'https://example.com/marvel_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.marvel.com', '1993-09-08', 'contact@marvel.com', '+1-800-MARVEL', 'Burbank, California', 'Kevin Feige', 'American film and television production company.', NOW(), NOW())," +
-                "('f9e8d7c6-b5a4-3210-fedc-ba9876543210', 'Walt Disney Pictures', 'https://example.com/disney_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.disneystudios.com', '1923-10-16', 'contact@disney.com', '+1-800-DISNEY', 'Burbank, California', 'Bob Iger', 'American film production and distribution company.', NOW(), NOW())"
+                "('a1b2c3d4-e5f6-7890-1234-567890abcdef', 'Marvel Studios', 'https://example.com/marvel_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.marvel.com', '1993-09-08', 'contact@marvel.com', '1-800-MARVEL', 'Burbank, California', 'Kevin Feige', 'American film and television production company.', NOW(), NOW())," +
+                "('f9e8d7c6-b5a4-3210-fedc-ba9876543210', 'Walt Disney Pictures', 'https://example.com/disney_logo.png', 'COUNTRY_UNITED_STATES', 'https://www.disneystudios.com', '1923-10-16', 'contact@disney.com', '1-800-DISNEY', 'Burbank, California', 'Bob Iger', 'American film production and distribution company.', NOW(), NOW())"
             ).executeUpdate();
         }
 
@@ -124,10 +126,10 @@ public class FlixDataSeeder implements CommandLineRunner {
         // Insert Customer
         if (isDataAbsent(CUSTOMER_CHECK_QUERY, "cust-001")) {
             entityManager.createNativeQuery(
-                "INSERT INTO " + DbBash.CUSTOMER_DB + " (id, fullname, country, phone_number, city, gender, registration_date, last_login, app_user_id) VALUES " +
-                "('cust-001', 'Budi Santoso', 'Indonesia', '081234567890', 'Bandung', 'GENDER_MALE', NOW(), NOW(), 'user-001')," +
-                "('cust-002', 'Siti Aminah', 'Indonesia', '089876543210', 'Jakarta', 'GENDER_FEMALE', NOW(), NOW(), 'user-002')," +
-                "('cust-003', 'John Doe', 'USA', '+1-555-1234', 'New York', 'GENDER_MALE', NOW(), NOW(), 'user-003')"
+                "INSERT INTO " + DbBash.CUSTOMER_DB + " (id, fullname, country, phone_number, city, gender, registration_date, last_login, birth_date, app_user_id) VALUES " +
+                "('cust-001', 'Budi Santoso', 'COUNTRY_INDONESIA', '081234567890', 'Bandung', 'GENDER_MALE', NOW(), NOW(), '1990-01-01', 'user-001')," +
+                "('cust-002', 'Siti Aminah', 'COUNTRY_INDONESIA', '089876543210', 'Jakarta', 'GENDER_FEMALE', NOW(), NOW(), '1995-02-02', 'user-002')," +
+                "('cust-003', 'John Doe', 'COUNTRY_UNITED_STATES', '1-555-1234', 'New York', 'GENDER_MALE', NOW(), NOW(), '1980-03-03', 'user-003')"
             ).executeUpdate();
         }
 
@@ -137,7 +139,7 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "INSERT INTO " + DbBash.PRODUCT_DB + " (id, title, duration, language, country, release_date, poster_url, trailer_url, rated, budget, synopsis, tagline, imdb_rating, rotten_tomatoes_rating, last_updated, production_company_id) VALUES " +
                 "('prod-001', 'Avengers: Endgame', 181, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '2019-04-26', 'https://example.com/avengers_poster.png', 'https://example.com/avengers_trailer.mp4', 'RATED_PG_13', 356000000, 'The culmination of 22 interconnected films.', 'Part of the journey is the end.', 8.4, 94, NOW(), 'a1b2c3d4-e5f6-7890-1234-567890abcdef')," +
                 "('prod-002', 'The Lion King', 118, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '1994-06-24', 'https://example.com/lionking_poster.png', 'https://example.com/lionking_trailer.mp4', 'RATED_G', 45000000, 'A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.', 'Hakuna Matata.', 8.5, 93, NOW(), 'f9e8d7c6-b5a4-3210-fedc-ba9876543210')," +
-                "('prod-003', 'Inception', 148, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '2010-07-16', 'https://example.com/inception_poster.png', 'https://example.com/inception_trailer.mp4', 'RATED_PG_13', 160000000, 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 'Your mind is the scene of the crime.', 8.8, 87, NOW(), NULL)"
+                "('prod-003', 'Inception', 148, 'LANGUAGE_ENGLISH', 'COUNTRY_UNITED_STATES', '2010-07-16', 'https://example.com/inception_poster.png', 'https://example.com/inception_trailer.mp4', 'RATED_PG_13', 160000000, 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.', 'Your mind is the scene of the crime.', 8.8, 87, NOW(), 'f9e8d7c6-b5a4-3210-fedc-ba9876543210')"
             ).executeUpdate();
         }
 
@@ -145,6 +147,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         if (isDataAbsent(FAV_GENRE_CHECK_QUERY, "fav-001")) {
             entityManager.createNativeQuery(
                 "INSERT INTO " + DbBash.FAV_GENRE_DB + " (id, customer_id, fav_genre) VALUES " +
+                "('fav-005', 'cust-003', 'GENRE_ACTION')," +
                 "('fav-001', 'cust-001', 'GENRE_ACTION')," +
                 "('fav-002', 'cust-001', 'GENRE_COMEDY')," +
                 "('fav-003', 'cust-002', 'GENRE_DRAMA')," +
@@ -207,7 +210,7 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "('emp-001', 'Panda', 'Jl. Raya Bandung', '081234567890', 'GENDER_MALE', 'Bandung', '1990-01-01', NOW(), 'theater-001', '1111111111111111', TRUE, 'useremp-001')," +
                 "('emp-002', 'Beruang', 'Jl. Raya Jakarta', '089876543210', 'GENDER_FEMALE', 'Jakarta', '1995-05-05', NOW(), 'theater-001', '2222222222222222', TRUE, 'useremp-002')," +
                 "('emp-003', 'Kucing', 'Jl. Bandung Selatan', '089324823422', 'GENDER_FEMALE', 'Jakarta', '1997-12-15', NOW(), 'theater-002', '3333333333333333', TRUE, 'useremp-003')," +
-                "('emp-004', 'John Doe', '123 Main Street', '+1-555-1234', 'GENDER_MALE', 'New York', '1980-10-10', NOW(), 'theater-002', '4444444444444444', TRUE, 'useremp-004')," +
+                "('emp-004', 'John Doe', '123 Main Street', '1-555-1234', 'GENDER_MALE', 'New York', '1980-10-10', NOW(), 'theater-002', '4444444444444444', TRUE, 'useremp-004')," +
                 "('emp-005', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-001', NULL, TRUE, 'useremp-005')," +
                 "('emp-006', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-002', NULL, TRUE, 'useremp-006')"
             ).executeUpdate();
@@ -253,6 +256,20 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "('studio_seat_schedule-003', 'studio-002', 'psched-003')," +
                 "('studio_seat_schedule-004', 'studio-003', 'psched-004')"
             ).executeUpdate();
+        }
+
+        // Insert LikeProduct for Customer
+        if (isLikeProductDataAbsent(LIKE_PRODUCT_CHECK_QUERY, "cust-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_CUSTOMER_LIKE_DB + " (customer_id, like_product_id) VALUES " +
+                "('cust-001', 'prod-001'), ('cust-001', 'prod-002'), ('cust-001', 'prod-003')," +
+                "('cust-002', 'prod-001')," +
+                "('cust-003', 'prod-001'), ('cust-003', 'prod-003')").executeUpdate();
+        }
+
+        // Insert DislikeProduct for Customer
+        if (isLikeProductDataAbsent(DISLIKE_PRODUCT_CHECK_QUERY, "cust-001")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_CUSTOMER_DISLIKE_DB + " (customer_id, dislike_product_id) VALUES " +
+                "('cust-002', 'prod-002'), ('cust-002', 'prod-003'), ('cust-003', 'prod-002')").executeUpdate();
         }
         
         // Insert SeatLayout for Studio
@@ -329,17 +346,13 @@ public class FlixDataSeeder implements CommandLineRunner {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_SCHEDULING_STUDIO_DB + " (product_scheduling_id, studio_id) VALUES ('psched-004', 'studio-003')").executeUpdate();
         }
 
-        // Inserting relations between Product and Artist
+        // Additional artists for Avengers: Endgame
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "11111111-2222-3333-4444-555555555555")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '11111111-2222-3333-4444-555555555555')").executeUpdate();
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "66666666-7777-8888-9999-000000000000")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '66666666-7777-8888-9999-000000000000')").executeUpdate();
         }
-        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "abcdef01-2345-6789-abcd-ef0123456789")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
-        }
-        // Additional artists for Avengers: Endgame
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "00000000-0000-0000-0000-000000000001")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '00000000-0000-0000-0000-000000000001')").executeUpdate(); // Chris Evans
         }
@@ -349,7 +362,7 @@ public class FlixDataSeeder implements CommandLineRunner {
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "00000000-0000-0000-0000-000000000003")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '00000000-0000-0000-0000-000000000003')").executeUpdate(); // Russo Brothers (Director)
         }
-
+        
         // Artists for The Lion King
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000004")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000004')").executeUpdate(); // Jon Favreau (Director)
@@ -366,8 +379,14 @@ public class FlixDataSeeder implements CommandLineRunner {
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000008")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000008')").executeUpdate(); // James Earl Jones (Actor)
         }
-
+        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "66666666-7777-8888-9999-000000000000")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '66666666-7777-8888-9999-000000000000')").executeUpdate();
+        }
+        
         // Artists for Inception
+        if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "abcdef01-2345-6789-abcd-ef0123456789")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
+        }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000009")) {
             entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000009')").executeUpdate(); // Leonardo DiCaprio (Actor)
         }
@@ -388,6 +407,13 @@ public class FlixDataSeeder implements CommandLineRunner {
     private boolean isDataAbsent(String query, String param) {
         Long count = (Long) entityManager.createNativeQuery(query)
             .setParameter("id", param)
+            .getSingleResult();
+        return count == 0;
+    }
+
+    private boolean isLikeProductDataAbsent(String query, String param) {
+        Long count = (Long) entityManager.createNativeQuery(query)
+            .setParameter("customer_id", param)
             .getSingleResult();
         return count == 0;
     }

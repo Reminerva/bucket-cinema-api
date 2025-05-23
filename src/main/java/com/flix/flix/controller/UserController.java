@@ -24,6 +24,7 @@ import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
 import com.flix.flix.model.response.SignupResponse;
 import com.flix.flix.service.AppUserService;
+import com.flix.flix.util.PagingUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -217,6 +218,7 @@ public class UserController {
                     .code(HttpStatus.OK.value())
                     .message(ApiBash.GET_ALL_USER_SUCCESS)
                     .data(appUsers.getContent())
+                    .paging(PagingUtils.pageToPagingResponse(appUsers))
                     .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

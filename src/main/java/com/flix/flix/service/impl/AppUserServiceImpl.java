@@ -127,8 +127,10 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public Page<AppUserResponse> getAll(SearchAppUserRequest searchAppUserRequest) {
         try {
-            if (searchAppUserRequest.getPage() <= 0 || searchAppUserRequest.getSize() <= 0) {
+            if (searchAppUserRequest.getPage() <= 0) {
                 searchAppUserRequest.setPage(1);
+            }
+            if (searchAppUserRequest.getSize() <= 0) {
                 searchAppUserRequest.setSize(10);
             }
             Sort sort = Sort.by(Sort.Direction.fromString(searchAppUserRequest.getDirection()), searchAppUserRequest.getSortBy());
@@ -136,6 +138,7 @@ public class AppUserServiceImpl implements AppUserService {
             Specification<AppUser> specification = AppUserSpecification.getSpecification(searchAppUserRequest);
             return appUserRepository.findAll(specification, pageable).map(this::toAppUserResponse);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

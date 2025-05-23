@@ -2,6 +2,8 @@ package com.flix.flix.specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -9,16 +11,21 @@ import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ELanguage;
 import com.flix.flix.constant.custom_enum.ERated;
+import com.flix.flix.entity.Artist;
+import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;
 import com.flix.flix.model.request.search.SearchProductRequest;
 import com.flix.flix.util.DateUtil;
 
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 public class ProductSpecification {
 
+    @SuppressWarnings("null")
     public static Specification<Product> getSpecification(SearchProductRequest request) {
-        return (root, query, cb) -> {
+        return (root, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
+            List<Predicate> havingPredicates = new ArrayList<>();
 
             if (request.getTitle() != null) {
                 predicates.add(cb.like(cb.lower(root.get("title")), "%" + request.getTitle().toLowerCase() + "%"));
@@ -63,8 +70,14 @@ public class ProductSpecification {
                 predicates.add(cb.lessThanOrEqualTo(root.get("rottenTomatoesRating"), request.getRottenTomatoesRatingMax()));
             }
             if (request.getMovieGenre() != null && !request.getMovieGenre().isEmpty()) {
-                List<EGenre> genres = request.getMovieGenre().stream().map(EGenre::findByDescription).toList();
-                predicates.add(root.get("movieGenre").in(genres));
+                Join<Product, MovieGenre> movieGenreJoin = root.join("movieGenre");
+                Set<EGenre> requiredGenres = request.getMovieGenre().stream()
+                    .map(EGenre::findByDescription)
+                    .collect(Collectors.toSet());
+
+                predicates.add(movieGenreJoin.get("genre").in(requiredGenres));
+
+                havingPredicates.add(cb.equal(cb.countDistinct(movieGenreJoin.get("genre")), requiredGenres.size()));
             }
             if (request.getProductPricingMin() != null) {
                 predicates.add(cb.or(
@@ -95,16 +108,31 @@ public class ProductSpecification {
                 ));
             }
             if (request.getArtistsName() != null && !request.getArtistsName().isEmpty()) {
-                List<Predicate> artistPredicates = new ArrayList<>();
-                for (String name : request.getArtistsName()) {
-                    artistPredicates.add(cb.like(cb.lower(root.get("artists").get("name")), "%" + name.toLowerCase() + "%"));
+                Join<Product, Artist> nameJoin = root.join("artists");
+
+                Set<String> artistNames = request.getArtistsName().stream()
+                    .map(name -> name.toLowerCase())
+                    .collect(Collectors.toSet());
+
+                List<Predicate> predicatesArtist = new ArrayList<>();
+                for (String name : artistNames) {
+                    predicatesArtist.add(cb.like(cb.lower(nameJoin.get("name")), "%" + name + "%"));
                 }
-                predicates.add(cb.or(artistPredicates.toArray(new Predicate[0])));
+                predicates.add(cb.or(predicatesArtist.toArray(new Predicate[0])));
+
+                havingPredicates.add(cb.equal(cb.countDistinct(nameJoin.get("name")), artistNames.size()));
             }
             if (request.getProductionCompany() != null) {
                 predicates.add(cb.like(cb.lower(root.get("productionCompany").get("name")), "%" + request.getProductionCompany().toLowerCase() + "%"));
             }
 
+            // apply groupBy once
+            cq.groupBy(root.get("id"));
+
+            // apply combined having condition
+            if (!havingPredicates.isEmpty()) {
+                cq.having(cb.and(havingPredicates.toArray(new Predicate[0])));
+            }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

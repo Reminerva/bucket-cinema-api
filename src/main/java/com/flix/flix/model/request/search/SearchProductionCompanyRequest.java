@@ -1,5 +1,7 @@
 package com.flix.flix.model.request.search;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class SearchProductionCompanyRequest {
     private String createdAtMax;
     private String updatedAtMin;
     private String updatedAtMax;
+    private List<String> hasProducts;
 
     private Integer page;
     private Integer size;

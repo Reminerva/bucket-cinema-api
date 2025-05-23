@@ -1,5 +1,7 @@
 package com.flix.flix.model.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +28,5 @@ public class ProductionCompanyResponse {
     private String foundedYear;
     private String createdAt;
     private String updatedAt;
+    private List<String> productTitle;
 }

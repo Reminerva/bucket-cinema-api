@@ -83,7 +83,7 @@ public class ArtistController {
         @RequestParam(required = false) String placeOfBirth,
         @RequestParam(required = false) String birthDateMin,
         @RequestParam(required = false) String birthDateMax,
-        @RequestParam(required = false) String artistType,
+        @RequestParam(required = false) List<String> artistType,
         @RequestParam(required = false) List<String> inProductTitle
 
     ) {

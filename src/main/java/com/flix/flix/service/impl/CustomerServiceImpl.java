@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGender;
 import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ERole;
@@ -66,7 +67,8 @@ public class CustomerServiceImpl implements CustomerService {
 
             Customer customer = Customer.builder()
                     .fullname(newCustomerRequest.getFullname())
-                    .country(newCustomerRequest.getCountry())
+                    .birthDate(DateUtil.parseDate(newCustomerRequest.getBirthDate()))
+                    .country(ECountry.findByDescription(newCustomerRequest.getCountry()))
                     .city(newCustomerRequest.getCity())
                     .phoneNumber(newCustomerRequest.getPhoneNumber())
                     .gender(EGender.findByDescription(newCustomerRequest.getGender()))
@@ -84,9 +86,26 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Page<CustomerResponse> getAll(SearchCustomerRequest searchCustomerRequest) {
         try {
-            if (searchCustomerRequest.getPage() <= 0 || searchCustomerRequest.getSize() <= 0) {
+            if (searchCustomerRequest.getPage() <= 0) {
                 searchCustomerRequest.setPage(1);
+            }
+            if (searchCustomerRequest.getSize() <= 0) {
                 searchCustomerRequest.setSize(10);
+            }
+            if (searchCustomerRequest.getRegistrationDateMin() != null && searchCustomerRequest.getRegistrationDateMin() != null) {
+                if (DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMin()).isAfter(DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMin()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchCustomerRequest.getLastLoginMin() != null && searchCustomerRequest.getLastLoginMax() != null) {
+                if (DateUtil.parseDate(searchCustomerRequest.getLastLoginMin()).isAfter(DateUtil.parseDate(searchCustomerRequest.getLastLoginMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchCustomerRequest.getBirthDateMin() != null && searchCustomerRequest.getBirthDateMax() != null) {
+                if (DateUtil.parseDate(searchCustomerRequest.getBirthDateMin()).isAfter(DateUtil.parseDate(searchCustomerRequest.getBirthDateMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
             }
             Sort sort = Sort.by(Sort.Direction.fromString(searchCustomerRequest.getDirection()), searchCustomerRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchCustomerRequest.getPage() - 1, searchCustomerRequest.getSize(), sort);
@@ -122,7 +141,8 @@ public class CustomerServiceImpl implements CustomerService {
                     .orElseThrow(() -> new RuntimeException(DbBash.CUSTOMER_NOT_FOUND));
 
             customer.setFullname(updateCustomerRequest.getFullname());
-            customer.setCountry(updateCustomerRequest.getCountry());
+            customer.setCountry(ECountry.findByDescription(updateCustomerRequest.getCountry()));
+            customer.setBirthDate(DateUtil.parseDate(updateCustomerRequest.getBirthDate()));
             customer.setPhoneNumber(updateCustomerRequest.getPhoneNumber());
             customer.setCity(updateCustomerRequest.getCity());
             customer.setGender(EGender.findByDescription(updateCustomerRequest.getGender()));
@@ -229,9 +249,10 @@ public class CustomerServiceImpl implements CustomerService {
                     .id(customer.getId())
                     .userId(customer.getAppUser().getId())
                     .fullname(customer.getFullname())
-                    .country(customer.getCountry())
+                    .country(customer.getCountry().getDescription())
                     .phoneNumber(customer.getPhoneNumber())
-                    .city(customer.getCity())  
+                    .city(customer.getCity())
+                    .birthDate(customer.getBirthDate().toString())
                     .gender(customer.getGender().getDescription())
                     .registrationDate(customer.getRegistrationDate().toString())
                     .lastLogin(customer.getLastLogin().toString())
