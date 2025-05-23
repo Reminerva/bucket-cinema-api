@@ -5,18 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
+import com.flix.flix.entity.Employee;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.Studio;
 import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.NewTheaterRequest;
+import com.flix.flix.model.request.search.SearchTheaterRequest;
 import com.flix.flix.model.response.TheaterResponse;
 import com.flix.flix.repository.TheaterRepository;
 import com.flix.flix.service.ProductService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.service.TheaterService;
+import com.flix.flix.specification.TheaterSpecification;
+import com.flix.flix.util.DateUtil;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -67,10 +76,30 @@ public class TheaterServiceImpl implements TheaterService {
     }
 
     @Override
-    public List<TheaterResponse> getAll() {
+    public Page<TheaterResponse> getAll(SearchTheaterRequest searchTheaterRequest) {
         try {
-            return theaterRepository.findAll().stream().map(this::toTheaterResponse).toList();
+            if (searchTheaterRequest.getPage() <= 0) {
+                searchTheaterRequest.setPage(1);
+            }
+            if (searchTheaterRequest.getSize() <= 0) {
+                searchTheaterRequest.setSize(10);
+            }
+            if (searchTheaterRequest.getCreatedAtMin() != null && searchTheaterRequest.getCreatedAtMax() != null) {
+                if (DateUtil.parseDate(searchTheaterRequest.getCreatedAtMin()).isAfter(DateUtil.parseDate(searchTheaterRequest.getCreatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTheaterRequest.getUpdatedAtMin() != null && searchTheaterRequest.getUpdatedAtMax() != null) {
+                if (DateUtil.parseDate(searchTheaterRequest.getUpdatedAtMin()).isAfter(DateUtil.parseDate(searchTheaterRequest.getUpdatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchTheaterRequest.getDirection()), searchTheaterRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchTheaterRequest.getPage() - 1, searchTheaterRequest.getSize(), sort);
+            Specification<Theater> specification = TheaterSpecification.getSpecification(searchTheaterRequest);
+            return theaterRepository.findAll(specification, pageable).map(this::toTheaterResponse);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -143,11 +172,20 @@ public class TheaterServiceImpl implements TheaterService {
         try {
             List<TheaterResponse.ProductResponse> productResponses = new ArrayList<>();
             if (theater.getProducts() != null && theater.getProducts().size() > 0) {
-                for (com.flix.flix.entity.Product product : theater.getProducts()) {
+                for (Product product : theater.getProducts()) {
                     productResponses.add(TheaterResponse.ProductResponse.builder()
                         .id(product.getId())
                         .title(product.getTitle())
                         .posterUrl(product.getPosterUrl())
+                        .build());
+                }
+            }
+            List<TheaterResponse.EmployeeResponse> employeeResponses = new ArrayList<>();
+            if (theater.getEmployees() != null && theater.getEmployees().size() > 0) {
+                for (Employee employee : theater.getEmployees()) {
+                    employeeResponses.add(TheaterResponse.EmployeeResponse.builder()
+                        .id(employee.getId())
+                        .fullname(employee.getFullname())
                         .build());
                 }
             }
@@ -163,6 +201,7 @@ public class TheaterServiceImpl implements TheaterService {
                 .oprationalStatus(theater.getOprationalStatus())
                 .studios(theater.getStudios().stream().map(studioService::toStudioResponse).toList())
                 .nowShowing(productResponses)
+                .employees(employeeResponses)
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

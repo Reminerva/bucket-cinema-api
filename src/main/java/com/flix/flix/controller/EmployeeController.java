@@ -2,6 +2,7 @@ package com.flix.flix.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flix.flix.constant.ApiBash;
@@ -20,10 +22,12 @@ import com.flix.flix.constant.DbBash;
 import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewCashierRequest;
 import com.flix.flix.model.request.NewEmployeeRequest;
+import com.flix.flix.model.request.search.SearchEmployeeRequest;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.EmployeeResponse;
 import com.flix.flix.model.response.SignupResponse;
 import com.flix.flix.service.EmployeeService;
+import com.flix.flix.util.PagingUtils;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -157,12 +161,55 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<EmployeeResponse>>> getAll() {
+    public ResponseEntity<CommonResponse<List<EmployeeResponse>>> getAll(
+        @RequestParam(required = false, defaultValue = "0") int page,
+        @RequestParam(required = false, defaultValue = "10") int size,
+        @RequestParam(required = false, defaultValue = "fullname") String sortBy,
+        @RequestParam(required = false, defaultValue = "asc") String direction,
+        @RequestParam(required = false) String fullname,
+        @RequestParam(required = false) String nikNumber,
+        @RequestParam(required = false) String address,
+        @RequestParam(required = false) String phoneNumber,
+        @RequestParam(required = false) String gender,
+        @RequestParam(required = false) String city,
+        @RequestParam(required = false) Boolean isActive,
+        @RequestParam(required = false) String dateOfBirthMin,
+        @RequestParam(required = false) String dateOfBirthMax,
+        @RequestParam(required = false) String dateOfApplimentMin,
+        @RequestParam(required = false) String dateOfApplimentMax,
+        @RequestParam(required = false) String appUserUsername,
+        @RequestParam(required = false) String appUserEmail,
+        @RequestParam(required = false) String theaterName,
+        @RequestParam(required = false) String theaterCity
+    ) {
         try {
+            SearchEmployeeRequest request = SearchEmployeeRequest.builder()
+                .page(page)
+                .size(size) 
+                .sortBy(sortBy)
+                .direction(direction)
+                .fullname(fullname)
+                .nikNumber(nikNumber)
+                .address(address)
+                .phoneNumber(phoneNumber)
+                .gender(gender)
+                .city(city)
+                .isActive(isActive)
+                .dateOfBirthMin(dateOfBirthMin)
+                .dateOfBirthMax(dateOfBirthMax)
+                .dateOfApplimentMin(dateOfApplimentMin)
+                .dateOfApplimentMax(dateOfApplimentMax)
+                .appUserUsername(appUserUsername)
+                .appUserEmail(appUserEmail)
+                .theaterName(theaterName)
+                .theaterCity(theaterCity)
+                .build();
+            Page<EmployeeResponse> employee = employeeService.getAll(request);
             CommonResponse<List<EmployeeResponse>> response = CommonResponse.<List<EmployeeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.GET_ALL_EMPLOYEE_SUCCESS)
-                .data(employeeService.getAll())
+                .data(employee.getContent())
+                .paging(PagingUtils.pageToPagingResponse(employee))
                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

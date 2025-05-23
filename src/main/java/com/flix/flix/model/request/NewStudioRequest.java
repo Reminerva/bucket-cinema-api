@@ -22,6 +22,8 @@ public class NewStudioRequest {
     private String studioSize;
     @NotEmpty(message = "seat layout is required")
     private List<String> seatLayout;
+    @NotBlank(message = "theater id is required")
+    private String theaterId;
 
     private List<NewStudioSeatScheduleRequest> studioSeatScheduleRequests;
     private List<NewProductPricingRequest> productPricingRequests;

@@ -1,11 +1,12 @@
 package com.flix.flix.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import com.flix.flix.entity.Theater;
 
 @Repository
-public interface TheaterRepository extends JpaRepository<Theater, String> {
+public interface TheaterRepository extends JpaRepository<Theater, String>, JpaSpecificationExecutor<Theater> {
 
 }

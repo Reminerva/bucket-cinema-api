@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
@@ -18,19 +23,23 @@ import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.entity.Studio;
 import com.flix.flix.entity.StudioSeatSchedule;
+import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.NewProductPricingRequest;
 import com.flix.flix.model.request.NewProductSchedulingRequest;
 import com.flix.flix.model.request.NewStudioRequest;
 import com.flix.flix.model.request.NewStudioSeatScheduleRequest;
+import com.flix.flix.model.request.search.SearchStudioRequest;
 import com.flix.flix.model.response.ProductPricingResponse;
 import com.flix.flix.model.response.ProductSchedulingResponse;
 import com.flix.flix.model.response.StudioResponse;
 import com.flix.flix.repository.StudioRepository;
+import com.flix.flix.repository.TheaterRepository;
 import com.flix.flix.service.ProductPricingService;
 import com.flix.flix.service.ProductSchedulingService;
 import com.flix.flix.service.ProductService;
 import com.flix.flix.service.StudioSeatScheduleService;
 import com.flix.flix.service.StudioService;
+import com.flix.flix.specification.StudioSpecification;
 import com.flix.flix.util.TimeUtil;
 
 import jakarta.transaction.Transactional;
@@ -45,12 +54,15 @@ public class StudioServiceImpl implements StudioService {
     private final ProductSchedulingService productSchedulingService;
     private final ProductService productService;
     private final StudioSeatScheduleService studioSeatScheduleService;
+    private final TheaterRepository theaterRepository;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public StudioResponse create(NewStudioRequest studioRequest) {
         try {
             List<String> seatLayoutRequest = studioRequest.getSeatLayout();
+            Optional<Theater> theater = theaterRepository.findById(studioRequest.getTheaterId());
+            if (theater.isEmpty()) throw new RuntimeException(DbBash.THEATER_NOT_FOUND);
 
             List<ESeat> seatLayout = ESeat.toESeatList(seatLayoutRequest);
             if (!EStudioSize.isSeatValid(seatLayout, EStudioSize.findByDescription(studioRequest.getStudioSize()))) {
@@ -61,6 +73,7 @@ public class StudioServiceImpl implements StudioService {
                     .studioSize(EStudioSize.findByDescription(studioRequest.getStudioSize()))
                     .seatLayout(seatLayout)
                     .isActive(true)
+                    .theater(theater.get())
                     .build();
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
@@ -70,18 +83,31 @@ public class StudioServiceImpl implements StudioService {
     }
 
     @Override
-    public List<StudioResponse> getAll() {
+    public Page<StudioResponse> getAll(SearchStudioRequest searchStudioRequest) {
         try {
-            return studioRepository.findAll().stream().map(this::toStudioResponse).toList();
+            if (searchStudioRequest.getPage() <= 0) {
+                searchStudioRequest.setPage(1);
+            }
+            if (searchStudioRequest.getSize() <= 0) {
+                searchStudioRequest.setSize(10);
+            }
+            if (searchStudioRequest.getSeatLayout() != null && searchStudioRequest.getStudioSize() == null) {
+                throw new RuntimeException(DbBash.INVALID_SEARCH_STUDIO_SEAT_LAYOUT_REQUEST);
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchStudioRequest.getDirection()), searchStudioRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchStudioRequest.getPage() - 1, searchStudioRequest.getSize(), sort);
+            Specification<Studio> specification = StudioSpecification.getSpecification(searchStudioRequest);
+            return studioRepository.findAll(specification, pageable).map(this::toStudioResponse);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public List<StudioResponse> getAllActive() {
+    public Page<StudioResponse> getAllActive(SearchStudioRequest searchStudioRequest) {
         try {
-            return studioRepository.findAllByIsActive(true).stream().map(this::toStudioResponse).toList();
+            searchStudioRequest.setIsActive(true);
+            return getAll(searchStudioRequest);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -207,6 +233,8 @@ public class StudioServiceImpl implements StudioService {
                     .productPricing(productPricings)
                     .productScheduling(productSchedulings)
                     .isActive(studio.getIsActive())
+                    .theaterId(studio.getTheater() == null ? null : studio.getTheater().getId())
+                    .theaterName(studio.getTheater() == null ? null : studio.getTheater().getName())
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

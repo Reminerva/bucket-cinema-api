@@ -22,4 +22,6 @@ public class StudioResponse {
     private List<ProductPricingResponse> productPricing;
     private List<ProductSchedulingResponse> productScheduling;
     private Boolean isActive;
+    private String theaterId;
+    private String theaterName;
 }

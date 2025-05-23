@@ -114,4 +114,6 @@ public class ApiBash {
     public static final String HAS_ROLE_ADMIN = "hasRole('ADMIN')";
     public static final String HAS_ROLE_CUSTOMER = "hasRole('CUSTOMER')";
     public static final String HAS_ROLE_CASHIER = "hasRole('CASHIER')";
+
+    public static final String INVALID_REQUEST_BODY = "Invalid request body";
 }

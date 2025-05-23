@@ -247,7 +247,9 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             return CustomerResponse.builder()
                     .id(customer.getId())
-                    .userId(customer.getAppUser().getId())
+                    .userAppId(customer.getAppUser().getId())
+                    .userAppUsername(customer.getAppUser().getUsername())
+                    .userAppEmail(customer.getAppUser().getEmail())
                     .fullname(customer.getFullname())
                     .country(customer.getCountry().getDescription())
                     .phoneNumber(customer.getPhoneNumber())

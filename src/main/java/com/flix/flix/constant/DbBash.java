@@ -86,4 +86,6 @@ public class DbBash {
 
     public static final String MIN_MAX_INVALID = "Min attribute must be less than max attribute";
 
+    public static final String INVALID_SEARCH_STUDIO_SEAT_LAYOUT_REQUEST = "Invalid search studio's seat layout request. To search by seat layout, studio Size should not be null";
+
 }

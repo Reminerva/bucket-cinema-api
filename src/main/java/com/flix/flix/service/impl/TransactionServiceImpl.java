@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
@@ -25,6 +30,7 @@ import com.flix.flix.entity.Theater;
 import com.flix.flix.entity.Transaction;
 import com.flix.flix.model.request.NewStudioSeatScheduleRequest;
 import com.flix.flix.model.request.NewTransactionRequest;
+import com.flix.flix.model.request.search.SearchTransactionRequest;
 import com.flix.flix.model.response.TransactionResponse;
 import com.flix.flix.repository.TransactionRepository;
 import com.flix.flix.service.CustomerService;
@@ -36,6 +42,7 @@ import com.flix.flix.service.StudioSeatScheduleService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.service.TheaterService;
 import com.flix.flix.service.TransactionService;
+import com.flix.flix.specification.TransactionSpecification;
 import com.flix.flix.util.DateUtil;
 import com.flix.flix.util.TokenUtil;
 
@@ -100,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
                 transaction.setCustomer(customerService.getCustomerById(appUser.getCustomer().getId()));
                 return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
             } else if (appUser.getRoles().contains(ERole.ROLE_CASHIER)) {
-                transaction.setEmployee(employeeService.getEmployeeById(appUser.getCustomer().getId()));
+                transaction.setEmployee(employeeService.getEmployeeById(appUser.getEmployee().getId()));
                 return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
             } else {
                 throw new RuntimeException(DbBash.ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION);
@@ -112,10 +119,51 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionResponse> getAll() {
+    public Page<TransactionResponse> getAll(SearchTransactionRequest searchTransactionRequest) {
         try {
-            return transactionRepository.findAll().stream().map(transaction -> toTransactionResponse(transaction)).toList();
+            if (searchTransactionRequest.getPage() <= 0) {
+                searchTransactionRequest.setPage(1);
+            }
+            if (searchTransactionRequest.getSize() <= 0) {
+                searchTransactionRequest.setSize(10);
+            }
+            if (searchTransactionRequest.getCreatedAtMin() != null && searchTransactionRequest.getCreatedAtMax() != null) {
+                if (DateUtil.parseDate(searchTransactionRequest.getCreatedAtMin()).isAfter(DateUtil.parseDate(searchTransactionRequest.getCreatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTransactionRequest.getUpdatedAtMin() != null && searchTransactionRequest.getUpdatedAtMax() != null) {
+                if (DateUtil.parseDate(searchTransactionRequest.getUpdatedAtMin()).isAfter(DateUtil.parseDate(searchTransactionRequest.getUpdatedAtMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTransactionRequest.getPaymentDateTimeMin() != null && searchTransactionRequest.getPaymentDateTimeMax() != null) {
+                if (DateUtil.parseDate(searchTransactionRequest.getPaymentDateTimeMin()).isAfter(DateUtil.parseDate(searchTransactionRequest.getPaymentDateTimeMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTransactionRequest.getProductPriceMin() != null && searchTransactionRequest.getProductPriceMax() != null) {
+                if (searchTransactionRequest.getProductPriceMin() > searchTransactionRequest.getProductPriceMax()) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTransactionRequest.getWatchDateMin() != null && searchTransactionRequest.getWatchDateMax() != null) {
+                if (DateUtil.parseDate(searchTransactionRequest.getWatchDateMin()).isAfter(DateUtil.parseDate(searchTransactionRequest.getWatchDateMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchTransactionRequest.getExpirationDateMin() != null && searchTransactionRequest.getExpirationDateMax() != null) {
+                if (DateUtil.parseDate(searchTransactionRequest.getExpirationDateMin()).isAfter(DateUtil.parseDate(searchTransactionRequest.getExpirationDateMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchTransactionRequest.getDirection()), searchTransactionRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchTransactionRequest.getPage() - 1, searchTransactionRequest.getSize(), sort);
+            Specification<Transaction> specification = TransactionSpecification.getSpecification(searchTransactionRequest);
+            return transactionRepository.findAll(specification, pageable).map(this::toTransactionResponse);
+
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -163,7 +211,8 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal roundedTotal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP);
         TransactionResponse transactionResponse = TransactionResponse.builder()
                 .id(transaction.getId())
-                .customerId(transaction.getCustomer().getId())
+                .employeeCashierId(transaction.getEmployee() == null ? null : transaction.getEmployee().getId())
+                .customerId(transaction.getCustomer() == null ? null : transaction.getCustomer().getId())
                 .theaterId(transaction.getTheater().getId())
                 .studioId(transaction.getStudio().getId())
                 .productId(transaction.getProduct().getId())

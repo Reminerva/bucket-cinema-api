@@ -1,11 +1,12 @@
 package com.flix.flix.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import com.flix.flix.entity.Employee;
 import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewCashierRequest;
 import com.flix.flix.model.request.NewEmployeeRequest;
+import com.flix.flix.model.request.search.SearchEmployeeRequest;
 import com.flix.flix.model.response.EmployeeResponse;
 import com.flix.flix.model.response.SignupResponse;
 
@@ -16,7 +17,7 @@ public interface EmployeeService {
     SignupResponse createAdmin(NewAdminRequest adminRequest);
     Employee getEmployeeById(String id);
     EmployeeResponse getById(String id);
-    List<EmployeeResponse> getAll();
+    Page<EmployeeResponse> getAll(SearchEmployeeRequest searchEmployeeRequest);
     EmployeeResponse update(String id, NewEmployeeRequest employeeRequest);
     void softDelete(String id);
 

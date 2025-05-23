@@ -1,16 +1,17 @@
 package com.flix.flix.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.NewTheaterRequest;
+import com.flix.flix.model.request.search.SearchTheaterRequest;
 import com.flix.flix.model.response.TheaterResponse;
 
 public interface TheaterService {
     TheaterResponse create(NewTheaterRequest theaterRequest);
     TheaterResponse getById(String id);
     Theater getTheaterById(String id);
-    List<TheaterResponse> getAll();
+    Page<TheaterResponse> getAll(SearchTheaterRequest searchTheaterRequest);
     TheaterResponse update(String id, NewTheaterRequest theaterRequest);
     void softDelete(String id);
     TheaterResponse refreshAllSeat(String id);

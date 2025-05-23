@@ -129,7 +129,7 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "INSERT INTO " + DbBash.CUSTOMER_DB + " (id, fullname, country, phone_number, city, gender, registration_date, last_login, birth_date, app_user_id) VALUES " +
                 "('cust-001', 'Budi Santoso', 'COUNTRY_INDONESIA', '081234567890', 'Bandung', 'GENDER_MALE', NOW(), NOW(), '1990-01-01', 'user-001')," +
                 "('cust-002', 'Siti Aminah', 'COUNTRY_INDONESIA', '089876543210', 'Jakarta', 'GENDER_FEMALE', NOW(), NOW(), '1995-02-02', 'user-002')," +
-                "('cust-003', 'John Doe', 'COUNTRY_UNITED_STATES', '1-555-1234', 'New York', 'GENDER_MALE', NOW(), NOW(), '1980-03-03', 'user-003')"
+                "('cust-003', 'John Doe', 'COUNTRY_UNITED_STATES', '15551234', 'New York', 'GENDER_MALE', NOW(), NOW(), '1980-03-03', 'user-003')"
             ).executeUpdate();
         }
 
@@ -172,8 +172,8 @@ public class FlixDataSeeder implements CommandLineRunner {
         if (isDataAbsent(THEATER_CHECK_QUERY, "theater-001")) {
             entityManager.createNativeQuery(
                 "INSERT INTO " + DbBash.THEATER_DB + " (id, name, city, address, contact_number, contact_email, created_at, updated_at, oprational_status) VALUES " +
-                "('theater-001', 'CGV Bandung Electronic Center', 'Bandung', 'Jl. Purnawarman No.13-15', '022-82060901', 'bec@cgv.id', NOW(), NOW(), TRUE)," +
-                "('theater-002', 'XXI Ciwalk', 'Bandung', 'Jl. Cihampelas Walk No.160', '022-2061021', 'ciwalk@xxi.co.id', NOW(), NOW(), TRUE)"
+                "('theater-001', 'CGV Bandung Electronic Center', 'Bandung', 'Jl. Purnawarman No.13-15', '02282060901', 'bec@cgv.id', NOW(), NOW(), TRUE)," +
+                "('theater-002', 'XXI Ciwalk', 'Bandung', 'Jl. Cihampelas Walk No.160', '0222061021', 'ciwalk@xxi.co.id', NOW(), NOW(), TRUE)"
             ).executeUpdate();
         }
 
@@ -210,7 +210,7 @@ public class FlixDataSeeder implements CommandLineRunner {
                 "('emp-001', 'Panda', 'Jl. Raya Bandung', '081234567890', 'GENDER_MALE', 'Bandung', '1990-01-01', NOW(), 'theater-001', '1111111111111111', TRUE, 'useremp-001')," +
                 "('emp-002', 'Beruang', 'Jl. Raya Jakarta', '089876543210', 'GENDER_FEMALE', 'Jakarta', '1995-05-05', NOW(), 'theater-001', '2222222222222222', TRUE, 'useremp-002')," +
                 "('emp-003', 'Kucing', 'Jl. Bandung Selatan', '089324823422', 'GENDER_FEMALE', 'Jakarta', '1997-12-15', NOW(), 'theater-002', '3333333333333333', TRUE, 'useremp-003')," +
-                "('emp-004', 'John Doe', '123 Main Street', '1-555-1234', 'GENDER_MALE', 'New York', '1980-10-10', NOW(), 'theater-002', '4444444444444444', TRUE, 'useremp-004')," +
+                "('emp-004', 'John Doe', '123 Main Street', '15551234', 'GENDER_MALE', 'New York', '1980-10-10', NOW(), 'theater-002', '4444444444444444', TRUE, 'useremp-004')," +
                 "('emp-005', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-001', NULL, TRUE, 'useremp-005')," +
                 "('emp-006', 'Cashier', NULL, NULL, NULL, NULL, NULL, NOW(), 'theater-002', NULL, TRUE, 'useremp-006')"
             ).executeUpdate();

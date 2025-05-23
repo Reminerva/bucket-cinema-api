@@ -25,6 +25,7 @@ public class TheaterResponse {
     private Boolean oprationalStatus;
     private List<StudioResponse> studios;
     private List<ProductResponse> nowShowing;
+    private List<EmployeeResponse> employees;
     
     @Builder
     @Getter
@@ -35,5 +36,15 @@ public class TheaterResponse {
         private String id;
         private String title;
         private String posterUrl;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmployeeResponse {
+        private String id;
+        private String fullname;
     }
 }

@@ -1,6 +1,4 @@
-package com.flix.flix.model.response;
-
-import java.util.List;
+package com.flix.flix.model.request.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,22 +11,26 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeResponse {
+public class SearchEmployeeRequest {
 
-    private String id;
     private String fullname;
     private String nikNumber;
     private String address;
     private String phoneNumber;
     private String gender;
     private String city;
-    private String dateOfBirth;
-    private String dateOfAppliment;
-    private String appUserId;
+    private Boolean isActive;
+    private String dateOfBirthMin;
+    private String dateOfBirthMax;
+    private String dateOfApplimentMin;
+    private String dateOfApplimentMax;
     private String appUserUsername;
     private String appUserEmail;
-    private String theaterId;
-    private List<String> transactionsId;
-    private Boolean isActive;
+    private String theaterName;
+    private String theaterCity;
 
+    private Integer page;
+    private Integer size;
+    private String sortBy;
+    private String direction;
 }

@@ -3,6 +3,11 @@ package com.flix.flix.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
@@ -13,12 +18,14 @@ import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewCashierRequest;
 import com.flix.flix.model.request.NewEmployeeRequest;
 import com.flix.flix.model.request.NewUserRequest;
+import com.flix.flix.model.request.search.SearchEmployeeRequest;
 import com.flix.flix.model.response.EmployeeResponse;
 import com.flix.flix.model.response.SignupResponse;
 import com.flix.flix.repository.EmployeeRepository;
 import com.flix.flix.service.AppUserService;
 import com.flix.flix.service.EmployeeService;
 import com.flix.flix.service.TheaterService;
+import com.flix.flix.specification.EmployeeSpecification;
 import com.flix.flix.util.DateUtil;
 
 import jakarta.transaction.Transactional;
@@ -157,10 +164,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> getAll() {
+    public Page<EmployeeResponse> getAll(SearchEmployeeRequest searchEmployeeRequest) {
 
         try {
-            return employeeRepository.findAll().stream().map(this::toEmployeeResponse).toList();
+            if (searchEmployeeRequest.getPage() <= 0) {
+                searchEmployeeRequest.setPage(1);
+            }
+            if (searchEmployeeRequest.getSize() <= 0) {
+                searchEmployeeRequest.setSize(10);
+            }
+            if (searchEmployeeRequest.getDateOfApplimentMin() != null && searchEmployeeRequest.getDateOfApplimentMax() != null) {
+                if (DateUtil.parseDate(searchEmployeeRequest.getDateOfApplimentMin()).isAfter(DateUtil.parseDate(searchEmployeeRequest.getDateOfApplimentMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            if (searchEmployeeRequest.getDateOfBirthMin() != null && searchEmployeeRequest.getDateOfBirthMax() != null) {
+                if (DateUtil.parseDate(searchEmployeeRequest.getDateOfBirthMin()).isAfter(DateUtil.parseDate(searchEmployeeRequest.getDateOfBirthMax()))) {
+                    throw new RuntimeException(DbBash.MIN_MAX_INVALID);
+                }
+            }
+            Sort sort = Sort.by(Sort.Direction.fromString(searchEmployeeRequest.getDirection()), searchEmployeeRequest.getSortBy());
+            Pageable pageable = PageRequest.of(searchEmployeeRequest.getPage() - 1, searchEmployeeRequest.getSize(), sort);
+            Specification<Employee> specification = EmployeeSpecification.getSpecification(searchEmployeeRequest);
+            return employeeRepository.findAll(specification, pageable).map(this::toEmployeeResponse);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -214,6 +240,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .dateOfAppliment(employee.getDateOfAppliment() == null ? null : employee.getDateOfAppliment().toString())
                     .gender(employee.getGender() == null ? null : employee.getGender().toString())
                     .nikNumber(employee.getNikNumber())
+                    .appUserId(employee.getAppUser() == null ? null : employee.getAppUser().getId())
                     .phoneNumber(employee.getPhoneNumber())
                     .appUserEmail(employee.getAppUser() == null ? null : employee.getAppUser().getEmail())
                     .appUserUsername(employee.getAppUser() == null ? null : employee.getAppUser().getUsername())

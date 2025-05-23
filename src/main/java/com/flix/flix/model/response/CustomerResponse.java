@@ -16,7 +16,9 @@ import lombok.Setter;
 public class CustomerResponse {
 
     private String id;
-    private String userId;
+    private String userAppId;
+    private String userAppUsername;
+    private String userAppEmail;
     private String fullname;
     private String birthDate;
     private String country;
