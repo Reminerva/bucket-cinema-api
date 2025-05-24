@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EGender;
+import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Employee;
 import com.flix.flix.model.request.NewAdminRequest;
@@ -27,7 +28,9 @@ import com.flix.flix.service.EmployeeService;
 import com.flix.flix.service.TheaterService;
 import com.flix.flix.specification.EmployeeSpecification;
 import com.flix.flix.util.DateUtil;
+import com.flix.flix.util.TokenUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final TheaterService theaterService;
     private final AppUserService appUserService;
+    private final TokenUtil tokenUtil;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -213,6 +217,18 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public EmployeeResponse updateByCredentials(NewEmployeeRequest employeeRequest, HttpServletRequest httpServletRequest) {
+        try {
+            AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
+            if (!userAccount.getRoles().contains(ERole.ROLE_EMPLOYEE)) throw new RuntimeException(DbBash.UNAUTHORIZED);
+            return update(userAccount.getEmployee().getId(), employeeRequest);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override

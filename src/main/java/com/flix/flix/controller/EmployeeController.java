@@ -29,6 +29,7 @@ import com.flix.flix.model.response.SignupResponse;
 import com.flix.flix.service.EmployeeService;
 import com.flix.flix.util.PagingUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -267,6 +268,44 @@ public class EmployeeController {
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.UPDATE_EMPLOYEE_SUCCESS)
                 .data(employeeService.update(id, employeeRequest))
+                .build();
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(ApiBash.UPDATE_EMPLOYEE_FAILED + ": " + e.getMessage())
+                .data(null)
+                .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<CommonResponse<EmployeeResponse>> updateMe(
+        HttpServletRequest httpServletRequest,
+        @Valid @RequestBody NewEmployeeRequest employeeRequest,
+        BindingResult bindingResult
+    ) {
+        try {
+            if (bindingResult.hasErrors()) {
+                FieldError fieldError = bindingResult.getFieldError();
+                String message = fieldError != null
+                    ? fieldError.getDefaultMessage()
+                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
+
+                CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message(message)
+                    .data(null)
+                    .paging(null)
+                    .build();
+            
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+            CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.UPDATE_EMPLOYEE_SUCCESS)
+                .data(employeeService.updateByCredentials(employeeRequest, httpServletRequest))
                 .build();
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
