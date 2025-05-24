@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.constant.custom_enum.ECountry;
@@ -92,14 +93,14 @@ public class ProductServiceImpl implements ProductService {
                         .build()))
                 .toList();
             
-            List<Artist> artists = productRequest.getArtistId().stream().map(artistId -> artistService.findById(artistId)).toList();
+            List<Artist> artists = productRequest.getArtistId().stream().map(artistId -> artistService.getArtistById(artistId)).toList();
             product.getArtists().addAll(artists);
 
             product.getMovieGenre().addAll(genres);
 
             return toProductResponse(productRepository.saveAndFlush(product));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.CREATE_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -150,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
             Specification<Product> specification = ProductSpecification.getSpecification(searchProductRequest);
             return productRepository.findAll(specification, pageable).map(this::toProductResponse);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.GET_ALL_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -160,11 +161,14 @@ public class ProductServiceImpl implements ProductService {
         if (product.isEmpty()) throw new RuntimeException(DbBash.PRODUCT_NOT_FOUND);
         return product.get();
     }
+
     @Override
     public ProductResponse getById(String id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) throw new RuntimeException(DbBash.PRODUCT_NOT_FOUND);
-        return toProductResponse(product.get());
+        try {
+            return toProductResponse(getProductById(id));
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.GET_PRODUCT_FAILED + ": " + e.getMessage());
+        }
     }
 
     @Override
@@ -216,7 +220,7 @@ public class ProductServiceImpl implements ProductService {
             if (updatedProduct.getArtists() == null) updatedProduct.setArtists(new ArrayList<>());
             if (productRequest.getArtistId() != null) {
                 for (String artistId : productRequest.getArtistId()) {
-                    Artist artist = artistService.findById(artistId);
+                    Artist artist = artistService.getArtistById(artistId);
                     if (!updatedProduct.containsArtist(artist)) {
                         artist.getInProduct().add(updatedProduct);
                         artists.add(artist);
@@ -248,7 +252,7 @@ public class ProductServiceImpl implements ProductService {
 
             return toProductResponse(productRepository.saveAndFlush(updatedProduct));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -259,7 +263,7 @@ public class ProductServiceImpl implements ProductService {
             getById(id);
             productRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.HARD_DELETE_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -272,7 +276,7 @@ public class ProductServiceImpl implements ProductService {
             product.setLastUpdated(LocalDate.now());
             productRepository.saveAndFlush(product);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.SOFT_DELETE_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -319,7 +323,7 @@ public class ProductServiceImpl implements ProductService {
                 .showingOnTheaters(theaterResponseList)
                 .build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

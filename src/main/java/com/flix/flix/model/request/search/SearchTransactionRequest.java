@@ -15,7 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SearchTransactionRequest {
 
+    private String customerId;
     private String customerName;
+    private String employeeId;
     private String employeeName;
     private String theaterName;
     private String studioName;

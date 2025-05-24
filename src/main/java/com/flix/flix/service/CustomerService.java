@@ -17,6 +17,7 @@ public interface CustomerService {
     Customer getCustomerById(String id);
     CustomerResponse getById(String id);
     CustomerResponse update(String id, UpdateCustomerRequest UpdateCustomerRequest);
+    CustomerResponse getByCredentials(HttpServletRequest httpServletRequest);
     CustomerResponse updateByCredentials(HttpServletRequest httpServletRequest, UpdateCustomerRequest UpdateCustomerRequest);
     void delete(String id);
 

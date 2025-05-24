@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,45 +34,24 @@ public class ArtistController {
 
     private final ArtistService artistService;
 
+    // Admin only //
     @PostMapping
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<ArtistResponse>> create (
         @Valid
         @RequestBody
-        NewArtistRequest artistRequest,
-        BindingResult bindingResult
+        NewArtistRequest artistRequest
     ) {
-        try {
-            if (bindingResult.hasErrors()) {
-                FieldError fieldError = bindingResult.getFieldError();
-                    String message = fieldError != null
-                        ? fieldError.getDefaultMessage()
-                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
-    
-                CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                        .code(HttpStatus.BAD_REQUEST.value())
-                        .message(message)
-                        .data(null)
-                        .build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.CREATED.value())
-                    .message(ApiBash.CREATE_ARTIST_SUCCESS)
-                    .data(artistService.create(artistRequest))
-                    .build();
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(e.getMessage())
-                    .data(null)
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
+                .code(HttpStatus.CREATED.value())
+                .message(ApiBash.CREATE_ARTIST_SUCCESS)
+                .data(artistService.create(artistRequest))
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<List<ArtistResponse>>> getAll(
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "10") int size,
@@ -87,119 +65,73 @@ public class ArtistController {
         @RequestParam(required = false) List<String> inProductTitle
 
     ) {
-        try {
-            SearchArtistRequest searchArtistRequest = SearchArtistRequest.builder()
-                .page(page)
-                .size(size)
-                .sortBy(sortBy)
-                .direction(direction)
-                .name(name)
-                .placeOfBirth(placeOfBirth)
-                .birthDateMin(birthDateMin)
-                .birthDateMax(birthDateMax)
-                .artistType(artistType)
-                .inProductTitle(inProductTitle)
+        SearchArtistRequest searchArtistRequest = SearchArtistRequest.builder()
+            .page(page)
+            .size(size)
+            .sortBy(sortBy)
+            .direction(direction)
+            .name(name)
+            .placeOfBirth(placeOfBirth)
+            .birthDateMin(birthDateMin)
+            .birthDateMax(birthDateMax)
+            .artistType(artistType)
+            .inProductTitle(inProductTitle)
+            .build();
+
+        Page<ArtistResponse> artists = artistService.getAll(searchArtistRequest);
+        CommonResponse<List<ArtistResponse>> response = CommonResponse.<List<ArtistResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.GET_ALL_ARTIST_SUCCESS)
+                .data(artists.getContent())
+                .paging(PagingUtils.pageToPagingResponse(artists))
                 .build();
-
-            Page<ArtistResponse> artists = artistService.getAll(searchArtistRequest);
-            CommonResponse<List<ArtistResponse>> response = CommonResponse.<List<ArtistResponse>>builder()
-                    .code(HttpStatus.OK.value())
-                    .message(ApiBash.GET_ALL_ARTIST_SUCCESS)
-                    .data(artists.getContent())
-                    .paging(PagingUtils.pageToPagingResponse(artists))
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<List<ArtistResponse>> response = CommonResponse.<List<ArtistResponse>>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(e.getMessage())    
-                    .data(null)
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<ArtistResponse>> getById(
-        @PathVariable String id
-    ) {
-        try {
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.OK.value())
-                    .message(ApiBash.GET_ARTIST_SUCCESS)
-                    .data(artistService.getById(id))
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(e.getMessage())
-                    .data(null)
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<ArtistResponse>> update(
         @PathVariable
         String id,
         @RequestBody
         @Valid
-        NewArtistRequest artistRequest,
-        BindingResult bindingResult
+        NewArtistRequest artistRequest
     ) {
-        try {
-            if (bindingResult.hasErrors()) {
-                FieldError fieldError = bindingResult.getFieldError();
-                    String message = fieldError != null
-                        ? fieldError.getDefaultMessage()
-                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
-
-                CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                        .code(HttpStatus.BAD_REQUEST.value())
-                        .message(message)
-                        .data(null)
-                        .build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.OK.value())
-                    .message(ApiBash.UPDATE_ARTIST_SUCCESS)
-                    .data(artistService.update(id, artistRequest))
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(e.getMessage())
-                    .data(null)
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.UPDATE_ARTIST_SUCCESS)
+                .data(artistService.update(id, artistRequest))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<ArtistResponse>> delete (
         @PathVariable String id
     ) {
-        try {
-            ArtistResponse artistResponse = artistService.getById(id);
-            artistService.delete(id);
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.OK.value())
-                    .message(ApiBash.DELETE_ARTIST_SUCCESS)
-                    .data(artistResponse)
-                    .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(e.getMessage())
-                    .data(null)
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        ArtistResponse artistResponse = artistService.getById(id);
+        artistService.delete(id);
+        CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.DELETE_ARTIST_SUCCESS)
+                .data(artistResponse)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    // admin and cashier //
+    @GetMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER)
+    public ResponseEntity<CommonResponse<ArtistResponse>> getById(
+        @PathVariable String id
+    ) {
+        CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message(ApiBash.GET_ARTIST_SUCCESS)
+                .data(artistService.getById(id))
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

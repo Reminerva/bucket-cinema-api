@@ -16,14 +16,15 @@ import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.swagger_example.UserSwaggerExample;
 import com.flix.flix.model.request.LoginRequest;
-import com.flix.flix.model.request.NewUserRequest;
+import com.flix.flix.model.request.NewCustomerRequest;
 import com.flix.flix.model.request.search.SearchAppUserRequest;
 import com.flix.flix.model.response.AppUserResponse;
 import com.flix.flix.model.response.CommonResponse;
+import com.flix.flix.model.response.CustomerResponse;
 import com.flix.flix.model.response.SigninResponse;
 import com.flix.flix.model.response.SignoutResponse;
-import com.flix.flix.model.response.SignupResponse;
 import com.flix.flix.service.AppUserService;
+import com.flix.flix.service.CustomerService;
 import com.flix.flix.util.PagingUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,6 +48,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     private final AppUserService userService;
+    private final CustomerService customerService;
 
     @Operation(
         summary = "Daftar akun", 
@@ -71,37 +73,23 @@ public class UserController {
         }
     )
     @PostMapping(ApiBash.SIGN_UP)
-    public ResponseEntity<CommonResponse<SignupResponse>> signup(
+    public ResponseEntity<CommonResponse<CustomerResponse>> signup(
         @Schema(example = "{ \"email\": \"user@example.com\", \"password\": \"SecureUser123\" \"username\": \"user\" }")
         @RequestBody
-        NewUserRequest userRequest,
-        BindingResult bindingResult
+        NewCustomerRequest newCustomerRequest
     ) {
         try {
-            if (bindingResult.hasErrors()) {
-                FieldError fieldError = bindingResult.getFieldError();
-                String message = fieldError != null
-                        ? fieldError.getDefaultMessage()
-                        : bindingResult.getAllErrors().get(0).getDefaultMessage();
-                    
-                CommonResponse<SignupResponse> response = CommonResponse.<SignupResponse>builder()
-                    .code(HttpStatus.BAD_REQUEST.value())
-                    .message(message)
-                    .data(null)
-                    .build();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-            CommonResponse<SignupResponse> response = CommonResponse.<SignupResponse>builder()
+            CommonResponse<CustomerResponse> response = CommonResponse.<CustomerResponse>builder()
                 .code(HttpStatus.CREATED.value())
                 .message(ApiBash.SIGN_UP_SUCCESS)
-                .data(userService.signup(userRequest))
+                .data(customerService.create(newCustomerRequest))
                 .build();
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             String message = e.getMessage();
             if (e.getMessage().contains(DbBash.EMAIL_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.EMAIL_ALREADY_EXISTS);};
             if (e.getMessage().contains(DbBash.USERNAME_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.USERNAME_ALREADY_EXISTS);};
-            CommonResponse<SignupResponse> response = CommonResponse.<SignupResponse>builder()
+            CommonResponse<CustomerResponse> response = CommonResponse.<CustomerResponse>builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(ApiBash.SIGN_UP_FAILED + ": " + message)
                 .data(null)

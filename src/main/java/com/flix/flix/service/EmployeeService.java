@@ -21,6 +21,7 @@ public interface EmployeeService {
     EmployeeResponse getById(String id);
     Page<EmployeeResponse> getAll(SearchEmployeeRequest searchEmployeeRequest);
     EmployeeResponse update(String id, NewEmployeeRequest employeeRequest);
+    EmployeeResponse getByCredentials(HttpServletRequest httpServletRequest);
     EmployeeResponse updateByCredentials(NewEmployeeRequest employeeRequest, HttpServletRequest httpServletRequest);
     void softDelete(String id);
 

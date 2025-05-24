@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.entity.Employee;
 import com.flix.flix.entity.Product;
@@ -57,7 +58,7 @@ public class TheaterServiceImpl implements TheaterService {
     
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_THEATER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -66,7 +67,7 @@ public class TheaterServiceImpl implements TheaterService {
         try {
             return toTheaterResponse(getTheaterById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_THEATER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -99,8 +100,9 @@ public class TheaterServiceImpl implements TheaterService {
             Sort sort = Sort.by(Sort.Direction.fromString(searchTheaterRequest.getDirection()), searchTheaterRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchTheaterRequest.getPage() - 1, searchTheaterRequest.getSize(), sort);
             
-            if (httpServletRequest.isUserInRole("ROLE_CUSTOMER")) {
+            if (httpServletRequest.isUserInRole("ROLE_CUSTOMER") || httpServletRequest.isUserInRole("ROLE_CASHIER")) {
                 searchTheaterRequest.setEmployeesName(null);
+                searchTheaterRequest.setOprationalStatus(true);
                 Specification<Theater> specification = TheaterSpecification.getSpecification(searchTheaterRequest);
                 return theaterRepository.findAll(specification, pageable).map(theater -> {
                     TheaterResponse response = toTheaterResponse(theater);
@@ -113,8 +115,7 @@ public class TheaterServiceImpl implements TheaterService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_THEATER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -155,7 +156,7 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setProducts(products);
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_THEATER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -168,7 +169,7 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setUpdatedAt(LocalDate.now());
             theaterRepository.saveAndFlush(theater);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.SOFT_DELETE_THEATER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -180,7 +181,7 @@ public class TheaterServiceImpl implements TheaterService {
             theater.getStudios().forEach(studio -> studioService.refreshAllSeat(studio.getId()));
             return toTheaterResponse(theaterRepository.saveAndFlush(theater));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.REFRESH_ALL_SEAT_FAILED + ": " + e.getMessage());
         }
     }
 

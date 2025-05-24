@@ -11,7 +11,7 @@ public interface ArtistService {
     ArtistResponse create(NewArtistRequest artistRequest);
     Page<ArtistResponse> getAll(SearchArtistRequest searchArtistRequest);
     ArtistResponse getById(String id);
-    Artist findById(String id);
+    Artist getArtistById(String id);
     ArtistResponse update(String id, NewArtistRequest artistRequest);
     void delete(String id);
 }

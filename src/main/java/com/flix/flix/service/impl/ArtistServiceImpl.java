@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.entity.Artist;
@@ -46,7 +47,7 @@ public class ArtistServiceImpl implements ArtistService {
 
             return toArtistResponse(artistRepository.saveAndFlush(artist));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_ARTIST_FAILED + ": " + e.getMessage());
         }
         
     }
@@ -70,20 +71,21 @@ public class ArtistServiceImpl implements ArtistService {
             Specification<Artist> specification = ArtistSpecification.getSpecification(searchArtistRequest);
             return artistRepository.findAll(specification, pageable).map(this::toArtistResponse);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_ARTIST_FAILED + ": " + e.getMessage());
         }
     }
 
     @Override
     public ArtistResponse getById(String id) {
-        Optional<Artist> artist = artistRepository.findById(id);
-        if (artist.isEmpty()) throw new RuntimeException(DbBash.ARTIST_NOT_FOUND);
-        return toArtistResponse(artist.get());
+        try {
+            return toArtistResponse(getArtistById(id));
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.GET_ARTIST_FAILED + ": " + e.getMessage());
+        }
     }
 
     @Override
-    public Artist findById(String id) {
+    public Artist getArtistById(String id) {
         Optional<Artist> artist = artistRepository.findById(id);
         if (artist.isEmpty()) throw new RuntimeException(DbBash.ARTIST_NOT_FOUND);
         return artist.get();
@@ -103,7 +105,7 @@ public class ArtistServiceImpl implements ArtistService {
                 artist.setArtistTypes(EArtistType.toEArtistTypeList(artistRequest.getArtistTypes()));
             return toArtistResponse(artistRepository.saveAndFlush(artist));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_ARTIST_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -113,7 +115,7 @@ public class ArtistServiceImpl implements ArtistService {
         try {
             artistRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.DELETE_ARTIST_FAILED + ": " + e.getMessage());
         }
     }
 

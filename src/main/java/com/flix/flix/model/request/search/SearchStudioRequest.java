@@ -18,6 +18,8 @@ public class SearchStudioRequest {
     private String name;
     private Boolean isActive;
     private String studioSize;
+    private String productId;
+    private String theaterId;
     private String theaterName;
     private String theaterCity;
     private List<String> seatLayout;

@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,42 +34,22 @@ public class ProductController {
 
     private final ProductService productService;
 
+    // admin only //
     @PostMapping
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<ProductResponse>> createProduct(
-        @RequestBody @Valid NewProductRequest productRequest,
-        BindingResult bindingResult
+        @RequestBody @Valid NewProductRequest productRequest
     ) {
-        if (bindingResult.hasErrors()) {
-            FieldError fieldError = bindingResult.getFieldError();
-                String message = fieldError != null
-                    ? fieldError.getDefaultMessage()
-                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
-
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(message)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        try {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.CREATED.value())
-                .message(ApiBash.CREATE_PRODUCT_SUCCESS)
-                .data(productService.create(productRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(productService.create(productRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+            .code(HttpStatus.CREATED.value())
+            .message(ApiBash.CREATE_PRODUCT_SUCCESS)
+            .data(productService.create(productRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<List<ProductResponse>>> getAllProduct(
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "10") int size,
@@ -98,146 +77,99 @@ public class ProductController {
         @RequestParam(required = false) List<String> artistsName,
         @RequestParam(required = false) String productionCompany
     ) {
-        try {
-            SearchProductRequest searchProductRequest = SearchProductRequest.builder()
-                .page(page)
-                .size(size)
-                .sortBy(sortBy)
-                .direction(direction)
-                .title(title)
-                .durationMin(durationMin)
-                .durationMax(durationMax)
-                .language(language)
-                .country(country)
-                .releaseDateMin(releaseDateMin)
-                .releaseDateMax(releaseDateMax)
-                .rated(rated)
-                .budgetMin(budgetMin)
-                .budgetMax(budgetMax)
-                .imdbRatingMin(imdbRatingMin)
-                .imdbRatingMax(imdbRatingMax)
-                .rottenTomatoesRatingMin(rottenTomatoesRatingMin)
-                .rottenTomatoesRatingMax(rottenTomatoesRatingMax)
-                .movieGenre(movieGenre)
-                .productPricingMin(productPricingMin)
-                .productPricingMax(productPricingMax)
-                .lastUpdatedMin(lastUpdatedMin)
-                .lastUpdatedMax(lastUpdatedMax)
-                .artistsName(artistsName)
-                .productionCompany(productionCompany)
-                .build();
-            Page<ProductResponse> products = productService.getAll(searchProductRequest);
-            CommonResponse<List<ProductResponse>> response = CommonResponse.<List<ProductResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.GET_ALL_PRODUCT_SUCCESS)
-                .data(products.getContent())
-                .paging(PagingUtils.pageToPagingResponse(products))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<List<ProductResponse>> response = CommonResponse.<List<ProductResponse>>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<ProductResponse>> getProductById(@PathVariable String id) {
-        try {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.GET_PRODUCT_SUCCESS)
-                .data(productService.getById(id))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        SearchProductRequest searchProductRequest = SearchProductRequest.builder()
+            .page(page)
+            .size(size)
+            .sortBy(sortBy)
+            .direction(direction)
+            .title(title)
+            .durationMin(durationMin)
+            .durationMax(durationMax)
+            .language(language)
+            .country(country)
+            .releaseDateMin(releaseDateMin)
+            .releaseDateMax(releaseDateMax)
+            .rated(rated)
+            .budgetMin(budgetMin)
+            .budgetMax(budgetMax)
+            .imdbRatingMin(imdbRatingMin)
+            .imdbRatingMax(imdbRatingMax)
+            .rottenTomatoesRatingMin(rottenTomatoesRatingMin)
+            .rottenTomatoesRatingMax(rottenTomatoesRatingMax)
+            .movieGenre(movieGenre)
+            .productPricingMin(productPricingMin)
+            .productPricingMax(productPricingMax)
+            .lastUpdatedMin(lastUpdatedMin)
+            .lastUpdatedMax(lastUpdatedMax)
+            .artistsName(artistsName)
+            .productionCompany(productionCompany)
+            .build();
+        Page<ProductResponse> products = productService.getAll(searchProductRequest);
+        CommonResponse<List<ProductResponse>> response = CommonResponse.<List<ProductResponse>>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.GET_ALL_PRODUCT_SUCCESS)
+            .data(products.getContent())
+            .paging(PagingUtils.pageToPagingResponse(products))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<ProductResponse>> updateProduct(
         @PathVariable String id,
-        @RequestBody NewProductRequest productRequest,
-        BindingResult bindingResult
+        @RequestBody NewProductRequest productRequest
     ) {
-        if (bindingResult.hasErrors()) {
-            FieldError fieldError = bindingResult.getFieldError();
-                String message = fieldError != null
-                    ? fieldError.getDefaultMessage()
-                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
-
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(message)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        try {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.UPDATE_PRODUCT_SUCCESS)
-                .data(productService.update(id, productRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        } 
+        CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.UPDATE_PRODUCT_SUCCESS)
+            .data(productService.update(id, productRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{id}" + ApiBash.HARD_DELETE)
-    public ResponseEntity<CommonResponse<ProductResponse>> hardDeleteProduct(@PathVariable String id) {
-        try {
-            ProductResponse productResponse = productService.getById(id);
-            productService.hardDelete(id);
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.OK.value())                
-                .message(ApiBash.HARD_DELETE_PRODUCT_SUCCESS)
-                .data(productResponse)
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<ProductResponse>> hardDeleteProduct(
+        @PathVariable String id
+    ) {
+        ProductResponse productResponse = productService.getById(id);
+        productService.hardDelete(id);
+        CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.HARD_DELETE_PRODUCT_SUCCESS)
+            .data(productResponse)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{id}" + ApiBash.SOFT_DELETE)
-    public ResponseEntity<CommonResponse<ProductResponse>> softDeleteProduct(@PathVariable String id) {
-        try {
-            ProductResponse productResponse = productService.getById(id);
-            productService.softDelete(id);
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.OK.value())                
-                .message(ApiBash.SOFT_DELETE_PRODUCT_SUCCESS)
-                .data(productResponse)
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<ProductResponse>> softDeleteProduct(
+        @PathVariable String id
+    ) {
+        ProductResponse productResponse = productService.getById(id);
+        productService.softDelete(id);
+        CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.SOFT_DELETE_PRODUCT_SUCCESS)
+            .data(productResponse)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    // admin, cashier, customer only //
+    @GetMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER + " || " + ApiBash.HAS_ROLE_CUSTOMER)
+    public ResponseEntity<CommonResponse<ProductResponse>> getProductById(
+        @PathVariable String id
+    ) {
+        CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.GET_PRODUCT_SUCCESS)
+            .data(productService.getById(id))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

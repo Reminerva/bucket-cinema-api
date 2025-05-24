@@ -35,6 +35,12 @@ public class ApiBash {
     public static final String UPDATE_CUSTOMER_SUCCESS = "Customer updated successfully!";
     public static final String DELETE_CUSTOMER_SUCCESS = "Customer deleted successfully!";
 
+    public static final String CREATE_CUSTOMER_FAILED = "Create customer failed!";
+    public static final String GET_CUSTOMER_FAILED = "Get customer failed!";
+    public static final String GET_ALL_CUSTOMER_FAILED = "Get all customer failed!";
+    public static final String UPDATE_CUSTOMER_FAILED = "Update customer failed!";
+    public static final String DELETE_CUSTOMER_FAILED = "Delete customer failed!";
+
     public static final String CREATE_EMPLOYEE_SUCCESS = "Employee created successfully!";
     public static final String GET_ALL_EMPLOYEE_SUCCESS = "Get all employee successfully!";
     public static final String GET_EMPLOYEE_SUCCESS = "Get employee successfully!";
@@ -58,7 +64,13 @@ public class ApiBash {
     public static final String GET_ARTIST_SUCCESS = "Get artist successfully!";
     public static final String UPDATE_ARTIST_SUCCESS = "Artist updated successfully!";
     public static final String DELETE_ARTIST_SUCCESS = "Artist deleted successfully!";
-    
+
+    public static final String CREATE_ARTIST_FAILED = "Create artist failed!";
+    public static final String GET_ALL_ARTIST_FAILED = "Get all artist failed!";
+    public static final String GET_ARTIST_FAILED = "Get artist failed!";
+    public static final String UPDATE_ARTIST_FAILED = "Update artist failed!";
+    public static final String DELETE_ARTIST_FAILED = "Delete artist failed!";
+
     public static final String CREATE_PRODUCT_SUCCESS = "Create product product success";
     public static final String GET_ALL_PRODUCT_SUCCESS = "Get all product product success";
     public static final String GET_PRODUCT_SUCCESS = "Get product product success";
@@ -78,6 +90,12 @@ public class ApiBash {
     public static final String GET_PRODUCTION_COMPANY_SUCCESS = "Get production company success";
     public static final String UPDATE_PRODUCTION_COMPANY_SUCCESS = "Update production company success";
     public static final String DELETE_PRODUCTION_COMPANY_SUCCESS = "Delete production company success";
+
+    public static final String CREATE_PRODUCTION_COMPANY_FAILED = "Create production company failed";
+    public static final String GET_ALL_PRODUCTION_COMPANY_FAILED = "Get all production company failed";
+    public static final String GET_PRODUCTION_COMPANY_FAILED = "Get production company failed";
+    public static final String UPDATE_PRODUCTION_COMPANY_FAILED = "Update production company failed";
+    public static final String DELETE_PRODUCTION_COMPANY_FAILED = "Delete production company failed";
 
     public static final String CREATE_THEATER_SUCCESS = "Create theater success";
     public static final String GET_ALL_THEATER_SUCCESS = "Get all theater success";
@@ -103,13 +121,17 @@ public class ApiBash {
     public static final String GET_ALL_STUDIO_FAILED = "Get all studio failed";
     public static final String GET_STUDIO_FAILED = "Get studio failed";
     public static final String UPDATE_STUDIO_FAILED = "Update studio failed";
-    public static final String DELETE_STUDIO_FAILED = "Delete studio failed";
+    public static final String SOFT_DELETE_STUDIO_FAILED = "Delete studio failed";
 
     public static final String CREATE_TRANSACTION_SUCCESS = "Create transaction success";
     public static final String GET_ALL_TRANSACTION_SUCCESS = "Get all transaction success";
     public static final String GET_TRANSACTION_SUCCESS = "Get transaction success";
     public static final String UPDATE_TRANSACTION_SUCCESS = "Update transaction success";
-    public static final String DELETE_TRANSACTION_SUCCESS = "Delete transaction success";
+
+    public static final String CREATE_TRANSACTION_FAILED = "Create transaction failed";
+    public static final String GET_ALL_TRANSACTION_FAILED = "Get all transaction failed";
+    public static final String GET_TRANSACTION_FAILED = "Get transaction failed";
+    public static final String UPDATE_PAYMENT_TRANSACTION_FAILED = "Update payment transaction failed";
 
     public static final String HAS_ROLE_ADMIN = "hasRole('ADMIN')";
     public static final String HAS_ROLE_CUSTOMER = "hasRole('CUSTOMER')";

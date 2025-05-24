@@ -60,10 +60,20 @@ public class GlobalExceptionHandler {
 
         CommonResponse<List<Object>> response = CommonResponse.<List<Object>>builder()
             .code(HttpStatus.BAD_REQUEST.value())
-            .message("ERROR BINDING RESULT" + ": " + message) // Gunakan pesan umum untuk validasi
+            .message(ApiBash.INVALID_REQUEST_BODY + ": " + message) // Gunakan pesan umum untuk validasi
             .data(Collections.emptyList())
             .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<CommonResponse<List<Object>>> handleRuntimeException(RuntimeException ex) {
+        CommonResponse<List<Object>> response = CommonResponse.<List<Object>>builder()
+            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .message("ERROR" + "! " + ex.getMessage())
+            .data(Collections.emptyList())
+            .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
 }

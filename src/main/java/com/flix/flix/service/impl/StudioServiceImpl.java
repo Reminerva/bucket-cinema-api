@@ -7,17 +7,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ESeat;
 import com.flix.flix.constant.custom_enum.EStudioSize;
+import com.flix.flix.entity.AppUser;
 import com.flix.flix.entity.Product;
 import com.flix.flix.entity.ProductPricing;
 import com.flix.flix.entity.ProductScheduling;
@@ -41,7 +45,9 @@ import com.flix.flix.service.StudioSeatScheduleService;
 import com.flix.flix.service.StudioService;
 import com.flix.flix.specification.StudioSpecification;
 import com.flix.flix.util.TimeUtil;
+import com.flix.flix.util.TokenUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +61,7 @@ public class StudioServiceImpl implements StudioService {
     private final ProductService productService;
     private final StudioSeatScheduleService studioSeatScheduleService;
     private final TheaterRepository theaterRepository;
+    private final TokenUtil tokenUtil;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -78,7 +85,7 @@ public class StudioServiceImpl implements StudioService {
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_STUDIO_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -99,7 +106,7 @@ public class StudioServiceImpl implements StudioService {
             Specification<Studio> specification = StudioSpecification.getSpecification(searchStudioRequest);
             return studioRepository.findAll(specification, pageable).map(this::toStudioResponse);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_STUDIO_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -118,7 +125,7 @@ public class StudioServiceImpl implements StudioService {
         try {
             return toStudioResponse(getStudioById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_STUDIO_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -183,7 +190,7 @@ public class StudioServiceImpl implements StudioService {
 
             return toStudioResponse(studioRepository.saveAndFlush(studio));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_STUDIO_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -194,6 +201,55 @@ public class StudioServiceImpl implements StudioService {
             Studio studio = getStudioById(id);
             studio.setIsActive(false);
             studioRepository.saveAndFlush(studio);
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.SOFT_DELETE_STUDIO_FAILED + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<StudioResponse> getByTheaterId(String theaterId) {
+        try {
+            SearchStudioRequest searchStudioRequest = SearchStudioRequest.builder().theaterId(theaterId).build();
+            return getAllActive(searchStudioRequest);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<StudioResponse> getByProductIdAndTheaterId(String productId, String theaterId) {
+        try {
+            SearchStudioRequest searchStudioRequest = SearchStudioRequest.builder().theaterId(theaterId).productId(productId).build();
+            List<StudioResponse> studios = getAllActive(searchStudioRequest).getContent();
+            List<StudioResponse> filteredStudios = studios.stream().map(studio -> {
+                List<ProductPricingResponse> productPricings = new ArrayList<>();
+                List<ProductSchedulingResponse> productSchedulings = new ArrayList<>();
+                for (ProductPricingResponse productPricingResponse : studio.getProductPricing()) {
+                    if (productPricingResponse.getProductId().equals(productId)) {
+                        productPricings.add(productPricingResponse);
+                    }
+                }
+                for (ProductSchedulingResponse productSchedulingResponse : studio.getProductScheduling()) {
+                    if (productSchedulingResponse.getProductId().equals(productId)) {
+                        productSchedulings.add(productSchedulingResponse);
+                    }
+                }
+                studio.setProductPricing(productPricings);
+                studio.setProductScheduling(productSchedulings);
+                return studio;
+            }).collect(Collectors.toList());
+            return new PageImpl<>(filteredStudios);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<StudioResponse> getByCredentials(HttpServletRequest httpServletRequest) {
+        try {
+            AppUser appUser = tokenUtil.getAppUserByToken(httpServletRequest);
+            String theaterId = appUser.getEmployee().getTheater().getId();
+            return getByTheaterId(theaterId);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

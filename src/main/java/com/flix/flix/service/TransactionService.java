@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface TransactionService {
     TransactionResponse create(NewTransactionRequest transactionRequest, HttpServletRequest request);
     Page<TransactionResponse> getAll(SearchTransactionRequest searchTransactionRequest);
+    Page<TransactionResponse> getAllByCredentials(SearchTransactionRequest searchTransactionRequest, HttpServletRequest httpServletRequest);
     Transaction getTransactionById(String id);
     TransactionResponse getById(String id);
     TransactionResponse updatePaymentStatus(NewTransactionRequest transactionRequest, String id, HttpServletRequest request);

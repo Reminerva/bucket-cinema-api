@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EPaymentMethod;
 import com.flix.flix.constant.custom_enum.EPaymentStatus;
@@ -115,7 +116,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_TRANSACTION_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -164,7 +165,22 @@ public class TransactionServiceImpl implements TransactionService {
             return transactionRepository.findAll(specification, pageable).map(this::toTransactionResponse);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(ApiBash.GET_ALL_TRANSACTION_FAILED + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Page<TransactionResponse> getAllByCredentials(SearchTransactionRequest searchTransactionRequest, HttpServletRequest httpServletRequest) {
+        try {
+            AppUser appUser = tokenUtil.getAppUserByToken(httpServletRequest);
+            if (appUser.getRoles().contains(ERole.ROLE_CUSTOMER)) {
+                searchTransactionRequest.setCustomerName(appUser.getCustomer().getId());
+            }
+            if (appUser.getRoles().contains(ERole.ROLE_CASHIER)) {
+                searchTransactionRequest.setEmployeeId(appUser.getEmployee().getId());
+            }
+            return getAll(searchTransactionRequest);
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -181,7 +197,7 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             return toTransactionResponse(getTransactionById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_TRANSACTION_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -198,7 +214,7 @@ public class TransactionServiceImpl implements TransactionService {
             }
             return toTransactionResponse(transactionRepository.saveAndFlush(transaction));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_PAYMENT_TRANSACTION_FAILED + ": " + e.getMessage());
         }
     }
 

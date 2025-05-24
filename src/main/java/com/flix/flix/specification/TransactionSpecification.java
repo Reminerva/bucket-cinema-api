@@ -22,8 +22,14 @@ public class TransactionSpecification {
         return (root, cq, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            if (request.getCustomerId() != null) {
+                predicates.add(cb.equal(root.get("customer").get("id"), request.getCustomerId()));
+            }
             if (request.getCustomerName() != null) {
                 predicates.add(cb.like(cb.lower(root.get("customer").get("fullname")), "%" + request.getCustomerName().toLowerCase() + "%"));
+            }
+            if (request.getEmployeeId() != null) {
+                predicates.add(cb.equal(root.get("employee").get("id"), request.getEmployeeId()));
             }
             if (request.getEmployeeName() != null) {
                 predicates.add(cb.like(cb.lower(root.get("employee").get("fullname")), "%" + request.getEmployeeName().toLowerCase() + "%"));

@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.EGender;
 import com.flix.flix.constant.custom_enum.ERole;
@@ -73,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.saveAndFlush(employee);
             return toEmployeeResponse(employee);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
     }
@@ -105,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             //         .build();
             return signupResponse;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
     }
@@ -141,7 +142,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.saveAndFlush(employee);
             return toEmployeeResponse(employee);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
     }
@@ -162,7 +163,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee employee = getEmployeeById(id);
             return toEmployeeResponse(employee);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
     }
@@ -192,7 +193,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Specification<Employee> specification = EmployeeSpecification.getSpecification(searchEmployeeRequest);
             return employeeRepository.findAll(specification, pageable).map(this::toEmployeeResponse);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -214,9 +215,19 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.saveAndFlush(employee);
             return toEmployeeResponse(employee);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.UPDATE_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public EmployeeResponse getByCredentials(HttpServletRequest httpServletRequest) {
+        try {
+            AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
+            return toEmployeeResponse(userAccount.getEmployee());
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.GET_EMPLOYEE_FAILED + ": " + e.getMessage());
+        }
     }
 
     @Override
@@ -240,7 +251,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setIsActive(false);
             employeeRepository.saveAndFlush(employee);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.DELETE_EMPLOYEE_FAILED + ": " + e.getMessage());
         }
 
     }

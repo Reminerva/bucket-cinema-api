@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.entity.ProductionCompany;
@@ -51,7 +52,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
 
             return toProductionCompanyResponse(productionCompanyRepository.saveAndFlush(productionCompany));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.CREATE_PRODUCTION_COMPANY_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -82,7 +83,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
             Specification<ProductionCompany> specification = ProductionCompanySpecification.getSpecification(searchProductionCompanyRequest);
             return productionCompanyRepository.findAll(specification, pageable).map(this::toProductionCompanyResponse);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.GET_ALL_PRODUCTION_COMPANY_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -91,7 +92,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
         try {
             return toProductionCompanyResponse(getProductionCompanyById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.GET_PRODUCTION_COMPANY_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -122,7 +123,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
 
             return toProductionCompanyResponse(productionCompanyRepository.saveAndFlush(productionCompany));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.UPDATE_PRODUCTION_COMPANY_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -133,7 +134,7 @@ public class ProductionCompanyServiceImpl implements ProductionCompanyService {
             getProductionCompanyById(id);
             productionCompanyRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(ApiBash.DELETE_PRODUCTION_COMPANY_FAILED + ": " + e.getMessage());
         }
     }
 

@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ERole;
 import com.flix.flix.entity.AppUser;
@@ -72,7 +73,7 @@ public class AppUserServiceImpl implements AppUserService {
 
             return response;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.SIGN_UP_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -100,28 +101,32 @@ public class AppUserServiceImpl implements AppUserService {
     
             return response;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.SIGN_IN_FAILED + ": " + e.getMessage());
         }
     }
 
     @Override
     public SignoutResponse signout(HttpServletRequest signoutRequest) {
-        String token =  jwtAuthenticationFilter.extractTokenFromRequest(signoutRequest);
+        try {
+            String token =  jwtAuthenticationFilter.extractTokenFromRequest(signoutRequest);
         
-        if (token == null || !jwtTokenProvider.validateToken(token)) {
+            if (token == null || !jwtTokenProvider.validateToken(token)) {
 
-            throw new RuntimeException("Token is null");
+                throw new RuntimeException("Token is null");
+            }
+
+            Long expirationTime = jwtTokenProvider.getExpirationTime(token);
+            redisTokenBlackListService.blackListToken(token, expirationTime);
+
+            SignoutResponse response = SignoutResponse.builder()
+                .statusMessage("Logout successful")
+                .accessToken(token)
+                .build();
+
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.SIGN_OUT_FAILED + ": " + e.getMessage());
         }
-
-        Long expirationTime = jwtTokenProvider.getExpirationTime(token);
-        redisTokenBlackListService.blackListToken(token, expirationTime);
-
-        SignoutResponse response = SignoutResponse.builder()
-            .statusMessage("Logout successful")
-            .accessToken(token)
-            .build();
-
-        return response;
     }
 
     @Override
@@ -138,8 +143,7 @@ public class AppUserServiceImpl implements AppUserService {
             Specification<AppUser> specification = AppUserSpecification.getSpecification(searchAppUserRequest);
             return appUserRepository.findAll(specification, pageable).map(this::toAppUserResponse);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_USER_FAILED + ": " + e.getMessage());
         }
     }
 

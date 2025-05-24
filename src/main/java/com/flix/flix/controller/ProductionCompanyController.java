@@ -5,8 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,45 +34,25 @@ public class ProductionCompanyController {
 
     private final ProductionCompanyService productionCompanyService;
 
+    // admin only //
     @PostMapping
-    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> create(
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> createProductionCompany(
         @Valid
         @RequestBody
-        NewProductionCompanyRequest productionCompanyRequest,
-        BindingResult bindingResult
+        NewProductionCompanyRequest productionCompanyRequest
     ) {
-        if (bindingResult.hasErrors()) {
-            FieldError fieldError = bindingResult.getFieldError();
-                String message = fieldError != null
-                    ? fieldError.getDefaultMessage()
-                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
-
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(message)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        try {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.CREATED.value())
-                .message(ApiBash.CREATE_PRODUCTION_COMPANY_SUCCESS)
-                .data(productionCompanyService.create(productionCompanyRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
+            .code(HttpStatus.CREATED.value())
+            .message(ApiBash.CREATE_PRODUCTION_COMPANY_SUCCESS)
+            .data(productionCompanyService.create(productionCompanyRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<ProductionCompanyResponse>>> getAll(
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<List<ProductionCompanyResponse>>> getAllProductionCompany(
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "10") int size,
         @RequestParam(required = false, defaultValue = "name") String sortBy,
@@ -91,118 +70,77 @@ public class ProductionCompanyController {
         @RequestParam(required = false) List<String> hasProducts
 
     ) {
-        try {
-            SearchProductionCompanyRequest searchProductionCompanyRequest = SearchProductionCompanyRequest.builder()
-                .page(page)
-                .size(size)
-                .sortBy(sortBy)
-                .direction(direction)
-                .name(name)
-                .originCountry(originCountry)
-                .foundedYearMin(foundedYearMin)
-                .foundedYearMax(foundedYearMax)
-                .headquarters(headquarters)
-                .ceo(ceo)
-                .createdAtMin(createdAtMin)
-                .createdAtMax(createdAtMax)
-                .updatedAtMin(updatedAtMin)
-                .updatedAtMax(updatedAtMax)
-                .hasProducts(hasProducts)
-                .build();
+        SearchProductionCompanyRequest searchProductionCompanyRequest = SearchProductionCompanyRequest.builder()
+            .page(page)
+            .size(size)
+            .sortBy(sortBy)
+            .direction(direction)
+            .name(name)
+            .originCountry(originCountry)
+            .foundedYearMin(foundedYearMin)
+            .foundedYearMax(foundedYearMax)
+            .headquarters(headquarters)
+            .ceo(ceo)
+            .createdAtMin(createdAtMin)
+            .createdAtMax(createdAtMax)
+            .updatedAtMin(updatedAtMin)
+            .updatedAtMax(updatedAtMax)
+            .hasProducts(hasProducts)
+            .build();
 
-            Page<ProductionCompanyResponse> productionCompanyResponses = productionCompanyService.getAll(searchProductionCompanyRequest);
-            CommonResponse<List<ProductionCompanyResponse>> response = CommonResponse.<List<ProductionCompanyResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.GET_ALL_PRODUCTION_COMPANY_SUCCESS)                
-                .data(productionCompanyResponses.getContent())
-                .paging(PagingUtils.pageToPagingResponse(productionCompanyResponses))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<List<ProductionCompanyResponse>> response = CommonResponse.<List<ProductionCompanyResponse>>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> getById(@PathVariable String id) {
-        try {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.GET_PRODUCTION_COMPANY_SUCCESS)
-                .data(productionCompanyService.getById(id))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        Page<ProductionCompanyResponse> productionCompanyResponses = productionCompanyService.getAll(searchProductionCompanyRequest);
+        CommonResponse<List<ProductionCompanyResponse>> response = CommonResponse.<List<ProductionCompanyResponse>>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.GET_ALL_PRODUCTION_COMPANY_SUCCESS)
+            .data(productionCompanyResponses.getContent())
+            .paging(PagingUtils.pageToPagingResponse(productionCompanyResponses))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> update(
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> updateProductionCompany(
         @PathVariable String id, 
         @Valid
         @RequestBody 
-        NewProductionCompanyRequest productionCompanyRequest,
-        BindingResult bindingResult
+        NewProductionCompanyRequest productionCompanyRequest
     ) {
-        if (bindingResult.hasErrors()) {
-            FieldError fieldError = bindingResult.getFieldError();
-                String message = fieldError != null
-                    ? fieldError.getDefaultMessage()
-                    : bindingResult.getAllErrors().get(0).getDefaultMessage();
-
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(message)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        try {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.UPDATE_PRODUCTION_COMPANY_SUCCESS)
-                .data(productionCompanyService.update(id, productionCompanyRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.UPDATE_PRODUCTION_COMPANY_SUCCESS)
+            .data(productionCompanyService.update(id, productionCompanyRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> delete(@PathVariable String id) {
-        try {
-            ProductionCompanyResponse productionCompanyResponse = productionCompanyService.getById(id);
-            productionCompanyService.delete(id);
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.DELETE_PRODUCTION_COMPANY_SUCCESS)
-                .data(productionCompanyResponse)
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
+    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> deleteProductionCompany(
+        @PathVariable String id
+    ) {
+        ProductionCompanyResponse productionCompanyResponse = productionCompanyService.getById(id);
+        productionCompanyService.delete(id);
+        CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.DELETE_PRODUCTION_COMPANY_SUCCESS)
+            .data(productionCompanyResponse)
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    // admin, cashier, customer only //
+    @GetMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER + " || " + ApiBash.HAS_ROLE_CUSTOMER)
+    public ResponseEntity<CommonResponse<ProductionCompanyResponse>> getProductionCompanyById(
+        @PathVariable String id
+    ) {
+        CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.GET_PRODUCTION_COMPANY_SUCCESS)
+            .data(productionCompanyService.getById(id))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

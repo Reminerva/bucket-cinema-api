@@ -33,6 +33,12 @@ public class StudioSpecification {
                     predicates.add(cb.isMember(ESeat.findByDescription(seatLayout), root.get("seatLayout")));
                 }
             }
+            if (request.getProductId() != null) {
+                predicates.add(cb.equal(root.join("productPricing").get("productIdPricing"), request.getProductId()));
+            }
+            if (request.getTheaterId() != null) {
+                predicates.add(cb.equal(root.get("theater").get("id"), request.getTheaterId()));
+            }
             if (request.getTheaterName() != null) {
                 predicates.add(cb.like(cb.lower(root.get("theater").get("name")), "%" + request.getTheaterName().toLowerCase() + "%"));
             }

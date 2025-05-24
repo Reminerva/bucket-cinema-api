@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.flix.flix.constant.ApiBash;
 import com.flix.flix.constant.DbBash;
 import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGender;
@@ -81,7 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
             appUser.setCustomer(customer);
             return toCustomerResponse(customerRepository.saveAndFlush(customer));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.CREATE_CUSTOMER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -114,17 +115,16 @@ public class CustomerServiceImpl implements CustomerService {
             Specification<Customer> specification = CustomerSpecification.getSpecification(searchCustomerRequest);
             return customerRepository.findAll(specification, pageable).map(this::toCustomerResponse);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_ALL_CUSTOMER_FAILED + ": " + e.getMessage());
         }
     }
 
     @Override
     public CustomerResponse getById(String id) {
         try {
-            Customer customer = getCustomerById(id);
-            return toCustomerResponse(customer);
+            return toCustomerResponse(getCustomerById(id));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(ApiBash.GET_CUSTOMER_FAILED + ": " + e.getMessage());
         }
     }
 
@@ -218,7 +218,66 @@ public class CustomerServiceImpl implements CustomerService {
 
             return toCustomerResponse(customer);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(ApiBash.UPDATE_CUSTOMER_FAILED + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    public CustomerResponse getByCredentials(HttpServletRequest httpServletRequest) {
+        try {
+            AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
+            return toCustomerResponse(userAccount.getCustomer());
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.GET_CUSTOMER_FAILED + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public CustomerResponse updateByCredentials(HttpServletRequest httpServletRequest, UpdateCustomerRequest UpdateCustomerRequest) {
+        try {
+
+            AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
+
+            if (!userAccount.getRoles().contains(ERole.ROLE_CUSTOMER)) throw new RuntimeException(DbBash.UNAUTHORIZED);
+
+            return update(userAccount.getCustomer().getId(), UpdateCustomerRequest);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void delete(String id) {
+        try {
+            getCustomerById(id);
+            customerRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(ApiBash.DELETE_CUSTOMER_FAILED + ": " + e.getMessage());
+        }
+    }
+
+    private CustomerResponse toCustomerResponse(Customer customer) {
+        try {
+            return CustomerResponse.builder()
+                    .id(customer.getId())
+                    .userAppId(customer.getAppUser().getId())
+                    .userAppUsername(customer.getAppUser().getUsername())
+                    .userAppEmail(customer.getAppUser().getEmail())
+                    .fullname(customer.getFullname())
+                    .country(customer.getCountry().getDescription())
+                    .phoneNumber(customer.getPhoneNumber())
+                    .city(customer.getCity())
+                    .birthDate(customer.getBirthDate().toString())
+                    .gender(customer.getGender().getDescription())
+                    .registrationDate(customer.getRegistrationDate().toString())
+                    .lastLogin(customer.getLastLogin().toString())
+                    .favGenre(customer.getFavGenre() == null ? null : customer.getFavGenre().stream().map(fg -> fg.getFavGenre().getDescription()).toList())
+                    .likeProductId(customer.getLikeProduct().stream().map(product -> product.getId()).toList())
+                    .dislikeProductId(customer.getDislikeProduct().stream().map(product -> product.getId()).toList())
+                    .build();
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -269,53 +328,4 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void delete(String id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) throw new RuntimeException(DbBash.CUSTOMER_NOT_FOUND);
-        Customer customer_ = customer.get();
-        customerRepository.delete(customer_);
-    }
-
-    
-    private CustomerResponse toCustomerResponse(Customer customer) {
-        try {
-            return CustomerResponse.builder()
-                    .id(customer.getId())
-                    .userAppId(customer.getAppUser().getId())
-                    .userAppUsername(customer.getAppUser().getUsername())
-                    .userAppEmail(customer.getAppUser().getEmail())
-                    .fullname(customer.getFullname())
-                    .country(customer.getCountry().getDescription())
-                    .phoneNumber(customer.getPhoneNumber())
-                    .city(customer.getCity())
-                    .birthDate(customer.getBirthDate().toString())
-                    .gender(customer.getGender().getDescription())
-                    .registrationDate(customer.getRegistrationDate().toString())
-                    .lastLogin(customer.getLastLogin().toString())
-                    .favGenre(customer.getFavGenre() == null ? null : customer.getFavGenre().stream().map(fg -> fg.getFavGenre().getDescription()).toList())
-                    .likeProductId(customer.getLikeProduct().stream().map(product -> product.getId()).toList())
-                    .dislikeProductId(customer.getDislikeProduct().stream().map(product -> product.getId()).toList())
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public CustomerResponse updateByCredentials(HttpServletRequest httpServletRequest, UpdateCustomerRequest UpdateCustomerRequest) {
-        try {
-
-            AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
-
-            if (!userAccount.getRoles().contains(ERole.ROLE_CUSTOMER)) throw new RuntimeException(DbBash.UNAUTHORIZED);
-
-            return update(userAccount.getCustomer().getId(), UpdateCustomerRequest);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
 }
