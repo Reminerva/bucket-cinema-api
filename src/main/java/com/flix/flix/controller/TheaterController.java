@@ -25,6 +25,7 @@ import com.flix.flix.model.response.TheaterResponse;
 import com.flix.flix.service.TheaterService;
 import com.flix.flix.util.PagingUtils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -87,7 +88,8 @@ public class TheaterController {
         @RequestParam(required = false) String updatedAtMax,
         @RequestParam(required = false) Boolean oprationalStatus,
         @RequestParam(required = false) List<String> employeesName,
-        @RequestParam(required = false) List<String> productsTitle
+        @RequestParam(required = false) List<String> productsTitle,
+        HttpServletRequest httpServletRequest
     ) {
         try {
             SearchTheaterRequest searchTheaterRequest = SearchTheaterRequest.builder()
@@ -108,7 +110,7 @@ public class TheaterController {
                 .employeesName(employeesName)
                 .productsTitle(productsTitle)
                 .build();
-            Page<TheaterResponse> theaterResponses = theaterService.getAll(searchTheaterRequest);
+            Page<TheaterResponse> theaterResponses = theaterService.getAll(searchTheaterRequest, httpServletRequest);
             CommonResponse<List<TheaterResponse>> response = CommonResponse.<List<TheaterResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.GET_ALL_THEATER_SUCCESS)

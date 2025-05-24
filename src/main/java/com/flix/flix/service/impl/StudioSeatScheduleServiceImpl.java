@@ -1,5 +1,6 @@
 package com.flix.flix.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +31,14 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public StudioSeatSchedule create(NewStudioSeatScheduleRequest studioSeatScheduleRequest) {
+    public StudioSeatSchedule create(NewStudioSeatScheduleRequest studioSeatScheduleRequest, List<ESeat> seatLayout) {
         try {
             Optional<Studio> studioOptional = studioRepository.findById(studioSeatScheduleRequest.getStudioId());
             Optional<ProductScheduling> productSchedulingOptional = productSchedulingRepository.findById(studioSeatScheduleRequest.getProductSchedulingId());
             if (studioOptional.isEmpty()) throw new RuntimeException(DbBash.STUDIO_NOT_FOUND);
             if (productSchedulingOptional.isEmpty()) throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_NOT_FOUND);
+            validateSeatRequest(studioSeatScheduleRequest);
+            validateSeatFromSeatLayout(studioSeatScheduleRequest, seatLayout);
             StudioSeatSchedule studioSeatSchedule = StudioSeatSchedule.builder()
                     .studio(studioOptional.get())
                     .productScheduling(productSchedulingOptional.get())
@@ -77,8 +80,10 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public StudioSeatSchedule update(String id, NewStudioSeatScheduleRequest studioSeatScheduleRequest) {
+    public StudioSeatSchedule update(String id, NewStudioSeatScheduleRequest studioSeatScheduleRequest, List<ESeat> seatLayout) {
         try {
+            validateSeatRequest(studioSeatScheduleRequest);
+            validateSeatFromSeatLayout(studioSeatScheduleRequest, seatLayout);
             StudioSeatSchedule studioSeatSchedule = new StudioSeatSchedule();
             if (id != null) {
                 studioSeatSchedule = getStudioSeatScheduleById(id);
@@ -98,15 +103,16 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
             List<ESeat> currentAvailableSeats = studioSeatSchedule.getAvailableSeat();
             List<ESeat> currentBookedSeats = studioSeatSchedule.getBookedSeat();
 
-            validateSeatRequest(availableSeatRequest, bookedSeatRequest);
+            validateSeatConflictRequest(availableSeatRequest, bookedSeatRequest);
 
             List<ESeat> newBookedSeats = bookedSeatRequest.stream().filter(seat -> currentAvailableSeats.contains(seat)).toList();
             List<ESeat> newAvailableSeats = availableSeatRequest.stream().filter(seat -> currentBookedSeats.contains(seat)).toList();
             if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !bookedSeatRequest.isEmpty()) {
                 throw new RuntimeException(DbBash.SEAT_ALREADY_BOOKED);
-            } else if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !availableSeatRequest.isEmpty()) {
-                throw new RuntimeException(DbBash.SEAT_ALREADY_AVAILABLE);
-            }
+            } 
+            // else if (newBookedSeats.isEmpty() && newAvailableSeats.isEmpty() && !availableSeatRequest.isEmpty()) {
+            //     throw new RuntimeException(DbBash.SEAT_ALREADY_AVAILABLE);
+            // }
 
             availableSeatRequest.removeAll(currentBookedSeats);
             if (!availableSeatRequest.isEmpty()) availableSeatRequest.addAll(newAvailableSeats);
@@ -146,7 +152,7 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
         }
     }
 
-    private void validateSeatRequest(List<ESeat> availableSeatRequest, List<ESeat> bookedSeatRequest) {
+    private void validateSeatConflictRequest(List<ESeat> availableSeatRequest, List<ESeat> bookedSeatRequest) {
         for (ESeat seat : availableSeatRequest) {
             if (bookedSeatRequest.contains(seat)) {
                 throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_CONFLICT);
@@ -157,5 +163,35 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
         //         throw new RuntimeException(DbBash.BOOKED_SEAT_AND_AVAILABLE_SEAT_CONFLICT);
         //     }
         // }
+    }
+
+    private void validateSeatRequest(NewStudioSeatScheduleRequest studioSeatScheduleRequest) {
+        // cek duplikasi availableSeat
+        if (studioSeatScheduleRequest.getAvailableSeat().size() != new HashSet<>(studioSeatScheduleRequest.getAvailableSeat()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_AVAILABLE_SEAT_REQUEST);
+        }
+        // cek duplikasi bookedSeat
+        if (studioSeatScheduleRequest.getBookedSeat().size() != new HashSet<>(studioSeatScheduleRequest.getBookedSeat()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_BOOKED_SEAT_REQUEST);
+        }
+    }
+
+    private void validateSeatFromSeatLayout(NewStudioSeatScheduleRequest studioSeatScheduleRequest, List<ESeat> seatLayout) {
+
+        for (String seat : studioSeatScheduleRequest.getAvailableSeat()) {
+            if (!seatLayout.contains(ESeat.findByDescription(seat))) {
+                throw new RuntimeException(DbBash.AVAILABLE_SEAT_NOT_IN_SEAT_LAYOUT);
+            }
+        }
+        for (String seat : studioSeatScheduleRequest.getBookedSeat()) {
+            if (!seatLayout.contains(ESeat.findByDescription(seat))) {
+                throw new RuntimeException(DbBash.BOOKED_SEAT_NOT_IN_SEAT_LAYOUT);
+            }
+        }
+        for (ESeat seat : seatLayout) {
+            if (!studioSeatScheduleRequest.getAvailableSeat().contains(seat.getDescription()) && !studioSeatScheduleRequest.getBookedSeat().contains(seat.getDescription())) {
+                throw new RuntimeException(DbBash.SEAT_NOT_IN_REQUEST);
+            }
+        }
     }
 }

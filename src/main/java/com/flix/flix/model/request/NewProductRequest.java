@@ -54,7 +54,5 @@ public class NewProductRequest {
     private String weekdayPriceActive;
     private String weekendPriceActive;
     private List<String> artistId;
-    private List<String> customerLikeId;
-    private List<String> customerDislikeId;
     private List<String> showingOnTheaters;
 }

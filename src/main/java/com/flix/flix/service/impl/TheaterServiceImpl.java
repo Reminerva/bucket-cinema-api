@@ -2,6 +2,7 @@ package com.flix.flix.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ import com.flix.flix.service.TheaterService;
 import com.flix.flix.specification.TheaterSpecification;
 import com.flix.flix.util.DateUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -76,7 +78,7 @@ public class TheaterServiceImpl implements TheaterService {
     }
 
     @Override
-    public Page<TheaterResponse> getAll(SearchTheaterRequest searchTheaterRequest) {
+    public Page<TheaterResponse> getAll(SearchTheaterRequest searchTheaterRequest, HttpServletRequest httpServletRequest) {
         try {
             if (searchTheaterRequest.getPage() <= 0) {
                 searchTheaterRequest.setPage(1);
@@ -96,8 +98,20 @@ public class TheaterServiceImpl implements TheaterService {
             }
             Sort sort = Sort.by(Sort.Direction.fromString(searchTheaterRequest.getDirection()), searchTheaterRequest.getSortBy());
             Pageable pageable = PageRequest.of(searchTheaterRequest.getPage() - 1, searchTheaterRequest.getSize(), sort);
-            Specification<Theater> specification = TheaterSpecification.getSpecification(searchTheaterRequest);
-            return theaterRepository.findAll(specification, pageable).map(this::toTheaterResponse);
+            
+            if (httpServletRequest.isUserInRole("ROLE_CUSTOMER")) {
+                searchTheaterRequest.setEmployeesName(null);
+                Specification<Theater> specification = TheaterSpecification.getSpecification(searchTheaterRequest);
+                return theaterRepository.findAll(specification, pageable).map(theater -> {
+                    TheaterResponse response = toTheaterResponse(theater);
+                    response.setEmployees(null);
+                    return response;
+                });
+            } else {
+                Specification<Theater> specification = TheaterSpecification.getSpecification(searchTheaterRequest);
+                return theaterRepository.findAll(specification, pageable).map(this::toTheaterResponse);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
@@ -116,6 +130,8 @@ public class TheaterServiceImpl implements TheaterService {
             theater.setContactEmail(theaterRequest.getContactEmail());
             theater.setUpdatedAt(LocalDate.now());
             // theater.setOprationalStatus(theaterRequest.getOprationalStatus());
+
+            validateTheaterRequest(theaterRequest);
 
             List<Studio> studios = new ArrayList<>();
             for (String studioId : theaterRequest.getStudiosId()) {
@@ -205,6 +221,21 @@ public class TheaterServiceImpl implements TheaterService {
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private void validateTheaterRequest(NewTheaterRequest theaterRequest) {
+        if (theaterRequest.getStudiosId() != null) {
+            // cek duplikasi studio
+            if (theaterRequest.getStudiosId().size() != new HashSet<>(theaterRequest.getStudiosId()).size()) {
+                throw new RuntimeException(DbBash.DUPLICATE_STUDIO_REQUEST);
+            }
+        }
+        if (theaterRequest.getNowShowingId() != null) {
+            // cek duplikasi product
+            if (theaterRequest.getNowShowingId().size() != new HashSet<>(theaterRequest.getNowShowingId()).size()) {
+                throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
+            }
         }
     }
 }

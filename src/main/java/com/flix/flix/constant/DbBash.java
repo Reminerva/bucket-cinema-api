@@ -50,8 +50,10 @@ public class DbBash {
     public static final String PRODUCT_ALREADY_SCHEDULED = "The product has already been scheduled in exact time in the studio";
 
     public static final String THEATER_AND_STUDIO_NOT_MATCH = "Theater and studio not match";
+
     public static final String STUDIO_SEAT_NOT_MATCH = "Studio seat not match";
     public static final String PRODUCT_AND_THEATER_NOT_MATCH = "Product and theater not match";
+    public static final String PRODUCT_IS_NOT_SHOWING_IN_THEATER = "Product is not showing in theater";
     public static final String PRODUCT_AND_PRODUCT_PRICING_NOT_MATCH = "Product and product pricing not match";
     public static final String PRODUCT_AND_PRODUCT_SCHEDULING_NOT_MATCH = "Product and product scheduling not match";
     public static final String PRODUCT_PRICING_AND_STUDIO_NOT_MATCH = "Product pricing and studio not match";
@@ -87,5 +89,20 @@ public class DbBash {
     public static final String MIN_MAX_INVALID = "Min attribute must be less than max attribute";
 
     public static final String INVALID_SEARCH_STUDIO_SEAT_LAYOUT_REQUEST = "Invalid search studio's seat layout request. To search by seat layout, studio Size should not be null";
+
+    public static final String DUPLICATE_STUDIO_REQUEST = "Duplicate studio request";
+    public static final String DUPLICATE_PRODUCT_REQUEST = "Duplicate product request";
+    public static final String DUPLICATE_ARTIST_TYPE_REQUEST = "Duplicate artist type request";
+    public static final String DUPLICATE_FAV_GENRE_REQUEST = "Duplicate fav genre request";
+    public static final String DUPLICATE_ROLE_REQUEST = "Duplicate role request";
+    public static final String DUPLICATE_ARTIST_REQUEST = "Duplicate artist request";
+    public static final String DUPLICATE_THEATER_REQUEST = "Duplicate theater request";
+    public static final String DUPLICATE_AVAILABLE_SEAT_REQUEST = "Duplicate available seat request";
+    public static final String DUPLICATE_BOOKED_SEAT_REQUEST = "Duplicate booked seat request";
+    public static final String AVAILABLE_SEAT_NOT_IN_SEAT_LAYOUT = "Available seat not in seat layout";
+    public static final String BOOKED_SEAT_NOT_IN_SEAT_LAYOUT = "Booked seat not in seat layout";
+    public static final String DUPLICATE_SEAT_REQUEST = "Duplicate seat request";
+
+    public static final String SEAT_NOT_IN_REQUEST = "Missing seat in request. Available seat and Booked seat should contains any seat from seat layout";
 
 }

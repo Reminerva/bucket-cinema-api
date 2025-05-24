@@ -2,6 +2,7 @@ package com.flix.flix.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(rollbackOn = Exception.class)
     public ProductResponse create(NewProductRequest productRequest) {
         try {
+            validateProductRequest(productRequest);
             Product product = Product.builder()
                 .title(productRequest.getTitle())
                 .duration(productRequest.getDuration())
@@ -169,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(rollbackOn = Exception.class)
     public ProductResponse update(String id, NewProductRequest productRequest) {
         try {
+            validateProductRequest(productRequest);
             // Pastikan produk ditemukan
             Product product_ = getProductById(id);
 
@@ -317,6 +320,18 @@ public class ProductServiceImpl implements ProductService {
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void validateProductRequest(NewProductRequest productRequest) {
+        // cek duplikasi Artist
+        if (productRequest.getArtistId().size() != new HashSet<>(productRequest.getArtistId()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_ARTIST_REQUEST);
+        }
+
+        // cek duplikasi Theater
+        if (productRequest.getShowingOnTheaters().size() != new HashSet<>(productRequest.getShowingOnTheaters()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_THEATER_REQUEST);
         }
     }
 

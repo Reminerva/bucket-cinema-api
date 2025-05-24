@@ -2,6 +2,7 @@ package com.flix.flix.service.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackOn = Exception.class)
     public CustomerResponse create(NewCustomerRequest newCustomerRequest) {
         try {
+            validateNewCustomerRequest(newCustomerRequest);
             NewUserRequest userRequest = NewUserRequest.builder()
                     .email(newCustomerRequest.getEmail())
                     .password(newCustomerRequest.getPassword())
@@ -137,6 +139,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackOn = Exception.class)
     public CustomerResponse update(String id, UpdateCustomerRequest updateCustomerRequest) {
         try {
+            validateUpdateCustomerRequest(updateCustomerRequest);
             Customer customer = customerRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException(DbBash.CUSTOMER_NOT_FOUND));
 
@@ -220,6 +223,39 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    private void validateNewCustomerRequest(NewCustomerRequest newCustomerRequest) {
+        // cek duplikasi favGenre
+        if (newCustomerRequest.getFavGenre().size() != new HashSet<>(newCustomerRequest.getFavGenre()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_FAV_GENRE_REQUEST);
+        }
+        // cek duplikasi likeProductId
+        if (newCustomerRequest.getLikeProductId().size() != new HashSet<>(newCustomerRequest.getLikeProductId()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
+        }
+        // cek duplikasi dislikeProductId
+        if (newCustomerRequest.getDislikeProductId().size() != new HashSet<>(newCustomerRequest.getDislikeProductId()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
+        }
+        // cek duplikasi role
+        if (newCustomerRequest.getRole().size() != new HashSet<>(newCustomerRequest.getRole()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_ROLE_REQUEST);
+        }
+    }
+
+    private void validateUpdateCustomerRequest(UpdateCustomerRequest updateCustomerRequest) {
+        // cek duplikasi favGenre
+        if (updateCustomerRequest.getFavGenre() != null && updateCustomerRequest.getFavGenre().size() != new HashSet<>(updateCustomerRequest.getFavGenre()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_FAV_GENRE_REQUEST);
+        }
+        // cek duplikasi likeProductId
+        if (updateCustomerRequest.getLikeProductId() != null && updateCustomerRequest.getLikeProductId().size() != new HashSet<>(updateCustomerRequest.getLikeProductId()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
+        }
+        // cek duplikasi dislikeProductId
+        if (updateCustomerRequest.getDislikeProductId() != null && updateCustomerRequest.getDislikeProductId().size() != new HashSet<>(updateCustomerRequest.getDislikeProductId()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
+        }
+    }
 
     private void validateLikeDislikeProductRequest(UpdateCustomerRequest updateCustomerRequest) {
         try {

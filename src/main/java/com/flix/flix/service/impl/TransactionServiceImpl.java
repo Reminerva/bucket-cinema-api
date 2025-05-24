@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -270,6 +271,9 @@ public class TransactionServiceImpl implements TransactionService {
                 throw new RuntimeException(DbBash.PRODUCT_SCHEDULING_AND_STUDIO_NOT_MATCH);
             }
         if (seats.size() != qty) throw new RuntimeException(DbBash.QTY_AND_SEAT_NOT_MATCH);
+        if (seats.size() != new HashSet<>(seats).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_SEAT_REQUEST);
+        }
     }
 
     private void updateStudioSeatSchedule(Studio studio, ProductScheduling productScheduling, Transaction transaction) {
@@ -295,7 +299,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .availableSeat(ESeat.toESeatStringList(newAvailableSeat))
                 .productSchedulingId(productScheduling.getId())
                 .build();
-        studioSeatScheduleService.update(null, newStudioSeatScheduleRequest);
+        studioSeatScheduleService.update(null, newStudioSeatScheduleRequest, studio.getSeatLayout());
     }
 
 }

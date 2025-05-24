@@ -155,6 +155,9 @@ public class StudioServiceImpl implements StudioService {
             // validasi product pricing and scheduling (tidak boleh ada product yang hanya memilki product pricing atau product scheduling saja)
             validateProductPricingAndScheduling(uniqueProductIdsInPricing, uniqueProductIdsInScheduling);
 
+            // validasi apakah product di request ada di theater yang bersangkutan
+            validateAvailabilityProduct(studioRequest, studio);
+
             // update product pricing
             List<ProductPricing> newProductPricings = getNewProductPricings(studioRequest, studio);
             studio.setProductPricing(newProductPricings);
@@ -169,10 +172,10 @@ public class StudioServiceImpl implements StudioService {
                 if (studioSeatScheduleService.getStudioSeatScheduleByAttribute(studio.getId(), studioSeatScheduleRequest.getProductSchedulingId()) == null) {
                     studioSeatScheduleRequest.setAvailableSeat(ESeat.toESeatStringList(studio.getSeatLayout()));
                     studioSeatScheduleRequest.setBookedSeat(new ArrayList<>());
-                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.create(studioSeatScheduleRequest);
+                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.create(studioSeatScheduleRequest, studio.getSeatLayout());
                     newStudioSeatSchedules.add(studioSeatSchedule);
                 } else {
-                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.update(null, studioSeatScheduleRequest);
+                    StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.update(null, studioSeatScheduleRequest, studio.getSeatLayout());
                     newStudioSeatSchedules.add(studioSeatSchedule);
                 }
             }
@@ -238,6 +241,20 @@ public class StudioServiceImpl implements StudioService {
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private void validateAvailabilityProduct(NewStudioRequest studioRequest, Studio studio) {
+        Theater theater = studio.getTheater();
+
+        List<Product> allProducts = studioRequest.getProductPricingRequests().stream()
+            .map(productPricing -> productPricing.getProductId())
+            .map(productService::getProductById)
+            .toList();
+        for (Product productId : allProducts) {
+            if (!theater.getProducts().contains(productId)) {
+                throw new RuntimeException(DbBash.PRODUCT_IS_NOT_SHOWING_IN_THEATER);
+            }
         }
     }
 

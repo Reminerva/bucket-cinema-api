@@ -1,5 +1,6 @@
 package com.flix.flix.service.impl;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponse create(NewArtistRequest artistRequest) {
         try {
+            validateArtistRequest(artistRequest);
             Artist artist = Artist.builder()
                 .name(artistRequest.getName())
                 .placeOfBirth(artistRequest.getPlaceOfBirth())
@@ -91,6 +93,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponse update(String id, NewArtistRequest artistRequest) {
         try {
+            validateArtistRequest(artistRequest);
             Artist artist = artistRepository.findById(id).orElseThrow(() -> new RuntimeException(DbBash.ARTIST_NOT_FOUND));
                 artist.setName(artistRequest.getName());
                 artist.setPlaceOfBirth(artistRequest.getPlaceOfBirth());
@@ -125,5 +128,12 @@ public class ArtistServiceImpl implements ArtistService {
                 .artistTypes(artist.getArtistTypes() == null ? null : EArtistType.toEArtistTypeStringList(artist.getArtistTypes()))
                 .productTitle(artist.getInProduct() == null ? null : artist.getInProduct().stream().map(product -> product.getTitle()).toList())
                 .build();
+    }
+
+    private void validateArtistRequest(NewArtistRequest artistRequest) {
+        // cek duplikasi ArtistType
+        if (artistRequest.getArtistTypes().size() != new HashSet<>(artistRequest.getArtistTypes()).size()) {
+            throw new RuntimeException(DbBash.DUPLICATE_ARTIST_TYPE_REQUEST);
+        }
     }
 }
