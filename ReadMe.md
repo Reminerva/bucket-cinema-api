@@ -62,7 +62,32 @@ Before you begin, ensure you have the following installed. **Note**: If you plan
 
 ### Environment Setup
 
-The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project, regardless of whether you're building from source or pulling a pre-built image. Open env_example.txt and replace the placeholders with your actual values.
+The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project, regardless of whether you're building from source or pulling a pre-built image. 
+
+    ```env
+    # Database Configuration (PostgreSQL)
+    DATABASE_HOST=db
+    DATABASE_USERNAME=your_db_user # Replace with your desired database username
+    DATABASE_PASSWORD=your_db_password # Replace with your desired database password
+    DATABASE_PORT=5432
+    DATABASE_NAME=flix_db
+
+    # Redis Configuration
+    REDIS_HOST=redis
+    REDIS_PORT=6379
+    REDIS_PASSWORD=your_redis_password # Replace with your desired Redis password (can be empty if no password)
+
+    # JWT Secret and Expiration
+    SECRET_KEY=your_jwt_secret_key_here_a_long_random_string_is_recommended
+    EXPIRATION_TIME=360000000 # Token expiration time in milliseconds (e.g., 1000 hours)
+
+    # Server Port
+    SERVER_PORT=8081
+
+    # Frontend URL for CORS
+    FRONTEND_URL=http://your_frontend_url
+    ```
+    **Note:** Replace placeholders like `your_db_user`, `your_db_password`, `your_redis_password`, `your_frontend_url` and `your_jwt_secret_key_here` with your actual desired values. For `SECRET_KEY`, generate a strong, random string.
 
 ---
 
@@ -78,8 +103,8 @@ Follow these steps to build and run the application using Docker:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/Reminerva/bucket-cinema-api.git
-    cd flix
+    git clone [https://github.com/Reminerva/bucket-cinema-api.git](https://github.com/Reminerva/bucket-cinema-api.git)
+    cd bucket-cinema-api
     ```
 
 2.  **Run the application with Docker Compose:**
@@ -185,11 +210,12 @@ This collection contains example requests for various API endpoints, including a
 
 This section details all the available API endpoints. All successful responses will follow the `CommonResponse` structure.
 
-### Authentication
+<details>
+<summary><b>Authentication</b></summary>
 
 **Base Path:** `/api/v1/user/auth`
 
-* **`POST /auth/signup` - Register a new user (Customer)**
+* **`POST {Base Path}/signup` - Register a new user (Customer)**
     * **Description:** Allows a new customer to register an account.
     * **Roles:** Public
     * **Request Example (NewCustomerRequest):**
@@ -217,7 +243,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`POST /auth/signin` - User Login**
+* **`POST {Base Path}/signin` - User Login**
     * **Description:** Authenticates a user and returns a JWT token.
     * **Roles:** Public
     * **Request Example (LoginRequest):**
@@ -233,7 +259,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`POST /auth/signout` - User Logout**
+* **`POST {Base Path}/signout` - User Logout**
     * **Description:** Invalidates the user's session/token.
     * **Roles:** Authenticated Users (Admin, Cashier, Customer)
     * **Request Example:** (No request body needed, typically uses JWT in header)
@@ -246,12 +272,15 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
+</details>
+</details>
 
-### User Management
+<details>
+<summary><b>User Management</b></summary>
 
 **Base Path:** `/api/v1/user`
 
-* **`GET /api/v1/user` - Get All Users**
+* **`GET {Base Path}` - Get All Users**
     * **Description:** Retrieves a paginated list of all registered users.
     * **Roles:** Admin
     * **Query Parameters:**
@@ -264,8 +293,8 @@ This section details all the available API endpoints. All successful responses w
         * `customerFullname` (optional): Filter by customer's full name.
         * `role` (optional, can be multiple): Filter by user role (e.g., `ADMIN`, `CUSTOMER`, `CASHIER`).
     * **Request Example:** (No request body)
-        ```
-        GET /api/v1/user?page=0&size=5&role=CUSTOMER
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -273,12 +302,14 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
+</details>
 
-### Customer Management
+<details>
+<summary><b>Customer Management</b></summary>
 
-**Base Path:** `/api/v1/customer`
+**Base Path:** `{Base Path}`
 
-* **`POST /api/v1/customer` - Create New Customer (Admin Only)**
+* **`POST {Base Path}` - Create New Customer (Admin Only)**
     * **Description:** Allows an admin to create a new customer account.
     * **Roles:** Admin
     * **Request Example (NewCustomerRequest):**
@@ -306,10 +337,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`GET /api/v1/customer` - Get All Customers (Admin Only)**
+* **`GET {Base Path}` - Get All Customers (Admin Only)**
     * **Description:** Retrieves a paginated list of all customer accounts.
     * **Roles:** Admin
-    * **Query Parameters:** (Similar to `User Management - Get All Users`, but specific to Customer fields)
+    * **Query Parameters:**
         * `page` (optional, default: 0): Page number.
         * `size` (optional, default: 10): Number of items per page.
         * `sortBy` (optional, default: `fullname`): Field to sort by.
@@ -329,9 +360,9 @@ This section details all the available API endpoints. All successful responses w
         * `email` (optional): Filter by customer's email.
         * `likeProductTitle` (optional): Filter by products liked by the customer (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
         * `dislikeProductTitle` (optional): Filter by products disliked by the customer (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
-    * **Request Example:**
-        ```
-        GET /api/v1/customer?customerFullname=John
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -339,14 +370,14 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<CustomerResponse> with pagination)
         }
         ```
-* **`GET /api/v1/customer/{id}` - Get Customer By ID (Admin, Cashier, Customer)**
+* **`GET {Base Path}/{id}` - Get Customer By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a customer's details by their ID.
     * **Roles:** Admin, Cashier, Customer (if `id` matches their own)
     * **Path Parameters:**
         * `id` (string, required): The ID of the customer.
-    * **Request Example:**
-        ```
-        GET /api/v1/customer/some-customer-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -354,7 +385,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`PUT /api/v1/customer/{id}` - Update Customer By ID (Admin Only)**
+* **`PUT {Base Path}/{id}` - Update Customer By ID (Admin Only)**
     * **Description:** Updates a customer's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -381,14 +412,14 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`DELETE /api/v1/customer/{id}` - Delete Customer By ID (Admin Only)**
+* **`DELETE {Base Path}/{id}` - Delete Customer By ID (Admin Only)**
     * **Description:** Deletes a customer account by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the customer to delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/customer/some-customer-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -396,12 +427,12 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`GET /api/v1/customer/me` - Get Current Customer's Details (Customer Only)**
+* **`GET {Base Path}/me` - Get Current Customer's Details (Customer Only)**
     * **Description:** Retrieves the details of the currently authenticated customer.
     * **Roles:** Customer
-    * **Request Example:** (No request body, uses JWT from header)
-        ```
-        GET /api/v1/customer/me
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -409,7 +440,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`PUT /api/v1/customer/me` - Update Current Customer's Details (Customer Only)**
+* **`PUT {Base Path}/me` - Update Current Customer's Details (Customer Only)**
     * **Description:** Updates the details of the currently authenticated customer.
     * **Roles:** Customer
     * **Request Example (UpdateCustomerRequest):**
@@ -434,8 +465,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
+</details>
 
-### Employee Management
+<details>
+<summary><b>Employee Management</b></summary>
 
 **Base Path:** `/api/v1/employee`
 
@@ -503,7 +536,7 @@ This section details all the available API endpoints. All successful responses w
 * **`GET /api/v1/employee` - Get All Employees (Admin Only)**
     * **Description:** Retrieves a paginated list of all employee accounts (Admins and Cashiers).
     * **Roles:** Admin
-    * **Query Parameters:** (Similar to `User Management - Get All Users`, but specific to Employee fields)
+    * **Query Parameters:**
         * `page` (optional, default: 0): Page number.
         * `size` (optional, default: 10): Number of items per page.
         * `sortBy` (optional, default: `fullname`): Field to sort by.
@@ -523,9 +556,9 @@ This section details all the available API endpoints. All successful responses w
         * `appUserEmail` (optional): Filter by employee's email.
         * `theaterName` (optional): Filter by employee's theater name.
         * `theaterCity` (optional): Filter by employee's theater city.
-    * **Request Example:**
-        ```
-        GET /api/v1/employee?fullName=Jane
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -538,9 +571,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the employee.
-    * **Request Example:**
-        ```
-        GET /api/v1/employee/some-employee-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -581,9 +614,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the employee to soft delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/employee/some-employee-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -594,9 +627,9 @@ This section details all the available API endpoints. All successful responses w
 * **`GET /api/v1/employee/me` - Get Current Employee's Details (Employee Only)**
     * **Description:** Retrieves the details of the currently authenticated employee.
     * **Roles:** Employee
-    * **Request Example:** (No request body, uses JWT from header)
-        ```
-        GET /api/v1/employee/me
+    * **Request Example:** (No request body, uses JWT from header) (No request body))
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -630,8 +663,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
+</details>
 
-### Artist Management
+<details>
+<summary><b>Artist Management</b></summary>
 
 **Base Path:** `/api/v1/artist`
 
@@ -669,9 +704,9 @@ This section details all the available API endpoints. All successful responses w
         * `birthDateMax` (optional): Filter by artist's birth date (get artists born before this date).
         * `artistType` (optional): Filter by artist's type (List of artist types, e.g., `["Actor", "Producer"]`).
         * `inProductTitle` (optional): Filter by artist's appearance in products (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
-    * **Request Example:**
-        ```
-        GET /api/v1/artist?name=Adele
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -684,9 +719,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
         * `id` (string, required): The ID of the artist.
-    * **Request Example:**
-        ```
-        GET /api/v1/artist/some-artist-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -721,9 +756,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the artist to delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/artist/some-artist-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -731,8 +766,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ArtistResponse)
         }
         ```
+</details>
 
-### Production Company Management
+### <details>
+<summary><b>Company Management</b></summary>
 
 **Base Path:** `/api/v1/production-company`
 
@@ -779,9 +816,9 @@ This section details all the available API endpoints. All successful responses w
         * `updatedAtMin` (optional): Filter by production company's updated date (get companies updated after this date, e.g., `YYYY-MM-DDTHH:MM:SS`).
         * `updatedAtMax` (optional): Filter by production company's updated date (get companies updated before this date).
         * `hasProducts` (optional): Filter by production company's presence of products (List of product IDs, e.g., `["product-001", "product-002"]`).
-    * **Request Example:**
-        ```
-        GET /api/v1/production-company?companyName=Warner
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -794,9 +831,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
         * `id` (string, required): The ID of the production company.
-    * **Request Example:**
-        ```
-        GET /api/v1/production-company/some-company-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -835,9 +872,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the production company to delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/production-company/some-company-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -845,8 +882,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductionCompanyResponse)
         }
         ```
+</details>
 
-### Product Management
+<details>
+<summary><b>Product Management</b></summary>
 
 **Base Path:** `/api/v1/product`
 
@@ -909,9 +948,9 @@ This section details all the available API endpoints. All successful responses w
         * `lastUpdatedMax` (optional): Filter by product's last updated date (get products updated before this date).
         * `artistsName` (optional): Filter by product's artists (List of artist names, e.g., `["John Doe", "Jane Smith"]`).
         * `productionCompany` (optional): Filter by product's production company.
-    * **Request Example:**
-        ```
-        GET /api/v1/product?title=Avengers&genre=Action
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -924,9 +963,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
         * `id` (string, required): The ID of the product.
-    * **Request Example:**
-        ```
-        GET /api/v1/product/some-product-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -972,9 +1011,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the product to hard delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/product/some-product-id/hard-delete
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -987,9 +1026,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the product to soft delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/product/some-product-id/soft-delete
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -997,8 +1036,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductResponse)
         }
         ```
+</details>
 
-### Theater Management
+<details>
+<summary><b>Theater Management</b></summary>
 
 **Base Path:** `/api/v1/theater`
 
@@ -1039,9 +1080,9 @@ This section details all the available API endpoints. All successful responses w
         * `oprationalStatus` (optional): Filter by operational status (e.g., `True`, `False`).
         * `employeesName` (optional): Filter by employee name associated with the theater.
         * `productsTitle` (optional): Filter by product title shown in the theater.
-    * **Request Example:**
-        ```
-        GET /api/v1/theater?theaterName=Cinema%20X&oprationalStatus=True
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1054,9 +1095,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
         * `id` (string, required): The ID of the theater.
-    * **Request Example:**
-        ```
-        GET /api/v1/theater/theater-001
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1092,9 +1133,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the theater to soft delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/theater/theater-001
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1117,8 +1158,10 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
+</details>
 
-### Studio Management
+<details>
+<summary><b>Studio Management</b></summary>
 
 **Base Path:** `/api/v1/studio`
 
@@ -1153,15 +1196,15 @@ This section details all the available API endpoints. All successful responses w
         * `studioSize` (optional): Filter by studio's size (e.g., `REGULAR MEDIUM`, `REGULAR LARGE`, `REGULAR SMALL`).
         * `theaterName` (optional): Filter by studio's theater name.
         * `theaterCity` (optional): Filter by studio's theater city.
-    * **Request Example:**
-        ```
-        GET /api/v1/studio?name=Studio%201&theaterName=Cinema%20X
-        ```
     * **Reqest body example:**
         ```json
         {
             "seatLayout": ["A1", "A2", "B1", "B2"],
         }
+        ```
+    * **Reqest body example to get all studios:**
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1174,9 +1217,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
         * `id` (string, required): The ID of the studio.
-    * **Request Example:**
-        ```
-        GET /api/v1/studio/some-studio-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1190,9 +1233,9 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `theaterId` (string, required): The ID of the theater.
         * `productId` (string, required): The ID of the product.
-    * **Request Example:**
-        ```
-        GET /api/v1/studio/theater-001/some-product-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1248,9 +1291,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the studio to delete.
-    * **Request Example:**
-        ```
-        DELETE /api/v1/studio/some-studio-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1261,9 +1304,9 @@ This section details all the available API endpoints. All successful responses w
 * **`GET /api/v1/studio/me` - Get Current Studio's Details (Cashier Only)**
     * **Description:** Retrieves the details of the current studio.
     * **Roles:** Cashier
-    * **Request Example:**
-        ```
-        GET /api/v1/studio/me
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1272,8 +1315,10 @@ This section details all the available API endpoints. All successful responses w
         }
         ```
 
+</details>
 
-### Transaction Management
+<details>
+<summary><b>Transaction Management</b></summary>
 
 **Base Path:** `/api/v1/transaction`
 
@@ -1339,9 +1384,9 @@ This section details all the available API endpoints. All successful responses w
         * `updatedAtMax` (optional): Filter by transaction's update date.
         * `expirationDateMin` (optional): Filter by transaction's expiration date (e.g., "2023-08-01T10:00:00").
         * `expirationDateMax` (optional): Filter by transaction's expiration date.
-    * **Request Example:**
-        ```
-        GET /api/v1/transaction?paymentStatus=PAID
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1381,9 +1426,9 @@ This section details all the available API endpoints. All successful responses w
         * `updatedAtMax` (optional): Filter by transaction's update date.
         * `expirationDateMin` (optional): Filter by transaction's expiration date (e.g., "2023-08-01T10:00:00").
         * `expirationDateMax` (optional): Filter by transaction's expiration date.
-    * **Request Example:**
-        ```
-        GET /api/v1/transaction?paymentStatus=PAID
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
@@ -1396,9 +1441,9 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin, Cashier, Customer (if `id` matches their own transaction)
     * **Path Parameters:**
         * `id` (string, required): The ID of the transaction.
-    * **Request Example:**
-        ```
-        GET /api/v1/transaction/some-transaction-id
+    * **Request Example:** (No request body)
+        ```json
+        {}
         ```
     * **Response Example:**
         ```json
