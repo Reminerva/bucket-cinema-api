@@ -188,6 +188,24 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // admin and cashier only //
+    @PutMapping("/{id}")
+    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER)
+    public ResponseEntity<CommonResponse<TransactionResponse>> updatePaymentTransaction(
+        @PathVariable String id,
+        @Valid
+        @RequestBody
+        NewTransactionRequest transactionRequest,
+        HttpServletRequest httpServletRequest
+    ) {
+        CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.UPDATE_TRANSACTION_SUCCESS)
+            .data(transactionService.updatePaymentStatus(transactionRequest, id, httpServletRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     // cashier and customer only //
     @PostMapping
     @PreAuthorize(ApiBash.HAS_ROLE_CASHIER + " || " + ApiBash.HAS_ROLE_CUSTOMER)
@@ -226,20 +244,4 @@ public class TransactionController {
         }
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER + " || " + ApiBash.HAS_ROLE_CUSTOMER)
-    public ResponseEntity<CommonResponse<TransactionResponse>> updatePaymentTransaction(
-        @PathVariable String id,
-        @Valid
-        @RequestBody
-        NewTransactionRequest transactionRequest,
-        HttpServletRequest httpServletRequest
-    ) {
-        CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
-            .code(HttpStatus.OK.value())
-            .message(ApiBash.UPDATE_TRANSACTION_SUCCESS)
-            .data(transactionService.updatePaymentStatus(transactionRequest, id, httpServletRequest))
-            .build();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 }
