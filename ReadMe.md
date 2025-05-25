@@ -103,7 +103,7 @@ Follow these steps to build and run the application using Docker:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/Reminerva/bucket-cinema-api.git](https://github.com/Reminerva/bucket-cinema-api.git)
+    git clone https://github.com/Reminerva/bucket-cinema-api.git
     cd bucket-cinema-api
     ```
 
