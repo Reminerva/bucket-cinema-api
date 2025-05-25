@@ -1,13 +1,15 @@
 # Flix API Documentation
 
-This document provides a comprehensive guide to using the Flix API, including available endpoints, request/response formats, and setup instructions.
+This document provides a comprehensive guide to using the Flix API/Bucket Cinema API, including available endpoints, request/response formats, and setup instructions.
 
 ## Table of Contents
 
 1.  [Getting Started](#1-getting-started)
     * [Prerequisites](#prerequisites)
     * [Environment Setup](#environment-setup)
-    * [Running with Docker](#running-with-docker)
+    * [Running the Application](#running-the-application)
+        * [Option A: Running with Docker (Building from Source)](#option-a-running-with-docker-building-from-source)
+        * [Option B: Running with Docker (Pre-built Image)](#option-b-running-with-docker-pre-built-image)
 2.  [API Endpoints](#2-api-endpoints)
     * [Authentication](#authentication)
     * [User Management](#user-management)
@@ -26,67 +28,137 @@ This document provides a comprehensive guide to using the Flix API, including av
 
 ## 1. Getting Started
 
-This section will guide you through setting up and running the Flix API.
+This section will guide you through setting up and running the Flix API. You have two primary ways to run this application: **building the Docker image from source** (which requires Java and Maven) or **pulling a pre-built Docker image** (which simplifies the setup by only requiring Docker).
+
+---
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have the following installed. **Note**: If you plan to only run the pre-built Docker image, you primarily only need **Docker Desktop** (or Docker Engine).
 
-* **Java Development Kit (JDK) 17 or higher**
-* **Maven** (for building the project, though Docker will handle most of this)
+* **Java Development Kit (JDK) 17 or higher** (Required if building from source)
+* **Maven** (Required if building from source)
 * **Docker Desktop** (or Docker Engine if on Linux)
-* **Git** (for cloning the repository)
+* **Git** (for cloning the repository, if building from source)
+
+---
 
 ### Environment Setup
 
-The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project. Below is an example of the variables you'll need to define.
+The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project, regardless of whether you're building from source or pulling a pre-built image. Below is an example of the variables you'll need to define.
 
 * **Database Configuration**
-* **DATABASE_HOST**=localhost
-* **DATABASE_PORT**=5432
-* **DATABASE_NAME**=flix_db
-* **DATABASE_USERNAME**=your_db_user
-* **DATABASE_PASSWORD**=your_db_password
+    * **DATABASE_HOST**=localhost
+    * **DATABASE_PORT**=5432
+    * **DATABASE_NAME**=flix_db
+    * **DATABASE_USERNAME**=your_db_user
+    * **DATABASE_PASSWORD**=your_db_password
 
 * **Redis Configuration**
-* **REDIS_HOST**=localhost
-* **REDIS_PASSWORD**=your_redis_password
-* **REDIS_PORT**=6379
+    * **REDIS_HOST**=localhost
+    * **REDIS_PASSWORD**=your_redis_password
+    * **REDIS_PORT**=6379
 
 * **JWT Configuration**
-* **SECRET_KEY**=your_super_secret_jwt_key_please_change_this_in_production
-* **EXPIRATION_TIME**=3600000 # 1 hour
+    * **SECRET_KEY**=your_super_secret_jwt_key_please_change_this_in_production
+    * **EXPIRATION_TIME**=3600000 # 1 hour
 
 * **Application Port**
-* **SERVER_PORT**=8081
+    * **SERVER_PORT**=8081
 
 **Note:** Replace `your_db_user`, `your_db_password`, and `your_super_secret_jwt_key_please_change_this_in_production` with your actual database credentials and a strong, unique JWT secret.
 
-### Running with Docker
+---
+
+### Running the Application
+
+You have two options to run the Flix API: **building from source with Docker** or **pulling a pre-built Docker image**.
+
+---
+
+#### Option A: Running with Docker (Building from Source)
 
 Follow these steps to build and run the application using Docker:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
-    cd <your-repository-name>
+    git clone https://github.com/Reminerva/bucket-cinema-api.git
+    cd flix
     ```
 
-2.  **Build the Docker image:**
-    Navigate to the root directory of your project (where the `pom.xml` and `Dockerfile` are located, if you have one, otherwise it might be the project root).
+2.  **Run the application with Docker Compose:**
+    Ensure you are in the root directory of your project (where `docker-compose.yml` and `.env` are located).
     ```bash
-    docker build -t flix-api .
+    docker compose up -d
     ```
-    This command will build a Docker image named `flix-api` from your project's Dockerfile.
+    * `-d`: Runs the containers in detached mode (in the background).
+    * This command will build your `flix-api` image, and then start all defined services (`db`, `redis`, `app`) within a shared Docker network, allowing them to communicate.
 
-3.  **Run the Docker container:**
+    Your API should now be running and accessible at `http://localhost:8081` (or the port you specified in `SERVER_PORT`). To stop all services, run `docker compose down`.
+
+---
+
+#### Option B: Running with Docker Compose (Using Pre-built Image)
+
+This is the recommended and simplest way to run the Flix API, as it leverages a pre-built image from Docker Hub and automatically sets up the database and Redis services. You don't need to clone the full repository or have Java/Maven installed for this option, only Docker.
+
+1.  **Create a dedicated directory and your `.env` file:**
+    Create a new empty directory for your project. Inside this directory, create your `.env` file with all the necessary environment variables as described in the **Environment Setup** section above.
+
+2.  **Create your `docker-compose.yml` file:**
+    In the same directory as your `.env` file, create a `docker-compose.yml` file with the following content. **This configuration specifically uses the pre-built `reksaalamsyah/flix-backend:1.0.0` image.**
+
+    ```yaml
+
+    services:
+      app:
+        image: reksaalamsyah/flix-backend:1.0.0 # Uses the pre-built image from Docker Hub
+        container_name: flix_api_prebuilt
+        ports:
+          - "${SERVER_PORT}:${SERVER_PORT}" # Uses SERVER_PORT from .env
+        env_file:
+          - ./.env # Mounts your .env file
+        depends_on:
+          - db
+          - redis
+        restart: always
+
+      db:
+        image: postgres:13-alpine
+        container_name: flix_postgres_db
+        restart: always
+        environment:
+          POSTGRES_DB: ${DATABASE_NAME}
+          POSTGRES_USER: ${DATABASE_USERNAME}
+          POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+        ports:
+          - "5432:5432" # Optional: map for host access (e.g., for DBeaver)
+        volumes:
+          - db_data:/var/lib/postgresql/data # For data persistence
+
+      redis:
+        image: redis:latest # Or redis:6-alpine
+        container_name: flix_redis
+        restart: always
+        environment:
+          REDIS_PASSWORD: ${REDIS_PASSWORD} # If your Redis requires a password
+        ports:
+          - "6379:6379" # Optional: map for host access (e.g., for RedisInsight)
+
+    volumes:
+      db_data: # Define the named volume for database persistence
+    ```
+
+3.  **Run the application with Docker Compose:**
+    Ensure you are in the directory containing `docker-compose.yml` and `.env`.
     ```bash
-    docker run -p 8080:8080 --env-file ./.env flix-api
+    docker compose up -d
     ```
-    * `-p 8080:8080`: Maps port 8080 on your host machine to port 8080 inside the Docker container. You can change the host port if needed.
-    * `--env-file ./.env`: Mounts your `.env` file into the Docker container, making the environment variables available to the application.
+    * `-d`: Runs the containers in detached mode (in the background).
+    * This command will pull the `reksaalamsyah/flix-backend:1.0.0` image, and then start the PostgreSQL database, Redis, and your Flix API, all within a shared Docker network.
 
-    Your API should now be running and accessible at `http://localhost:8080` (or the port you specified).
+    Your API should now be running and accessible at `http://localhost:8081` (or the port you specified in `SERVER_PORT`). To stop all services, run `docker compose down`.
+
 
 ## 2. API Endpoints
 

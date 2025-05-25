@@ -1,72 +1,47 @@
-# Definisi service-service yang akan dijalankan
 services:
-  # Service untuk aplikasi Spring Boot Anda
   app:
-    # Menginstruksikan Docker Compose untuk membangun image dari Dockerfile di direktori saat ini
     build: .
-    # Mapping port dari host ke container.
-    # Host port 8081 akan diarahkan ke container port 8081.
-    # Pastikan SERVER_PORT di .env Anda adalah 8081 agar sesuai.
+    container_name: flix_api_local_build
     ports:
-      - "8081:8081"
-    # Variabel lingkungan yang akan diteruskan ke container aplikasi Spring Boot.
-    # Nilai-nilai ini akan diambil dari file .env di direktori yang sama.
+      - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
       SERVER_PORT: ${SERVER_PORT}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      # DATABASE_HOST di sini merujuk ke nama service database di Docker Compose (yaitu 'db')
       DATABASE_HOST: db
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
-      # REDIS_HOST di sini merujuk ke nama service Redis di Docker Compose (yaitu 'redis')
       REDIS_HOST: redis
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_PORT: ${REDIS_PORT}
       SECRET_KEY: ${SECRET_KEY}
       EXPIRATION_TIME: ${EXPIRATION_TIME}
-    # Menentukan dependensi. Service 'app' akan dimulai setelah 'db' dan 'redis' siap.
     depends_on:
       - db
       - redis
-    # Kebijakan restart: selalu restart container jika berhenti (misalnya karena crash).
     restart: always
 
-  # Service untuk database PostgreSQL
   db:
-    # Menggunakan image PostgreSQL versi 13 yang ringan (alpine)
-    image: postgres:13-alpine
-    # Variabel lingkungan untuk konfigurasi PostgreSQL.
-    # Nilai-nilai ini juga diambil dari file .env.
+    image: postgres:13-alpine 
+    container_name: flix_postgres_db
+    restart: always
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-    # Volume untuk menyimpan data database secara persisten.
-    # Ini penting agar data Anda tidak hilang setiap kali container di-restart.
+    ports:
+      - "5432:5432" 
     volumes:
-      - db_data:/var/lib/postgresql/data
-    # Mapping port dari host ke container untuk database.
-    # Host port 5432 akan diarahkan ke container port 5432.
-    # Ini opsional, tapi berguna untuk mengakses database dari luar container (misalnya dengan DBeaver).
-    ports:
-      - "5432:5432"
-    restart: always
+      - db_data:/var/lib/postgresql/data 
 
-  # Service untuk server Redis
   redis:
-    # Menggunakan image Redis versi 6 yang ringan (alpine)
-    image: redis:6-alpine
-    environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-    # Mapping port dari host ke container untuk Redis.
-    # Host port 6379 akan diarahkan ke container port 6379.
-    # Ini opsional, tapi berguna untuk mengakses Redis dari luar container.
-    ports:
-      - "6379:6379"
+    image: redis:latest 
+    container_name: flix_redis
     restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD} 
+    ports:
+      - "6379:6379" 
 
-# Definisi volume yang digunakan oleh service.
-# 'db_data' akan digunakan oleh service 'db' untuk menyimpan data PostgreSQL.
 volumes:
-  db_data:
+  db_data: 
