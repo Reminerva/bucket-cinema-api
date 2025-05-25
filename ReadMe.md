@@ -211,7 +211,7 @@ This collection contains example requests for various API endpoints, including a
 This section details all the available API endpoints. All successful responses will follow the `CommonResponse` structure.
 
 <details>
-<summary><b>Authentication</b></summary>
+<summary><h2>Authentication</h2></summary>
 
 **Auth Base Path:** `/api/v1/user/auth`
 
