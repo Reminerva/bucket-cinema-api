@@ -213,9 +213,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Authentication</b></summary>
 
-**Base Path:** `/api/v1/user/auth`
+**Auth Base Path:** `/api/v1/user/auth`
 
-* **`POST {Base Path}/signup` - Register a new user (Customer)**
+* **`POST {Auth Base Path}/signup` - Register a new user (Customer)**
     * **Description:** Allows a new customer to register an account.
     * **Roles:** Public
     * **Request Example (NewCustomerRequest):**
@@ -243,7 +243,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`POST {Base Path}/signin` - User Login**
+* **`POST {Auth Base Path}/signin` - User Login**
     * **Description:** Authenticates a user and returns a JWT token.
     * **Roles:** Public
     * **Request Example (LoginRequest):**
@@ -259,7 +259,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`POST {Base Path}/signout` - User Logout**
+* **`POST {Auth Base Path}/signout` - User Logout**
     * **Description:** Invalidates the user's session/token.
     * **Roles:** Authenticated Users (Admin, Cashier, Customer)
     * **Request Example:** (No request body needed, typically uses JWT in header)
@@ -278,9 +278,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>User Management</b></summary>
 
-**Base Path:** `/api/v1/user`
+**User Base Path:** `/api/v1/user`
 
-* **`GET {Base Path}` - Get All Users**
+* **`GET {User Base Path}` - Get All Users**
     * **Description:** Retrieves a paginated list of all registered users.
     * **Roles:** Admin
     * **Query Parameters:**
@@ -307,9 +307,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Customer Management</b></summary>
 
-**Base Path:** `{Base Path}`
+**Customer Base Path:** `/api/v1/customer`
 
-* **`POST {Base Path}` - Create New Customer (Admin Only)**
+* **`POST {Customer Base Path}` - Create New Customer (Admin Only)**
     * **Description:** Allows an admin to create a new customer account.
     * **Roles:** Admin
     * **Request Example (NewCustomerRequest):**
@@ -337,7 +337,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`GET {Base Path}` - Get All Customers (Admin Only)**
+* **`GET {Customer Base Path}` - Get All Customers (Admin Only)**
     * **Description:** Retrieves a paginated list of all customer accounts.
     * **Roles:** Admin
     * **Query Parameters:**
@@ -370,7 +370,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<CustomerResponse> with pagination)
         }
         ```
-* **`GET {Base Path}/{id}` - Get Customer By ID (Admin, Cashier, Customer)**
+* **`GET {Customer Base Path}/{id}` - Get Customer By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a customer's details by their ID.
     * **Roles:** Admin, Cashier, Customer (if `id` matches their own)
     * **Path Parameters:**
@@ -385,7 +385,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`PUT {Base Path}/{id}` - Update Customer By ID (Admin Only)**
+* **`PUT {Customer Base Path}/{id}` - Update Customer By ID (Admin Only)**
     * **Description:** Updates a customer's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -412,7 +412,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`DELETE {Base Path}/{id}` - Delete Customer By ID (Admin Only)**
+* **`DELETE {Customer Base Path}/{id}` - Delete Customer By ID (Admin Only)**
     * **Description:** Deletes a customer account by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -427,7 +427,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`GET {Base Path}/me` - Get Current Customer's Details (Customer Only)**
+* **`GET {Customer Base Path}/me` - Get Current Customer's Details (Customer Only)**
     * **Description:** Retrieves the details of the currently authenticated customer.
     * **Roles:** Customer
     * **Request Example:** (No request body)
@@ -440,7 +440,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(CustomerResponse)
         }
         ```
-* **`PUT {Base Path}/me` - Update Current Customer's Details (Customer Only)**
+* **`PUT {Customer Base Path}/me` - Update Current Customer's Details (Customer Only)**
     * **Description:** Updates the details of the currently authenticated customer.
     * **Roles:** Customer
     * **Request Example (UpdateCustomerRequest):**
@@ -470,9 +470,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Employee Management</b></summary>
 
-**Base Path:** `/api/v1/employee`
+**Employee Base Path:** `/api/v1/employee`
 
-* **`POST /api/v1/employee` - Create New Employee (Employee Only)**
+* **`POST {Employee Base Path}` - Create New Employee (Employee Only)**
     * **Description:** Allows an admin to create a new Employee.
     * **Roles:** Admin
     * **Request Example (NewEmployeeRequest):**
@@ -498,7 +498,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
-* **`POST /api/v1/employee/admin` - Create New Admin (Admin Only)**
+* **`POST {Employee Base Path}/admin` - Create New Admin (Admin Only)**
     * **Description:** Allows an admin to create a new admin account.
     * **Roles:** Admin
     * **Request Example (NewAdminRequest):**
@@ -515,7 +515,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(SignupResponse)
         }
         ```
-* **`POST /api/v1/employee/cashier` - Create New Cashier (Admin Only)**
+* **`POST {Employee Base Path}/cashier` - Create New Cashier (Admin Only)**
     * **Description:** Allows an admin to create a new cashier account.
     * **Roles:** Admin
     * **Request Example (NewCashierRequest):**
@@ -533,7 +533,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
-* **`GET /api/v1/employee` - Get All Employees (Admin Only)**
+* **`GET {Employee Base Path}` - Get All Employees (Admin Only)**
     * **Description:** Retrieves a paginated list of all employee accounts (Admins and Cashiers).
     * **Roles:** Admin
     * **Query Parameters:**
@@ -566,7 +566,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<EmployeeResponse>) with paging
         }
         ```
-* **`GET /api/v1/employee/{id}` - Get Employee By ID (Admin Only)**
+* **`GET {Employee Base Path}/{id}` - Get Employee By ID (Admin Only)**
     * **Description:** Retrieves an employee's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -581,7 +581,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
-* **`PUT /api/v1/employee/{id}` - Update Employee By ID (Admin Only)**
+* **`PUT {Employee Base Path}/{id}` - Update Employee By ID (Admin Only)**
     * **Description:** Updates an employee's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -609,7 +609,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
-* **`DELETE /api/v1/employee/{id}` - Soft Delete Employee By ID (Admin Only)**
+* **`DELETE {Employee Base Path}/{id}` - Soft Delete Employee By ID (Admin Only)**
     * **Description:** Soft deletes an employee account by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -624,7 +624,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`GET /api/v1/employee/me` - Get Current Employee's Details (Employee Only)**
+* **`GET {Employee Base Path}/me` - Get Current Employee's Details (Employee Only)**
     * **Description:** Retrieves the details of the currently authenticated employee.
     * **Roles:** Employee
     * **Request Example:** (No request body, uses JWT from header) (No request body))
@@ -637,7 +637,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(EmployeeResponse)
         }
         ```
-* **`PUT /api/v1/employee/me` - Update Current Employee's Details (Employee Only)**
+* **`PUT {Employee Base Path}/me` - Update Current Employee's Details (Employee Only)**
     * **Description:** Updates the details of the currently authenticated employee.
     * **Roles:** Employee
     * **Request Example (UpdateEmployeeRequest):**
@@ -668,9 +668,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Artist Management</b></summary>
 
-**Base Path:** `/api/v1/artist`
+**Artist Base Path:** `/api/v1/artist`
 
-* **`POST /api/v1/artist` - Create New Artist (Admin Only)**
+* **`POST {Artist Base Path}` - Create New Artist (Admin Only)**
     * **Description:** Creates a new artist record.
     * **Roles:** Admin
     * **Request Example (NewArtistRequest):**
@@ -690,7 +690,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ArtistResponse)
         }
         ```
-* **`GET /api/v1/artist` - Get All Artists (Admin, Cashier, Customer)**
+* **`GET {Artist Base Path}` - Get All Artists (Admin, Cashier, Customer)**
     * **Description:** Retrieves a paginated list of all artists.
     * **Roles:** Admin, Cashier, Customer
     * **Query Parameters:**
@@ -714,7 +714,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ArtistResponse)
         }
         ```
-* **`GET /api/v1/artist/{id}` - Get Artist By ID (Admin, Cashier, Customer)**
+* **`GET {Artist Base Path}/{id}` - Get Artist By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves an artist's details by their ID.
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
@@ -729,7 +729,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ArtistResponse)
         }
         ```
-* **`PUT /api/v1/artist/{id}` - Update Artist By ID (Admin Only)**
+* **`PUT {Artist Base Path}/{id}` - Update Artist By ID (Admin Only)**
     * **Description:** Updates an artist's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -751,7 +751,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ArtistResponse)
         }
         ```
-* **`DELETE /api/v1/artist/{id}` - Delete Artist By ID (Admin Only)**
+* **`DELETE {Artist Base Path}/{id}` - Delete Artist By ID (Admin Only)**
     * **Description:** Deletes an artist record by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -771,9 +771,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Production Company Management</b></summary>
 
-**Base Path:** `/api/v1/production-company`
+**Production Company Base Path:** `/api/v1/production-company`
 
-* **`POST /api/v1/production-company` - Create New Production Company (Admin Only)**
+* **`POST {Production Company Base Path}` - Create New Production Company (Admin Only)**
     * **Description:** Creates a new production company record.
     * **Roles:** Admin
     * **Request Example (NewProductionCompanyRequest):**
@@ -797,7 +797,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductionCompanyResponse)
         }
         ```
-* **`GET /api/v1/production-company` - Get All Production Companies (Admin, Cashier, Customer)**
+* **`GET {Production Company Base Path}` - Get All Production Companies (Admin, Cashier, Customer)**
     * **Description:** Retrieves a paginated list of all production companies.
     * **Roles:** Admin, Cashier, Customer
     * **Query Parameters:**
@@ -826,7 +826,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<ProductionCompanyResponse> with paging)
         }
         ```
-* **`GET /api/v1/production-company/{id}` - Get Production Company By ID (Admin, Cashier, Customer)**
+* **`GET {Production Company Base Path}/{id}` - Get Production Company By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a production company's details by their ID.
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
@@ -841,7 +841,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductionCompanyResponse)
         }
         ```
-* **`PUT /api/v1/production-company/{id}` - Update Production Company By ID (Admin Only)**
+* **`PUT {Production Company Base Path}/{id}` - Update Production Company By ID (Admin Only)**
     * **Description:** Updates a production company's details by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -867,7 +867,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductionCompanyResponse)
         }
         ```
-* **`DELETE /api/v1/production-company/{id}` - Delete Production Company By ID (Admin Only)**
+* **`DELETE {Production Company Base Path}/{id}` - Delete Production Company By ID (Admin Only)**
     * **Description:** Deletes a production company record by their ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -887,9 +887,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Product Management</b></summary>
 
-**Base Path:** `/api/v1/product`
+**Product Base Path:** `/api/v1/product`
 
-* **`POST /api/v1/product` - Create New Product (Admin Only)**
+* **`POST {Product Base Path}` - Create New Product (Admin Only)**
     * **Description:** Creates a new product (e.g., movie) record.
     * **Roles:** Admin
     * **Request Example (NewProductRequest):**
@@ -919,7 +919,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductResponse)
         }
         ```
-* **`GET /api/v1/product` - Get All Products (Admin, Cashier, Customer)**
+* **`GET {Product Base Path}` - Get All Products (Admin, Cashier, Customer)**
     * **Description:** Retrieves a paginated list of all products.
     * **Roles:** Admin, Cashier, Customer
     * **Query Parameters:**
@@ -958,7 +958,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<ProductResponse> with paging)
         }
         ```
-* **`GET /api/v1/product/{id}` - Get Product By ID (Admin, Cashier, Customer)**
+* **`GET {Product Base Path}/{id}` - Get Product By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a product's details by its ID.
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
@@ -973,7 +973,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductResponse)
         }
         ```
-* **`PUT /api/v1/product/{id}` - Update Product By ID (Admin Only)**
+* **`PUT {Product Base Path}/{id}` - Update Product By ID (Admin Only)**
     * **Description:** Updates a product's details by its ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1006,7 +1006,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductResponse)
         }
         ```
-* **`DELETE /api/v1/product/{id}/hard-delete` - Hard Delete Product By ID (Admin Only)**
+* **`DELETE {Product Base Path}/{id}/hard-delete` - Hard Delete Product By ID (Admin Only)**
     * **Description:** Permanently deletes a product record by its ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1021,7 +1021,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(ProductResponse)
         }
         ```
-* **`DELETE /api/v1/product/{id}/soft-delete` - Soft Delete Product By ID (Admin Only)**
+* **`DELETE {Product Base Path}/{id}/soft-delete` - Soft Delete Product By ID (Admin Only)**
     * **Description:** Soft deletes a product record by its ID (marks as inactive without permanent deletion).
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1041,9 +1041,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Theater Management</b></summary>
 
-**Base Path:** `/api/v1/theater`
+**Theater Base Path:** `/api/v1/theater`
 
-* **`POST /api/v1/theater` - Create New Theater (Admin Only)**
+* **`POST {Theater Base Path}` - Create New Theater (Admin Only)**
     * **Description:** Creates a new theater record.
     * **Roles:** Admin
     * **Request Example (NewTheaterRequest):**
@@ -1061,7 +1061,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TheaterResponse)
         }
         ```
-* **`GET /api/v1/theater` - Get All Theaters (Admin, Cashier, Customer)**
+* **`GET {Theater Base Path}` - Get All Theaters (Admin, Cashier, Customer)**
     * **Description:** Retrieves a paginated list of all theaters.
     * **Roles:** Admin, Cashier, Customer
     * **Query Parameters:**
@@ -1090,7 +1090,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<TheaterResponse> with paging)
         }
         ```
-* **`GET /api/v1/theater/{id}` - Get Theater By ID (Admin, Cashier, Customer)**
+* **`GET {Theater Base Path}/{id}` - Get Theater By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a theater's details by its ID.
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
@@ -1105,7 +1105,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TheaterResponse)
         }
         ```
-* **`PUT /api/v1/theater/{id}` - Update Theater By ID (Admin Only)**
+* **`PUT {Theater Base Path}/{id}` - Update Theater By ID (Admin Only)**
     * **Description:** Updates a theater's details by its ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1128,7 +1128,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TheaterResponse)
         }
         ```
-* **`DELETE /api/v1/theater/{id}` - Hard Delete Theater By ID (Admin Only)**
+* **`DELETE {Theater Base Path}/{id}` - Hard Delete Theater By ID (Admin Only)**
     * **Description:** Soft deletes a theater record by its ID (marks as inactive without permanent deletion).
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1143,7 +1143,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TheaterResponse)
         }
         ```
-* **`PUT /api/v1/theater/{id}/refresh-all-seat` - Refresh All Seats (Admin Only)**
+* **`PUT {Theater Base Path}/{id}/refresh-all-seat` - Refresh All Seats (Admin Only)**
     * **Description:** Refreshes all seats for a specific theater.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1163,9 +1163,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Studio Management</b></summary>
 
-**Base Path:** `/api/v1/studio`
+**Studio Base Path:** `/api/v1/studio`
 
-* **`POST /api/v1/studio` - Create New Studio (Admin Only)**
+* **`POST {Studio Base Path}` - Create New Studio (Admin Only)**
     * **Description:** Creates a new studio (screen/hall within a theater) record.
     * **Roles:** Admin
     * **Request Example (NewStudioRequest):**
@@ -1183,7 +1183,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(StudioResponse)
         }
         ```
-* **`GET /api/v1/studio` - Get All Studios (Admin, Cashier, Customer)**
+* **`GET {Studio Base Path}` - Get All Studios (Admin, Cashier, Customer)**
     * **Description:** Retrieves a paginated list of all studios. This endpoint needs request body.
     * **Roles:** Admin, Cashier, Customer
     * **Query Parameters:**
@@ -1212,7 +1212,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(List<StudioResponse> with paging)
         }
         ```
-* **`GET /api/v1/studio/{id}` - Get Studio By ID (Admin, Cashier, Customer)**
+* **`GET {Studio Base Path}/{id}` - Get Studio By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a studio's details by its ID.
     * **Roles:** Admin, Cashier, Customer
     * **Path Parameters:**
@@ -1227,7 +1227,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(StudioResponse)
         }
         ```
-* **`GET /api/v1/studio/{theaterId}/{productId}` - Get Studios by Product and Theater ID (Cashier, Customer)**
+* **`GET {Studio Base Path}/{theaterId}/{productId}` - Get Studios by Product and Theater ID (Cashier, Customer)**
     * **Description:** Retrieves studios associated with a specific product and theater.
     * **Roles:** Cashier, Customer
     * **Path Parameters:**
@@ -1243,7 +1243,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`PUT /api/v1/studio/{id}` - Update Studio By ID (Admin Only)**
+* **`PUT {Studio Base Path}/{id}` - Update Studio By ID (Admin Only)**
     * **Description:** Updates a studio's details by its ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1286,7 +1286,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(StudioResponse)
         }
         ```
-* **`DELETE /api/v1/studio/{id}` - Delete Studio By ID (Admin Only)**
+* **`DELETE {Studio Base Path}/{id}` - Delete Studio By ID (Admin Only)**
     * **Description:** Deletes a studio record by its ID.
     * **Roles:** Admin
     * **Path Parameters:**
@@ -1301,7 +1301,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(StudioResponse)
         }
         ```
-* **`GET /api/v1/studio/me` - Get Current Studio's Details (Cashier Only)**
+* **`GET {Studio Base Path}/me` - Get Current Studio's Details (Cashier Only)**
     * **Description:** Retrieves the details of the current studio.
     * **Roles:** Cashier
     * **Request Example:** (No request body)
@@ -1320,9 +1320,9 @@ This section details all the available API endpoints. All successful responses w
 <details>
 <summary><b>Transaction Management</b></summary>
 
-**Base Path:** `/api/v1/transaction`
+**Transaction Base Path:** `/api/v1/transaction`
 
-* **`POST /api/v1/transaction` - Create New Transaction (Customer, Cashier)**
+* **`POST {Transaction Base Path}` - Create New Transaction (Customer, Cashier)**
     * **Description:** Creates a new transaction record for a customer's purchase.
     * **Roles:** Customer, Cashier
     * **Request Example (NewTransactionRequest):**
@@ -1348,7 +1348,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TransactionResponse)
         }
         ```
-* **`GET /api/v1/transaction` - Get All Transactions (Admin)**
+* **`GET {Transaction Base Path}` - Get All Transactions (Admin)**
     * **Description:** Retrieves a paginated list of all transactions.
     * **Roles:** Admin
     * **Query Parameters:**
@@ -1394,7 +1394,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`GET /api/v1/transaction/me` - Get All Transactions (Customer, Cashier)**
+* **`GET {Transaction Base Path}/me` - Get All Transactions (Customer, Cashier)**
     * **Description:** Retrieves a paginated list of all transactions.
     * **Roles:** Customer, Cashier
     * **Query Parameters:**
@@ -1436,7 +1436,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`GET /api/v1/transaction/{id}` - Get Transaction By ID (Admin, Cashier, Customer)**
+* **`GET {Transaction Base Path}/{id}` - Get Transaction By ID (Admin, Cashier, Customer)**
     * **Description:** Retrieves a transaction's details by its ID.
     * **Roles:** Admin, Cashier, Customer (if `id` matches their own transaction)
     * **Path Parameters:**
@@ -1451,7 +1451,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later
         }
         ```
-* **`PUT /api/v1/transaction/{id}` - Update Payment Status (Admin, Cashier)**
+* **`PUT {Transaction Base Path}/{id}` - Update Payment Status (Admin, Cashier)**
     * **Description:** Updates the payment status of a transaction by its ID.
     * **Roles:** Admin, Cashier
     * **Path Parameters:**
