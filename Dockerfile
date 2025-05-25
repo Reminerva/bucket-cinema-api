@@ -4,6 +4,10 @@ WORKDIR /app
 
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
+
+# izin eksekusi pada mvnw
+RUN chmod +x mvnw
+
 RUN ./mvnw dependency:go-offline
 COPY src/ ./src/
 RUN ./mvnw clean install -DskipTests
