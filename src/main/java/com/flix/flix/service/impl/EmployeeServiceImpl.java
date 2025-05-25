@@ -20,6 +20,7 @@ import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewCashierRequest;
 import com.flix.flix.model.request.NewEmployeeRequest;
 import com.flix.flix.model.request.NewUserRequest;
+import com.flix.flix.model.request.UpdateEmployeeRequest;
 import com.flix.flix.model.request.search.SearchEmployeeRequest;
 import com.flix.flix.model.response.EmployeeResponse;
 import com.flix.flix.model.response.SignupResponse;
@@ -199,7 +200,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public EmployeeResponse update(String id, NewEmployeeRequest employeeRequest) {
+    public EmployeeResponse update(String id, UpdateEmployeeRequest employeeRequest) {
 
         try {
             Employee employee = getEmployeeById(id);
@@ -232,7 +233,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public EmployeeResponse updateByCredentials(NewEmployeeRequest employeeRequest, HttpServletRequest httpServletRequest) {
+    public EmployeeResponse updateByCredentials(UpdateEmployeeRequest employeeRequest, HttpServletRequest httpServletRequest) {
         try {
             AppUser userAccount = tokenUtil.getAppUserByToken(httpServletRequest);
             if (!userAccount.getRoles().contains(ERole.ROLE_EMPLOYEE)) throw new RuntimeException(DbBash.UNAUTHORIZED);

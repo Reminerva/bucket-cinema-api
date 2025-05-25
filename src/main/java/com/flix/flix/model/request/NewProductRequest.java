@@ -45,14 +45,6 @@ public class NewProductRequest {
     private String productionCompanyId;
     @NotEmpty(message = "movie genre is required")
     private List<String> movieGenre;
-    @Min(value = 0, message = "weekday price is required")
-    private Double weekdayPrice;
-    @Min(value = 0, message = "weekend price is required")
-    private Double weekendPrice;
-    private String weekdayPriceDate;
-    private String weekendPriceDate;
-    private String weekdayPriceActive;
-    private String weekendPriceActive;
     private List<String> artistId;
     private List<String> showingOnTheaters;
 }

@@ -20,6 +20,7 @@ import com.flix.flix.constant.ApiBash;
 import com.flix.flix.model.request.NewAdminRequest;
 import com.flix.flix.model.request.NewCashierRequest;
 import com.flix.flix.model.request.NewEmployeeRequest;
+import com.flix.flix.model.request.UpdateEmployeeRequest;
 import com.flix.flix.model.request.search.SearchEmployeeRequest;
 import com.flix.flix.model.response.CommonResponse;
 import com.flix.flix.model.response.EmployeeResponse;
@@ -149,7 +150,7 @@ public class EmployeeController {
     @PreAuthorize(ApiBash.HAS_ROLE_ADMIN)
     public ResponseEntity<CommonResponse<EmployeeResponse>> update(
         @PathVariable String id, 
-        @Valid @RequestBody NewEmployeeRequest employeeRequest
+        @Valid @RequestBody UpdateEmployeeRequest employeeRequest
     ) {
         CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
             .code(HttpStatus.OK.value())
@@ -188,7 +189,7 @@ public class EmployeeController {
     @PutMapping("/me")
     public ResponseEntity<CommonResponse<EmployeeResponse>> updateMe(
         HttpServletRequest httpServletRequest,
-        @Valid @RequestBody NewEmployeeRequest employeeRequest
+        @Valid @RequestBody UpdateEmployeeRequest employeeRequest
     ) {
         CommonResponse<EmployeeResponse> response = CommonResponse.<EmployeeResponse>builder()
             .code(HttpStatus.OK.value())
