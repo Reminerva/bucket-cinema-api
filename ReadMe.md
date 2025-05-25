@@ -1480,6 +1480,7 @@ This section details all the available API endpoints. All successful responses w
             // Will be added later(TransactionResponse)
         }
         ```
+</details>
 
 ## 3. Common Responses
 
