@@ -30,7 +30,7 @@ public class SecurityConfiguration {
         httpSecurity.csrf(crsf -> crsf.disable())
             .authorizeHttpRequests(authz -> authz
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll() 
-                .requestMatchers(ApiBash.AUTH + "/**", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
+                .requestMatchers(ApiBash.USER + ApiBash.AUTH + "/**", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, redisTokenBlackListService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
