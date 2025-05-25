@@ -768,8 +768,8 @@ This section details all the available API endpoints. All successful responses w
         ```
 </details>
 
-### <details>
-<summary><b>Company Management</b></summary>
+<details>
+<summary><b>Production Company Management</b></summary>
 
 **Base Path:** `/api/v1/production-company`
 
