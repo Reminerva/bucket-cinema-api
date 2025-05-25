@@ -21,6 +21,7 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       # REDIS_HOST di sini merujuk ke nama service Redis di Docker Compose (yaitu 'redis')
       REDIS_HOST: redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_PORT: ${REDIS_PORT}
       SECRET_KEY: ${SECRET_KEY}
       EXPIRATION_TIME: ${EXPIRATION_TIME}
@@ -56,6 +57,8 @@ services:
   redis:
     # Menggunakan image Redis versi 6 yang ringan (alpine)
     image: redis:6-alpine
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     # Mapping port dari host ke container untuk Redis.
     # Host port 6379 akan diarahkan ke container port 6379.
     # Ini opsional, tapi berguna untuk mengakses Redis dari luar container.
