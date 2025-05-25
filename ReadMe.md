@@ -9,7 +9,7 @@ This document provides a comprehensive guide to using the Flix API/Bucket Cinema
     * [Environment Setup](#environment-setup)
     * [Running the Application](#running-the-application)
         * [Option A: Running with Docker (Building from Source)](#option-a-running-with-docker-building-from-source)
-        * [Option B: Running with Docker (Pre-built Image)](#option-b-running-with-docker-pre-built-image)
+        * [Option B: Running with Docker Compose (Using Pre-built Image)](#option-b-running-with-docker-compose-using-pre-built-image)
 2.  [API Endpoints](#2-api-endpoints)
     * [Authentication](#authentication)
     * [User Management](#user-management)
@@ -45,28 +45,7 @@ Before you begin, ensure you have the following installed. **Note**: If you plan
 
 ### Environment Setup
 
-The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project, regardless of whether you're building from source or pulling a pre-built image. Below is an example of the variables you'll need to define.
-
-* **Database Configuration**
-    * **DATABASE_HOST**=localhost
-    * **DATABASE_PORT**=5432
-    * **DATABASE_NAME**=flix_db
-    * **DATABASE_USERNAME**=your_db_user
-    * **DATABASE_PASSWORD**=your_db_password
-
-* **Redis Configuration**
-    * **REDIS_HOST**=localhost
-    * **REDIS_PASSWORD**=your_redis_password
-    * **REDIS_PORT**=6379
-
-* **JWT Configuration**
-    * **SECRET_KEY**=your_super_secret_jwt_key_please_change_this_in_production
-    * **EXPIRATION_TIME**=3600000 # 1 hour
-
-* **Application Port**
-    * **SERVER_PORT**=8081
-
-**Note:** Replace `your_db_user`, `your_db_password`, and `your_super_secret_jwt_key_please_change_this_in_production` with your actual database credentials and a strong, unique JWT secret.
+The API uses environment variables for configuration. You'll need to create a `.env` file in the root directory of the project, regardless of whether you're building from source or pulling a pre-built image. Open env_example.txt and replace the placeholders with your actual values.
 
 ---
 
@@ -571,8 +550,8 @@ This section details all the available API endpoints. All successful responses w
         }
         ```
 * **`GET /api/v1/employee/me` - Get Current Employee's Details (Employee Only)**
-    * **Description:** Retrieves the details of the currently authenticated employee (Admin or Cashier).
-    * **Roles:** Admin, Cashier
+    * **Description:** Retrieves the details of the currently authenticated employee.
+    * **Roles:** Employee
     * **Request Example:** (No request body, uses JWT from header)
         ```
         GET /api/v1/employee/me
@@ -585,7 +564,7 @@ This section details all the available API endpoints. All successful responses w
         ```
 * **`PUT /api/v1/employee/me` - Update Current Employee's Details (Employee Only)**
     * **Description:** Updates the details of the currently authenticated employee.
-    * **Roles:** Admin, Cashier
+    * **Roles:** Employee
     * **Request Example (UpdateEmployeeRequest):**
         ```json
         {
@@ -1443,6 +1422,7 @@ The API implements role-based access control using Spring Security's @PreAuthori
 **ADMIN:** Has full access to all API endpoints.
 **CASHIER:** Has access to endpoints related to product viewing, studio viewing, and transaction viewing.
 **CUSTOMER:** Has access to endpoints related to their own customer profile, product viewing, studio viewing, and creating/viewing their own transactions.
+**EMPLOYEE:** Has access to endpoints related to their own employee profile.
 
 To access protected endpoints, users must include a valid JWT (JSON Web Token) in the Authorization header of their requests, prefixed with Bearer.
 

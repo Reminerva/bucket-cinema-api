@@ -175,6 +175,7 @@ public class EmployeeController {
 
     // employee only //
     @GetMapping("/me")
+    @PreAuthorize(ApiBash.HAS_ROLE_EMPLOYEE)
     public ResponseEntity<CommonResponse<EmployeeResponse>> getMe(
         HttpServletRequest httpServletRequest
     ) {
@@ -187,6 +188,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/me")
+    @PreAuthorize(ApiBash.HAS_ROLE_EMPLOYEE)
     public ResponseEntity<CommonResponse<EmployeeResponse>> updateMe(
         HttpServletRequest httpServletRequest,
         @Valid @RequestBody UpdateEmployeeRequest employeeRequest
