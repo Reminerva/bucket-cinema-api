@@ -1,18 +1,16 @@
-# Gunakan base image OpenJDK 17 slim untuk ukuran yang lebih kecil
-FROM openjdk:17-jdk-slim
-
-# Set working directory di dalam container
+# === Tahap Build ===
+FROM openjdk:17-slim AS build
 WORKDIR /app
 
-# Copy JAR aplikasi Anda ke dalam container.
-# Asumsi nama JAR setelah 'mvn clean package' adalah 'flix-0.0.1-SNAPSHOT.jar'
-# di dalam direktori 'target/'. Pastikan Anda sudah menjalankan perintah build Maven ini.
-COPY target/flix-0.0.1-SNAPSHOT.jar app.jar
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+COPY src/ ./src/
+RUN ./mvnw clean install -DskipTests
 
-# Expose port yang digunakan aplikasi Spring Boot Anda.
-# Berdasarkan file .env Anda, SERVER_PORT adalah 8081.
-EXPOSE 8081
-
-# Command untuk menjalankan aplikasi Spring Boot Anda saat container dimulai.
-# Menggunakan 'java -jar app.jar' akan menjalankan aplikasi sebagai executable JAR.
+# === Tahap Runtime ===
+FROM openjdk:17-slim
+WORKDIR /app
+COPY --from=build /app/target/flix-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

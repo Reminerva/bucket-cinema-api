@@ -1,6 +1,3 @@
-# Versi Docker Compose yang digunakan
-version: '3.8'
-
 # Definisi service-service yang akan dijalankan
 services:
   # Service untuk aplikasi Spring Boot Anda
