@@ -5,11 +5,14 @@ This document provides a comprehensive guide to using the Flix API/Bucket Cinema
 ## Table of Contents
 
 1.  [Getting Started](#1-getting-started)
+    * [API Documentation (Swagger UI)](#api-documentation-swagger-ui)
     * [Prerequisites](#prerequisites)
     * [Environment Setup](#environment-setup)
     * [Running the Application](#running-the-application)
         * [Option A: Running with Docker (Building from Source)](#option-a-running-with-docker-building-from-source)
         * [Option B: Running with Docker Compose (Using Pre-built Image)](#option-b-running-with-docker-compose-using-pre-built-image)
+    * [Initial Data (Seeder)](#initial-data-seeder)
+    * [Postman Collection](#postman-collection)
 2.  [API Endpoints](#2-api-endpoints)
     * [Authentication](#authentication)
     * [User Management](#user-management)
@@ -23,6 +26,20 @@ This document provides a comprehensive guide to using the Flix API/Bucket Cinema
     * [Transaction Management](#transaction-management)
 3.  [Common Responses](#3-common-responses)
 4.  [Roles and Authorization](#4-roles-and-authorization)
+---
+
+## API Documentation (Swagger UI)
+
+You can explore the full API documentation, including all available endpoints, request parameters, and response models, directly through **Swagger UI**.
+
+Once the backend application is running, open your web browser and navigate to:
+
+`http://localhost:8081/swagger-ui/index.html`
+
+This interactive documentation allows you to:
+* View detailed information about each endpoint.
+* Try out API calls directly from the browser (though you'll need to manually add authorization tokens for protected endpoints).
+* Understand the expected request and response formats.
 
 ---
 
@@ -138,6 +155,31 @@ This is the recommended and simplest way to run the Flix API, as it leverages a 
 
     Your API should now be running and accessible at `http://localhost:8081` (or the port you specified in `SERVER_PORT`). To stop all services, run `docker compose down`.
 
+### Initial Data (Seeder)
+
+To facilitate testing and development, this application comes equipped with a **data seeder** that automatically populates the database with initial data when the application first starts (or when `spring.jpa.hibernate.ddl-auto=update` detects schema changes and performs initialization).
+
+This means you **do not need to perform POST requests** to create basic data (such as users, theaters, etc.) if you only want to try GET requests on existing endpoints. Simply run the application, and the initial data will be available.
+
+Here are some important initial data details: To get authenticated as an admin, customer, employee, or cashier user, you can use the following credentials:
+* **Admin User**: `admin@flix.com` / `password` (to obtain admin token)
+* **Customer User**: `budi@example.com` / `password` (to obtain customer token)
+* **Employee User**: `empName1@flix.com` / `password` (to obtain employee token)
+* **Cashier User**: `empName5@flix.com` / `password` (to obtain cashier token)
+
+### Postman Collection
+
+To facilitate testing and interaction with the API, you can import the provided Postman collection.
+
+* **File Location:** `postman_collection/PostmanCollection.postman_collection.json`
+* **How to Import:**
+    1.  Open your Postman application.
+    2.  Click the **"Import"** button in the top left corner.
+    3.  Select the **"File"** tab and click **"Upload Files"**.
+    4.  Navigate to your project directory and select the `PostmanCollection.postman_collection.json` file inside the `postman_collection` folder.
+    5.  Follow the instructions to complete the import process.
+
+This collection contains example requests for various API endpoints, including authentication endpoints, which will be very helpful in understanding how the API works and performing tests. Be sure to update Postman environment variables (such as `baseUrl` and tokens if necessary) to match your environment.
 
 ## 2. API Endpoints
 

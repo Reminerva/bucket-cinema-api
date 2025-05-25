@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "signin",
+			"name": "auth",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -17,7 +17,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\" : \"admin@flix.com\",\r\n    \"password\" : \"password\"\r\n}",
+					"raw": "// {\r\n//     \"email\" : \"admin@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"empName5@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n{\r\n    \"email\" : \"budi@example.com\",\r\n    \"password\" : \"password\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -25,17 +25,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/auth/user/signin",
+					"raw": "http://{{SERVER_PORT}}/api/v1/user/auth/signin",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
-						"auth",
 						"user",
+						"auth",
 						"signin"
 					]
 				}
@@ -43,7 +42,7 @@
 			"response": []
 		},
 		{
-			"name": "auth",
+			"name": "user",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -53,7 +52,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -70,16 +69,62 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/auth",
+					"raw": "http://{{SERVER_PORT}}/api/v1/user",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
-						"auth"
+						"user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin",
+							"disabled": true
+						},
+						{
+							"key": "role",
+							"value": "cashier",
+							"disabled": true
+						},
+						{
+							"key": "role",
+							"value": "admin",
+							"disabled": true
+						},
+						{
+							"key": "customerFullname",
+							"value": "i ",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "name",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": null,
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -96,7 +141,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -105,7 +150,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n    \"fullname\": \"Budi Santoso\",\r\n    \"country\": \"Indonesia\",\r\n    \"phoneNumber\": \"081234567890\",\r\n    \"city\": \"Bandung\",\r\n    \"gender\": \"MALE\",\r\n    \"registrationDate\": \"2025-05-20\",\r\n    \"lastLogin\": \"2025-05-20\",\r\n    \"favGenre\": [\r\n        // \"ACTION\",\r\n        \"COMEDY\"\r\n    ],\r\n    \"likeProductId\": [\r\n        \"prod-001\"\r\n    ],\r\n    \"dislikeProductId\": [\r\n        \"prod-001\"\r\n    ]\r\n},",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -113,16 +158,142 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/customer",
+					"raw": "http://{{SERVER_PORT}}/api/v1/customer",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
 						"customer"
+					],
+					"query": [
+						{
+							"key": "fullname",
+							"value": "Budi",
+							"disabled": true
+						},
+						{
+							"key": "country",
+							"value": "indo",
+							"disabled": true
+						},
+						{
+							"key": "city",
+							"value": "bandung",
+							"disabled": true
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"disabled": true
+						},
+						{
+							"key": "birthDateMin",
+							"value": "1990-01-01",
+							"disabled": true
+						},
+						{
+							"key": "birthDateMax",
+							"value": "1990-01-01",
+							"disabled": true
+						},
+						{
+							"key": "registrationDateMin",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "registrationDateMax",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "lastLoginMin",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "lastLoginMax",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "favGenres",
+							"value": "Action",
+							"disabled": true
+						},
+						{
+							"key": "favGenres",
+							"value": "comedy",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "budi",
+							"disabled": true
+						},
+						{
+							"key": "username",
+							"value": "budi",
+							"disabled": true
+						},
+						{
+							"key": "phoneNumber",
+							"value": "81",
+							"disabled": true
+						},
+						{
+							"key": "likeProductTitle",
+							"value": "avenger",
+							"disabled": true
+						},
+						{
+							"key": "likeProductTitle",
+							"value": "king",
+							"disabled": true
+						},
+						{
+							"key": "likeProductTitle",
+							"value": "inception",
+							"disabled": true
+						},
+						{
+							"key": "dislikeProductTitle",
+							"value": "avenger",
+							"disabled": true
+						},
+						{
+							"key": "dislikeProductTitle",
+							"value": "king",
+							"disabled": true
+						},
+						{
+							"key": "dislikeProductTitle",
+							"value": "inception",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "2",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -139,7 +310,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -156,16 +327,85 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/artist",
+					"raw": "http://{{SERVER_PORT}}/api/v1/artist?inProductTitle=avenger&inProductTitle=king",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
 						"artist"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "gambino",
+							"disabled": true
+						},
+						{
+							"key": "placeOfBirth",
+							"value": "Edwards",
+							"disabled": true
+						},
+						{
+							"key": "inProductTitle",
+							"value": "inception",
+							"disabled": true
+						},
+						{
+							"key": "inProductTitle",
+							"value": "avenger"
+						},
+						{
+							"key": "inProductTitle",
+							"value": "king"
+						},
+						{
+							"key": "artistType",
+							"value": "producer",
+							"disabled": true
+						},
+						{
+							"key": "artistType",
+							"value": "Director",
+							"disabled": true
+						},
+						{
+							"key": "birthDateMin",
+							"value": "1981-01-01",
+							"disabled": true
+						},
+						{
+							"key": "birthDateMax",
+							"value": "1983-01-01",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "20",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "artistType",
+							"value": "actor",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -182,7 +422,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -191,7 +431,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"The Lion King\",\r\n    \"duration\": 118,\r\n    \"language\": \"English\",\r\n    \"country\": \"United States\",\r\n    \"releaseDate\": \"1994-06-24\",\r\n    \"posterUrl\": \"https://example.com/lionking_poster.png\",\r\n    \"trailerUrl\": \"https://example.com/lionking_trailer.mp4\",\r\n    \"rated\": \"G\",\r\n    \"budget\": 45000000,\r\n    \"synopsis\": \"A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.\",\r\n    \"tagline\": \"Hakuna Matata.\",\r\n    \"imdbRating\": 8.5,\r\n    \"rottenTomatoesRating\": 93,\r\n    \"director\": \"Roger Allers, Rob Minkoff\",\r\n    \"writer\": \"Irene Mecchi, Jonathan Roberts, Linda Woolverton\",\r\n    \"producer\": \"Don Hahn\",\r\n    \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n    \"movieGenre\": [\r\n        \"Animation\",\r\n        \"Adventure\"\r\n    ],\r\n    \"artistId\": [],\r\n    \"customerLikeId\": null,\r\n    \"customerDislikeId\": null,\r\n    \"showingOnTheaters\": [\r\n        \"theater-001\",\r\n        \"theater-002\"\r\n    ]\r\n}",
+					"raw": "{\r\n    \"title\": \"\",\r\n    \"duration\": 118,\r\n    \"language\": \"English\",\r\n    \"country\": \"United States\",\r\n    \"releaseDate\": \"1994-06-24\",\r\n    \"posterUrl\": \"https://example.com/lionking_poster.png\",\r\n    \"trailerUrl\": \"https://example.com/lionking_trailer.mp4\",\r\n    \"rated\": \"G\",\r\n    \"budget\": 45000000,\r\n    \"synopsis\": \"A young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.\",\r\n    \"tagline\": \"Hakuna Matata.\",\r\n    \"imdbRating\": 8.5,\r\n    \"rottenTomatoesRating\": 93,\r\n    \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n    \"movieGenre\": [\r\n        \"Animation\",\r\n        \"Adventure\"\r\n    ],\r\n    \"artistId\": [],\r\n    \"customerLikeId\": null,\r\n    \"customerDislikeId\": null,\r\n    \"showingOnTheaters\": [\r\n        \"theater-001\",\r\n        \"theater-002\"\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,16 +439,157 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/product",
+					"raw": "http://{{SERVER_PORT}}/api/v1/product",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
 						"product"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "Avengers",
+							"disabled": true
+						},
+						{
+							"key": "durationMin",
+							"value": "180",
+							"disabled": true
+						},
+						{
+							"key": "durationMax",
+							"value": "148",
+							"disabled": true
+						},
+						{
+							"key": "language",
+							"value": "english",
+							"disabled": true
+						},
+						{
+							"key": "country",
+							"value": "United states",
+							"disabled": true
+						},
+						{
+							"key": "releaseDateMin",
+							"value": "2010-07-16",
+							"disabled": true
+						},
+						{
+							"key": "releaseDateMax",
+							"value": "2010-07-16",
+							"disabled": true
+						},
+						{
+							"key": "rated",
+							"value": "pG-13",
+							"disabled": true
+						},
+						{
+							"key": "budgetMin",
+							"value": "45000000",
+							"disabled": true
+						},
+						{
+							"key": "budgetMax",
+							"value": "45000000",
+							"disabled": true
+						},
+						{
+							"key": "imdbRatingMin",
+							"value": "8.8",
+							"disabled": true
+						},
+						{
+							"key": "imdbRatingMax",
+							"value": "8.5",
+							"disabled": true
+						},
+						{
+							"key": "rottenTomatoesRatingMin",
+							"value": "93",
+							"disabled": true
+						},
+						{
+							"key": "rottenTomatoesRatingMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "movieGenre",
+							"value": "Action",
+							"disabled": true
+						},
+						{
+							"key": "movieGenre",
+							"value": "science fiction",
+							"disabled": true
+						},
+						{
+							"key": "productPricingMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productPricingMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "lastUpdatedMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "lastUpdatedMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "artistsName",
+							"value": "robert",
+							"disabled": true
+						},
+						{
+							"key": "artistsName",
+							"value": "chris",
+							"disabled": true
+						},
+						{
+							"key": "artistsName",
+							"value": "gambino",
+							"disabled": true
+						},
+						{
+							"key": "productionCompany",
+							"value": "marvel",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": "",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -225,7 +606,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -242,16 +623,102 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/production-company",
+					"raw": "http://{{SERVER_PORT}}/api/v1/production-company",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
 						"production-company"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "vel",
+							"disabled": true
+						},
+						{
+							"key": "originCountry",
+							"value": "United States",
+							"disabled": true
+						},
+						{
+							"key": "foundedYearMin",
+							"value": "1993-01-01",
+							"disabled": true
+						},
+						{
+							"key": "foundedYearMax",
+							"value": "1993-01-01",
+							"disabled": true
+						},
+						{
+							"key": "headquarters",
+							"value": "Burbank",
+							"disabled": true
+						},
+						{
+							"key": "ceo",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMin",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMax",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "hasProducts",
+							"value": "king",
+							"disabled": true
+						},
+						{
+							"key": "hasProducts",
+							"value": "incep",
+							"disabled": true
+						},
+						{
+							"key": "hasProducts",
+							"value": "avenger",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -268,7 +735,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
@@ -277,7 +744,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"CGV Bandung Electronic Center\",\r\n    \"city\": \"Bandung\",\r\n    \"address\": \"Jl. Purnawarman No.13-15\",\r\n    \"contactNumber\": \"022-82060901\",\r\n    \"contactEmail\": \"bec@cgv.id\",\r\n    \"oprationalStatus\": true,\r\n    \"studiosId\": [\r\n        \"studio-001\",\r\n        \"studio-002\"\r\n    ],\r\n    \"nowShowingId\": [\r\n            \"prod-001\",\r\n            \"prod-002\"\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\": \"CGV Bandung Electronic Center\",\r\n    \"city\": \"Bandung\",\r\n    \"address\": \"Jl. Purnawarman No.13-15\",\r\n    \"contactNumber\": \"022-82060901\",\r\n    \"contactEmail\": \"bec@cgv.id\",\r\n    \"oprationalStatus\": true,\r\n    \"studiosId\": [\r\n        \"studio-001\",\r\n        \"studio-002\"\r\n    ],\r\n    \"nowShowingId\": [\r\n        \"prod-001\",\r\n        \"prod-002\",\r\n        \"prod-003\"\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -285,16 +752,117 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/theater",
+					"raw": "http://{{SERVER_PORT}}/api/v1/theater",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
 						"theater"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "cgv",
+							"disabled": true
+						},
+						{
+							"key": "city",
+							"value": "band",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "cihampelas",
+							"disabled": true
+						},
+						{
+							"key": "contactNumber",
+							"value": "02220610",
+							"disabled": true
+						},
+						{
+							"key": "contactEmail",
+							"value": "ciwalk",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMin",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMax",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMin",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMax",
+							"value": "2025-05-23",
+							"disabled": true
+						},
+						{
+							"key": "oprationalStatus",
+							"value": "false",
+							"disabled": true
+						},
+						{
+							"key": "employeesName",
+							"value": "panda",
+							"disabled": true
+						},
+						{
+							"key": "employeesName",
+							"value": "beruang",
+							"disabled": true
+						},
+						{
+							"key": "employeesName",
+							"value": "kucing",
+							"disabled": true
+						},
+						{
+							"key": "productsTitle",
+							"value": "avenger",
+							"disabled": true
+						},
+						{
+							"key": "productsTitle",
+							"value": "king",
+							"disabled": true
+						},
+						{
+							"key": "productsTitle",
+							"value": "inception",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "12",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": "",
+							"disabled": true
+						}
 					]
 				}
 			},
@@ -302,22 +870,25 @@
 		},
 		{
 			"name": "studio",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDc3NjAyNzF9.KPZcw__bb-eKqxz7i3-ajY8TnKkX--v6er5450yEbYNuI8MtsmHLtEmBrLUMB_P3KKNCU3lwhGVSIXYX6nQMJQ",
+							"value": "{{token admin}}",
 							"type": "string"
 						}
 					]
 				},
-				"method": "PUT",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"Studio 1\",\r\n    \"studioSize\" : \"REGULER SMALL\",\r\n    \"seatLayout\": [\r\n        \"A1\",\r\n        \"A2\",\r\n        \"B1\",\r\n        \"B2\"\r\n    ],\r\n    \"studioSeatScheduleRequests\" : [\r\n        {\r\n            \"studioId\": \"studio-001\",\r\n            \"productSchedulingId\": \"psched-001\",\r\n            \"bookedSeat\": [\r\n                // \"A1\"\r\n            ],\r\n            \"availableSeat\": [\r\n                \"A1\",\r\n                \"A2\",\r\n                \"B1\",\r\n                \"B2\"\r\n            ]\r\n        }\r\n        ,\r\n        {\r\n            \"studioId\": \"studio-001\",\r\n            \"productSchedulingId\": \"psched-002\",\r\n            \"bookedSeat\": [\r\n                // \"A1\"\r\n            ],\r\n            \"availableSeat\": [\r\n                \"A1\",\r\n                \"A2\",\r\n                \"B1\",\r\n                \"B2\"\r\n            ]\r\n        }\r\n    ],\r\n    \"productPricingRequests\": [\r\n        {\r\n            \"weekdayPrice\": 45000.0,\r\n            \"weekendPrice\": 65000.0,\r\n            \"isPriceActive\": true,\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"weekdayPrice\": 51000.0,\r\n        //     \"weekendPrice\": 70000.0,\r\n        //     \"isPriceActive\": true,\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n    ],\r\n    \"productSchedulingRequests\": [\r\n        {\r\n            \"schedule\": \"15:00\",\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"16:00\",\r\n        //     \"productId\": \"prod-002\"\r\n        // }\r\n        ,\r\n        {\r\n            \"schedule\": \"17:00\",\r\n            \"productId\": \"prod-002\"\r\n        }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"19:00\",\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n        // ,\r\n        // {\r\n        //     \"schedule\": \"19:00\",\r\n        //     \"productId\": \"prod-003\"\r\n        // }\r\n    ]\r\n}",
+					"raw": "{\r\n    // \"name\" : \"abc\",\r\n    // \"theaterId\": \"theater-001\",\r\n    // \"studioSize\" : \"REGULER SMALL\",\r\n    // \"seatLayout\": [\r\n    //     \"A1\",\r\n    //     \"A2\",\r\n    //     \"B1\",\r\n    //     \"B2\"\r\n    // ],\r\n    // \"studioSeatScheduleRequests\" : [\r\n    //     {\r\n    //         \"studioId\": \"studio-001\",\r\n    //         \"productSchedulingId\": \"psched-001\",\r\n    //         \"bookedSeat\": [\r\n    //             // \"A1\"\r\n    //         ],\r\n    //         \"availableSeat\": [\r\n    //             // \"A1\",\r\n    //             \"A2\",\r\n    //             \"B1\",\r\n    //             \"B2\"\r\n    //         ]\r\n    //     }\r\n    //     // ,\r\n    //     // {\r\n    //     //     \"studioId\": \"studio-001\",\r\n    //     //     \"productSchedulingId\": \"psched-001\",\r\n    //     //     \"bookedSeat\": [\r\n    //     //         // \"A1\"\r\n    //     //     ],\r\n    //     //     \"availableSeat\": [\r\n    //     //         \"A1\",\r\n    //     //         \"A2\",\r\n    //     //         \"B1\",\r\n    //     //         \"B2\"\r\n    //     //     ]\r\n    //     // }\r\n    //     ,\r\n    //     {\r\n    //         \"studioId\": \"studio-001\",\r\n    //         \"productSchedulingId\": \"psched-002\",\r\n    //         \"bookedSeat\": [\r\n    //             // \"A1\"\r\n    //         ],\r\n    //         \"availableSeat\": [\r\n    //             \"A1\",\r\n    //             \"A2\",\r\n    //             \"B1\",\r\n    //             \"B2\"\r\n    //         ]\r\n    //     }\r\n    // ],\r\n    // \"productPricingRequests\": [\r\n    //     {\r\n    //         \"weekdayPrice\": 45000.0,\r\n    //         \"weekendPrice\": 65000.0,\r\n    //         \"isPriceActive\": true,\r\n    //         \"productId\": \"prod-002\"\r\n    //     }\r\n    //     // ,\r\n    //     // {\r\n    //     //     \"weekdayPrice\": 51000.0,\r\n    //     //     \"weekendPrice\": 70000.0,\r\n    //     //     \"isPriceActive\": true,\r\n    //     //     \"productId\": \"prod-003\"\r\n    //     // }\r\n    // ],\r\n    // \"productSchedulingRequests\": [\r\n    //     {\r\n    //         \"schedule\": \"15:00\",\r\n    //         \"productId\": \"prod-002\"\r\n    //     }\r\n    //     // ,\r\n    //     // {\r\n    //     //     \"schedule\": \"16:00\",\r\n    //     //     \"productId\": \"prod-002\"\r\n    //     // }\r\n    //     ,\r\n    //     {\r\n    //         \"schedule\": \"17:00\",\r\n    //         \"productId\": \"prod-002\"\r\n    //     }\r\n    //     // ,\r\n    //     // {\r\n    //     //     \"schedule\": \"19:00\",\r\n    //     //     \"productId\": \"prod-003\"\r\n    //     // }\r\n    //     // ,\r\n    //     // {\r\n    //     //     \"schedule\": \"19:00\",\r\n    //     //     \"productId\": \"prod-003\"\r\n    //     // }\r\n    // ]\r\n}\r\n// {\r\n//     // \"seatLayout\": [\r\n//     //     \"C1\",\r\n//     //     \"C2\",\r\n//     //     \"D1\"\r\n//     // ]\r\n// }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -325,17 +896,375 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/api/v1/studio/studio-001",
+					"raw": "http://{{SERVER_PORT}}/api/v1/studio",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER_PORT}}"
 					],
-					"port": "8081",
 					"path": [
 						"api",
 						"v1",
-						"studio",
-						"studio-001"
+						"studio"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "isActive",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "studioSize",
+							"value": "Reguler small",
+							"disabled": true
+						},
+						{
+							"key": "theaterName",
+							"value": "CGV",
+							"disabled": true
+						},
+						{
+							"key": "theaterCity",
+							"value": "bandung",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employee",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "// {\r\n//     \"fullname\": \"Beruangg\",\r\n//     \"nikNumber\": \"8888888888888888\",\r\n//     \"address\": \"Jl. Raya Jakarta\",\r\n//     \"phoneNumber\": \"089876543210\",\r\n//     \"gender\": \"FEMALE\",\r\n//     \"city\": \"Jakarta\",\r\n//     \"dateOfBirth\": \"1995-05-05\",\r\n//     \"dateOfAppliment\": \"2025-05-19\",\r\n//     \"theaterId\": \"theater-002\",\r\n//     \"username\": \"Beruang\",\r\n//     \"email\": \"beruang@gmail.com\",\r\n//     \"password\": \"password\"\r\n// }\r\n{\r\n    \"theaterId\": \"theater-001\",\r\n    \"username\": \"Beruang\",\r\n    \"email\": \"beruangg@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SERVER_PORT}}/api/v1/employee",
+					"protocol": "http",
+					"host": [
+						"{{SERVER_PORT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"employee"
+					],
+					"query": [
+						{
+							"key": "fullname",
+							"value": "ber",
+							"disabled": true
+						},
+						{
+							"key": "nikNumber",
+							"value": "111",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "jl",
+							"disabled": true
+						},
+						{
+							"key": "phoneNumber",
+							"value": "155",
+							"disabled": true
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"disabled": true
+						},
+						{
+							"key": "city",
+							"value": "york",
+							"disabled": true
+						},
+						{
+							"key": "isActive",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "dateOfBirthMin",
+							"value": "1990-01-01",
+							"disabled": true
+						},
+						{
+							"key": "dateOfBirthMax",
+							"value": "1990-01-01",
+							"disabled": true
+						},
+						{
+							"key": "dateOfApplimentMin",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "dateOfApplimentMax",
+							"value": "2025-01-01",
+							"disabled": true
+						},
+						{
+							"key": "appUserUsername",
+							"value": "empName",
+							"disabled": true
+						},
+						{
+							"key": "appUserEmail",
+							"value": "empName2",
+							"disabled": true
+						},
+						{
+							"key": "theaterName",
+							"value": "CGV Bandung Electronic Center",
+							"disabled": true
+						},
+						{
+							"key": "theaterCity",
+							"value": "Bandung",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"theaterId\": \"theater-001\",\r\n    \"studioId\": \"studio-001\",\r\n    \"productId\": \"prod-001\",\r\n    \"productPricingId\": \"pprice-001\",\r\n    \"productSchedulingId\": \"psched-001\",\r\n    \"qty\": 1,\r\n    \"tax\": 10,\r\n    \"transactionDateTime\": \"2025-12-12 12:10:12\",\r\n    \"watchDate\": \"2025-12-12\",\r\n    \"paymentDateTime\": \"2025-12-12 12:12:12\",\r\n    \"paymentMethod\": \"CASH\",\r\n    \"paymentStatus\": \"FAILED\",\r\n    \"seats\": [\r\n        \"A1\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{SERVER_PORT}}/api/v1/transaction",
+					"protocol": "http",
+					"host": [
+						"{{SERVER_PORT}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"transaction"
+					],
+					"query": [
+						{
+							"key": "customerName",
+							"value": "a",
+							"disabled": true
+						},
+						{
+							"key": "employeeName",
+							"value": "a",
+							"disabled": true
+						},
+						{
+							"key": "theaterName",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "studioName",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productTitle",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productPriceMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productPriceMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "productSchedule",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "qtyMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "qtyMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "tax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "transactionDateTimeMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "transactionDateTimeMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "watchDateMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "watchDateMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paymentStatus",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paymentDateTimeMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paymentDateTimeMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paymentMethod",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "seats",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "createdAtMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "updatedAtMax",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "expirationDateMin",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "expirationDateMax",
+							"value": null,
+							"disabled": true
+						}
 					]
 				}
 			},
