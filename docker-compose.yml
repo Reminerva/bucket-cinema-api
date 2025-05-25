@@ -16,6 +16,7 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       SECRET_KEY: ${SECRET_KEY}
       EXPIRATION_TIME: ${EXPIRATION_TIME}
+      FRONTEND_URL: ${FRONTEND_URL}
     depends_on:
       - db
       - redis
