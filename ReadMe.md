@@ -276,7 +276,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>User Management</b></summary>
+<summary><h2>User Management</h2></summary>
 
 **User Base Path:** `/api/v1/user`
 
@@ -305,7 +305,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Customer Management</b></summary>
+<summary><h2>Customer Management</h2></summary>
 
 **Customer Base Path:** `/api/v1/customer`
 
@@ -468,7 +468,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Employee Management</b></summary>
+<summary><h2>Employee Management</h2></summary>
 
 **Employee Base Path:** `/api/v1/employee`
 
@@ -666,7 +666,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Artist Management</b></summary>
+<summary><h2>Artist Management</h2></summary>
 
 **Artist Base Path:** `/api/v1/artist`
 
@@ -769,7 +769,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Production Company Management</b></summary>
+<summary><h2>Production Company Management</h2></summary>
 
 **Production Company Base Path:** `/api/v1/production-company`
 
@@ -885,7 +885,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Product Management</b></summary>
+<summary><h2>Product Management</h2></summary>
 
 **Product Base Path:** `/api/v1/product`
 
@@ -1039,7 +1039,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Theater Management</b></summary>
+<summary><h2>Theater Management</h2></summary>
 
 **Theater Base Path:** `/api/v1/theater`
 
@@ -1161,7 +1161,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Studio Management</b></summary>
+<summary><h2>Studio Management</h2></summary>
 
 **Studio Base Path:** `/api/v1/studio`
 
@@ -1318,7 +1318,7 @@ This section details all the available API endpoints. All successful responses w
 </details>
 
 <details>
-<summary><b>Transaction Management</b></summary>
+<summary><h2>Transaction Management</h2></summary>
 
 **Transaction Base Path:** `/api/v1/transaction`
 
