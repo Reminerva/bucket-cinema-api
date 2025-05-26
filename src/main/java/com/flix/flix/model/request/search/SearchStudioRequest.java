@@ -24,8 +24,12 @@ public class SearchStudioRequest {
     private String theaterCity;
     private List<String> seatLayout;
 
-    private Integer page;
-    private Integer size;
-    private String sortBy;
-    private String direction;
+    @Builder.Default
+    private Integer page = 0;
+    @Builder.Default
+    private Integer size = 10;
+    @Builder.Default
+    private String sortBy = "name";
+    @Builder.Default
+    private String direction = "asc";
 }

@@ -2,6 +2,7 @@ package com.flix.flix.global_exception_handler;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.flix.flix.constant.ApiBash;
+import com.flix.flix.constant.DbBash;
 import com.flix.flix.model.response.CommonResponse;
 
 import org.springframework.http.HttpStatus;
@@ -68,9 +69,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<CommonResponse<List<Object>>> handleRuntimeException(RuntimeException ex) {
-        CommonResponse<List<Object>> response = CommonResponse.<List<Object>>builder()
+        String message = ex.getMessage();
+        if (ex.getMessage().contains(DbBash.ALREADY_EXISTS_CONSTRAINT)) {
+            if (ex.getMessage().contains(DbBash.EMAIL_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.EMAIL_ALREADY_EXISTS);};
+            if (ex.getMessage().contains(DbBash.USERNAME_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.USERNAME_ALREADY_EXISTS);};
+            if (ex.getMessage().contains(DbBash.NIK_NUMBER_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.NIK_NUMBER_ALREADY_EXISTS);};
+        }
+        if (ex.getMessage().contains(DbBash.IS_STILL_REFERENCED_CONSTRAINT)) {
+            String[] messages = message.split(" ");
+            message = messages[18].substring(1, messages[18].length() - 2);
+            message = (DbBash.IS_STILL_REFERENCED + ": " + message);
+        };
+            CommonResponse<List<Object>> response = CommonResponse.<List<Object>>builder()
             .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-            .message("ERROR" + "! " + ex.getMessage())
+            .message("ERROR" + "! " + message)
             .data(Collections.emptyList())
             .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

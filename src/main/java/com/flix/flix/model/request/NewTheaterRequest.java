@@ -1,5 +1,6 @@
 package com.flix.flix.model.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +27,10 @@ public class NewTheaterRequest {
     private String contactNumber;
     @NotBlank(message = "contact email is required")
     private String contactEmail;
-    private Boolean oprationalStatus;
-    private List<String> studiosId;
-    private List<String> nowShowingId;
+    @Builder.Default
+    private Boolean oprationalStatus = true;
+    @Builder.Default
+    private List<String> studiosId = new ArrayList<>();
+    @Builder.Default
+    private List<String> nowShowingId = new ArrayList<>();
 }

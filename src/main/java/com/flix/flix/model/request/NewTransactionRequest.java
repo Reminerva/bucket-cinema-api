@@ -41,7 +41,7 @@ public class NewTransactionRequest {
     private String paymentDateTime;
     @NotBlank(message = "payment method is required")
     private String paymentMethod;
-    private String paymentStatus;
     @NotEmpty(message = "seats is required")
     private List<String> seats;
+    private String paymentStatus;
 }

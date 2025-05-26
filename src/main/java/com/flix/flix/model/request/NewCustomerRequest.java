@@ -1,10 +1,10 @@
 package com.flix.flix.model.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,11 +33,14 @@ public class NewCustomerRequest {
     private String birthDate;
     private String registrationDate;
     private String lastLogin;
-    private List<String> favGenre;
-    private List<String> likeProductId;
-    private List<String> dislikeProductId;
+    @Builder.Default
+    private List<String> favGenre = new ArrayList<>();
+    @Builder.Default
+    private List<String> likeProductId = new ArrayList<>();
+    @Builder.Default
+    private List<String> dislikeProductId = new ArrayList<>();
     @NotBlank(message = "username is required")
-    @Size(min = 5, max = 20, message = "Username must be between 3 and 20 characters")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
     @NotBlank(message = "email is required")
     @Email
@@ -45,7 +48,5 @@ public class NewCustomerRequest {
     @NotBlank(message = "password is required")
     @Size(min = 6, max = 40, message = "Password must be between 6 and 40 characters")
     private String password;
-    @NotEmpty(message = "role is required")
-    private List<String> role;
 
 }

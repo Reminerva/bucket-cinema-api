@@ -222,16 +222,11 @@ This section details all the available API endpoints. All successful responses w
         ```json
         {
             "fullname": "John Doe",
-            "country": "USA",
+            "country": "United States",
             "phoneNumber": "1234567890",
             "city": "New York",
             "gender": "MALE",
             "birthDate": "1990-01-15",
-            "registrationDate": "2023-01-01",
-            "lastLogin": "2023-01-01",
-            "favGenre": ["Action", "Comedy"],
-            "likeProductId": [],
-            "dislikeProductId": [],
             "username": "johndoe123",
             "email": "john.doe@example.com",
             "password": "securepassword123"
@@ -240,7 +235,26 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 201,
+            "message": "Sign up success",
+            "data": {
+                "id": "1dd24fb0-9c9c-4dc5-b29a-adf6286e8865",
+                "userAppId": "a3b3ad25-b89c-403e-85ae-e5522e7eab8b",
+                "userAppUsername": "johndoe123",
+                "userAppEmail": "john.doe@example.com",
+                "fullname": "John Doe",
+                "birthDate": "1990-01-15",
+                "country": "United States",
+                "phoneNumber": "1234567890",
+                "city": "New York",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [],
+                "likeProductId": [],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 * **`POST {Auth Base Path}/signin` - User Login**
@@ -256,7 +270,15 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 202,
+            "message": "Sign in success",
+            "data": {
+                "accountId": "admin-001",
+                "email": "admin@flix.com",
+                "token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDg2MjQ0MDB9.Jbex-GNi-JRUm3e6GLB__KA-kEcOWXzrl5YXs4vgTgxcKmag2HSl0Kr4bUEJE-8ECHazY4Qv6p_vy-y9ypvgHQ",
+                "role": "[ROLE_ADMIN]"
+            },
+            "paging": null
         }
         ```
 * **`POST {Auth Base Path}/signout` - User Logout**
@@ -269,10 +291,15 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Sign out success",
+            "data": {
+                "statusMessage": "Logout successful",
+                "accessToken": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkBmbGl4LmNvbSIsInJvbGUiOiJbUk9MRV9BRE1JTl0iLCJleHAiOjE3NDg2MjQ0MDB9.Jbex-GNi-JRUm3e6GLB__KA-kEcOWXzrl5YXs4vgTgxcKmag2HSl0Kr4bUEJE-8ECHazY4Qv6p_vy-y9ypvgHQ"
+            },
+            "paging": null
         }
         ```
-</details>
 </details>
 
 <details>
@@ -293,13 +320,30 @@ This section details all the available API endpoints. All successful responses w
         * `customerFullname` (optional): Filter by customer's full name.
         * `role` (optional, can be multiple): Filter by user role (e.g., `ADMIN`, `CUSTOMER`, `CASHIER`).
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Get all user success!",
+            "data": [
+                {
+                    "id": "admin-001",
+                    "username": "admin",
+                    "email": "admin@flix.com",
+                    "role": [
+                        "ROLE_ADMIN"
+                    ],
+                    "customerFullname": ""
+                }
+            ],
+            "paging": {
+                "totalPages": 2,
+                "totalElement": 11,
+                "page": 1,
+                "size": 10,
+                "hasNext": true,
+                "hasPrevious": false
+            }
         }
         ```
 </details>
@@ -315,26 +359,40 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewCustomerRequest):**
         ```json
         {
-            "fullname": "Jane Smith",
-            "country": "Canada",
-            "phoneNumber": "1987654321",
-            "city": "Toronto",
-            "gender": "FEMALE",
-            "birthDate": "1995-05-20",
-            "registrationDate": "2024-01-10",
-            "lastLogin": "2024-01-10",
-            "favGenre": ["Drama"],
-            "likeProductId": [],
-            "dislikeProductId": [],
-            "username": "janesmith",
-            "email": "jane.smith@example.com",
-            "password": "anothersecurepassword"
+            "fullname": "John Doe",
+            "country": "United States",
+            "phoneNumber": "1234567890",
+            "city": "New York",
+            "gender": "MALE",
+            "birthDate": "1990-01-15",
+            "username": "johndoe123",
+            "email": "john.doe@example.com",
+            "password": "securepassword123"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 201,
+            "message": "Customer created successfully!",
+            "data": {
+                "id": "71d8cd4b-94dc-40f0-9da6-7a05e60d4417",
+                "userAppId": "8f7a59a3-a76a-456a-88ff-4c8ddb84520f",
+                "userAppUsername": "johndoe123",
+                "userAppEmail": "john.doe@example.com",
+                "fullname": "John Doe",
+                "birthDate": "1990-01-15",
+                "country": "United States",
+                "phoneNumber": "1234567890",
+                "city": "New York",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [],
+                "likeProductId": [],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 * **`GET {Customer Base Path}` - Get All Customers (Admin Only)**
@@ -361,13 +419,45 @@ This section details all the available API endpoints. All successful responses w
         * `likeProductTitle` (optional): Filter by products liked by the customer (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
         * `dislikeProductTitle` (optional): Filter by products disliked by the customer (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<CustomerResponse> with pagination)
+            "code": 200,
+            "message": "Get all customer success!",
+            "data": [
+                {
+                    "id": "cust-001",
+                    "userAppId": "user-001",
+                    "userAppUsername": "budi",
+                    "userAppEmail": "budi@example.com",
+                    "fullname": "Budi Santoso",
+                    "birthDate": "1990-01-01",
+                    "country": "Indonesia",
+                    "phoneNumber": "081234567890",
+                    "city": "Bandung",
+                    "gender": "Male",
+                    "registrationDate": "2025-05-26",
+                    "lastLogin": "2025-05-26",
+                    "favGenre": [
+                        "Action",
+                        "Comedy"
+                    ],
+                    "likeProductId": [
+                        "prod-001",
+                        "prod-002",
+                        "prod-003"
+                    ],
+                    "dislikeProductId": []
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 4,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Customer Base Path}/{id}` - Get Customer By ID (Admin, Cashier, Customer)**
@@ -376,13 +466,36 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the customer.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 200,
+            "message": "Get customer success!",
+            "data": {
+                "id": "cust-001",
+                "userAppId": "user-001",
+                "userAppUsername": "budi",
+                "userAppEmail": "budi@example.com",
+                "fullname": "Budi Santoso",
+                "birthDate": "1990-01-01",
+                "country": "Indonesia",
+                "phoneNumber": "081234567890",
+                "city": "Bandung",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [
+                    "Action",
+                    "Comedy"
+                ],
+                "likeProductId": [
+                    "prod-001",
+                    "prod-002",
+                    "prod-003"
+                ],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 * **`PUT {Customer Base Path}/{id}` - Update Customer By ID (Admin Only)**
@@ -390,26 +503,59 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Path Parameters:**
         * `id` (string, required): The ID of the customer to update.
-    * **Request Example (UpdateCustomerRequest - Assuming it has similar fields to NewCustomerRequest but all optional):**
+    * **Request Example (UpdateCustomerRequest):**
         ```json
         {
-            "fullname": "Jane Smith",
-            "country": "Canada",
-            "phoneNumber": "1987654321",
-            "city": "Toronto",
-            "gender": "FEMALE",
-            "birthDate": "1995-05-20",
-            "registrationDate": "2024-01-10",
-            "lastLogin": "2024-01-10",
-            "favGenre": ["Drama"],
-            "likeProductId": [],
+            "fullname": "Budi Santoso",
+            "birthDate": "1990-01-01",
+            "country": "Indonesia",
+            "phoneNumber": "081234567890",
+            "city": "Bandung",
+            "gender": "Male",
+            "registrationDate": "2025-05-26",
+            "lastLogin": "2025-05-26",
+            "favGenre": [
+                "Action",
+                "Comedy"
+            ],
+            "likeProductId": [
+                "prod-001",
+                "prod-002",
+                "prod-003"
+            ],
             "dislikeProductId": []
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 200,
+            "message": "Customer updated successfully!",
+            "data": {
+                "id": "cust-001",
+                "userAppId": "user-001",
+                "userAppUsername": "budi",
+                "userAppEmail": "budi@example.com",
+                "fullname": "Budi Santoso",
+                "birthDate": "1990-01-01",
+                "country": "Indonesia",
+                "phoneNumber": "081234567890",
+                "city": "Bandung",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [
+                    "Action",
+                    "Comedy"
+                ],
+                "likeProductId": [
+                    "prod-001",
+                    "prod-002",
+                    "prod-003"
+                ],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Customer Base Path}/{id}` - Delete Customer By ID (Admin Only)**
@@ -418,26 +564,49 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the customer to delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 200,
+            "message": "Customer deleted successfully!",
+            "data": null,
+            "paging": null
         }
         ```
 * **`GET {Customer Base Path}/me` - Get Current Customer's Details (Customer Only)**
     * **Description:** Retrieves the details of the currently authenticated customer.
     * **Roles:** Customer
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 200,
+            "message": "Get customer success!",
+            "data": {
+                "id": "cust-001",
+                "userAppId": "user-001",
+                "userAppUsername": "budi",
+                "userAppEmail": "budi@example.com",
+                "fullname": "Budi Santoso",
+                "birthDate": "1990-01-01",
+                "country": "Indonesia",
+                "phoneNumber": "081234567890",
+                "city": "Bandung",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [
+                    "Action",
+                    "Comedy"
+                ],
+                "likeProductId": [
+                    "prod-001",
+                    "prod-002",
+                    "prod-003"
+                ],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 * **`PUT {Customer Base Path}/me` - Update Current Customer's Details (Customer Only)**
@@ -446,23 +615,56 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (UpdateCustomerRequest):**
         ```json
         {
-            "fullname": "Jane Smith",
-            "country": "Canada",
-            "phoneNumber": "1987654321",
-            "city": "Toronto",
-            "gender": "FEMALE",
-            "birthDate": "1995-05-20",
-            "registrationDate": "2024-01-10",
-            "lastLogin": "2024-01-10",
-            "favGenre": ["Drama"],
-            "likeProductId": [],
+            "fullname": "Budi Santoso",
+            "birthDate": "1990-01-01",
+            "country": "Indonesia",
+            "phoneNumber": "081234567890",
+            "city": "Bandung",
+            "gender": "Male",
+            "registrationDate": "2025-05-26",
+            "lastLogin": "2025-05-26",
+            "favGenre": [
+                "Action",
+                "Comedy"
+            ],
+            "likeProductId": [
+                "prod-001",
+                "prod-002",
+                "prod-003"
+            ],
             "dislikeProductId": []
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(CustomerResponse)
+            "code": 200,
+            "message": "Customer updated successfully!",
+            "data": {
+                "id": "cust-001",
+                "userAppId": "user-001",
+                "userAppUsername": "budi",
+                "userAppEmail": "budi@example.com",
+                "fullname": "Budi Santoso",
+                "birthDate": "1990-01-01",
+                "country": "Indonesia",
+                "phoneNumber": "081234567890",
+                "city": "Bandung",
+                "gender": "Male",
+                "registrationDate": "2025-05-26",
+                "lastLogin": "2025-05-26",
+                "favGenre": [
+                    "Action",
+                    "Comedy"
+                ],
+                "likeProductId": [
+                    "prod-001",
+                    "prod-002",
+                    "prod-003"
+                ],
+                "dislikeProductId": []
+            },
+            "paging": null
         }
         ```
 </details>
@@ -478,24 +680,43 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewEmployeeRequest):**
         ```json
         {
-            "fullname": "Jane Smith",
-            "nikNumber": "1111111111111111",
-            "address": "123 Main St",
-            "phoneNumber": "1987654321",
+            "fullname": "Jane",
+            "nikNumber": "8888888888888888",
+            "address": "Jl. Raya Jakarta",
+            "phoneNumber": "089876543210",
             "gender": "FEMALE",
-            "city": "Toronto",
-            "dateOfBirth": "1995-05-20",
-            "theaterId": "theater-001",
-            "dateOfAppliment": "2024-01-10",
-            "username": "janesmith",
-            "email": "jane.smith@example.com",
-            "password": "anothersecurepassword"
+            "city": "Jakarta",
+            "dateOfBirth": "1995-05-05",
+            "dateOfAppliment": "2025-05-19",
+            "theaterId": "theater-002",
+            "username": "Jane",
+            "email": "jane@gmail.com",
+            "password": "password"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 201,
+            "message": "Employee created successfully!",
+            "data": {
+                "id": "c3bca552-060d-4a28-bf3c-18e8f646d452",
+                "fullname": "Jane",
+                "nikNumber": "8888888888888888",
+                "address": "Jl. Raya Jakarta",
+                "phoneNumber": "089876543210",
+                "gender": "GENDER_FEMALE",
+                "city": "Jakarta",
+                "dateOfBirth": "1995-05-05",
+                "dateOfAppliment": "2025-05-19",
+                "appUserId": "941acf5b-b157-4c4e-868e-ff557871a520",
+                "appUserUsername": "Jane",
+                "appUserEmail": "jane@gmail.com",
+                "theaterId": "theater-002",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 * **`POST {Employee Base Path}/admin` - Create New Admin (Admin Only)**
@@ -504,15 +725,22 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewAdminRequest):**
         ```json
         {
-            "username": "adminUser",
-            "email": "admin@example.com",
-            "password": "adminpassword123"
+            "username": "Jane",
+            "email": "jane@gmail.com",
+            "password": "password"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(SignupResponse)
+            "code": 201,
+            "message": "Admin created successfully!",
+            "data": {
+                "accountId": "3882dcda-9518-4c2d-a455-b60eea96cafd",
+                "email": "jane@gmail.com",
+                "role": "[ROLE_ADMIN]"
+            },
+            "paging": null
         }
         ```
 * **`POST {Employee Base Path}/cashier` - Create New Cashier (Admin Only)**
@@ -521,16 +749,35 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewCashierRequest):**
         ```json
         {
-            "username": "cashierUser",
-            "email": "cashier@example.com",
-            "password": "cashierpassword123",
-            "theaterId": "theater-001"
+            "theaterId": "theater-001",
+            "username": "Jane",
+            "email": "jane@gmail.com",
+            "password": "password"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 201,
+            "message": "Cashier created successfully!",
+            "data": {
+                "id": "2dfa04c5-804f-4cfe-95f4-cd8665a00676",
+                "fullname": null,
+                "nikNumber": null,
+                "address": null,
+                "phoneNumber": null,
+                "gender": null,
+                "city": null,
+                "dateOfBirth": null,
+                "dateOfAppliment": null,
+                "appUserId": "6006ab91-8034-45d8-9f56-615dfd55d4c0",
+                "appUserUsername": "Jane",
+                "appUserEmail": "jane@gmail.com",
+                "theaterId": "theater-001",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 * **`GET {Employee Base Path}` - Get All Employees (Admin Only)**
@@ -557,13 +804,38 @@ This section details all the available API endpoints. All successful responses w
         * `theaterName` (optional): Filter by employee's theater name.
         * `theaterCity` (optional): Filter by employee's theater city.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<EmployeeResponse>) with paging
+            "code": 200,
+            "message": "Get all employee successfully!",
+            "data": [
+                {
+                    "id": "emp-002",
+                    "fullname": "Beruang",
+                    "nikNumber": "2222222222222222",
+                    "address": "Jl. Raya Jakarta",
+                    "phoneNumber": "089876543210",
+                    "gender": "GENDER_FEMALE",
+                    "city": "Jakarta",
+                    "dateOfBirth": "1995-05-05",
+                    "dateOfAppliment": "2025-05-26",
+                    "appUserId": "useremp-002",
+                    "appUserUsername": "empName2",
+                    "appUserEmail": "empName2@flix.com",
+                    "theaterId": "theater-001",
+                    "transactionsId": [],
+                    "isActive": true
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 7,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Employee Base Path}/{id}` - Get Employee By ID (Admin Only)**
@@ -572,13 +844,29 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the employee.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 200,
+            "message": "Get employee successfully!",
+            "data": {
+                "id": "emp-002",
+                "fullname": "Beruang",
+                "nikNumber": "2222222222222222",
+                "address": "Jl. Raya Jakarta",
+                "phoneNumber": "089876543210",
+                "gender": "GENDER_FEMALE",
+                "city": "Jakarta",
+                "dateOfBirth": "1995-05-05",
+                "dateOfAppliment": "2025-05-26",
+                "appUserId": "useremp-002",
+                "appUserUsername": "empName2",
+                "appUserEmail": "empName2@flix.com",
+                "theaterId": "theater-001",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 * **`PUT {Employee Base Path}/{id}` - Update Employee By ID (Admin Only)**
@@ -589,24 +877,40 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (UpdateEmployeeRequest):**
         ```json
         {
-            "fullname": "Updated Employee Name",
-            "nikNumber": "1234567890123456",
-            "address": "New Employee Address",
-            "phoneNumber": "11122233344",
+            "fullname": "Jane",
+            "nikNumber": "8888888888888888",
+            "address": "Jl. Raya Jakarta",
+            "phoneNumber": "089876543210",
             "gender": "FEMALE",
-            "city": "Bandung",
-            "dateOfBirth": "1988-03-22",
-            "theaterId": "another-theater-id-456",
-            "dateOfAppliment": "2020-01-01",
-            "username": "updated_employee",
-            "email": "updated.employee@example.com",
-            "password": "newsecurepassword"
+            "city": "Jakarta",
+            "dateOfBirth": "1995-05-05",
+            "dateOfAppliment": "2025-05-19",
+            "theaterId": "theater-002"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 200,
+            "message": "Employee updated successfully!",
+            "data": {
+                "id": "emp-002",
+                "fullname": "Jane",
+                "nikNumber": "8888888888888888",
+                "address": "Jl. Raya Jakarta",
+                "phoneNumber": "089876543210",
+                "gender": "GENDER_FEMALE",
+                "city": "Jakarta",
+                "dateOfBirth": "1995-05-05",
+                "dateOfAppliment": "2025-05-19",
+                "appUserId": "useremp-002",
+                "appUserUsername": "empName2",
+                "appUserEmail": "empName2@flix.com",
+                "theaterId": "theater-002",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Employee Base Path}/{id}` - Soft Delete Employee By ID (Admin Only)**
@@ -615,26 +919,42 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the employee to soft delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Employee deleted successfully!",
+            "data": null,
+            "paging": null
         }
         ```
 * **`GET {Employee Base Path}/me` - Get Current Employee's Details (Employee Only)**
     * **Description:** Retrieves the details of the currently authenticated employee.
     * **Roles:** Employee
-    * **Request Example:** (No request body, uses JWT from header) (No request body))
-        ```json
-        {}
-        ```
+    * **Request Example:** (No request body)
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 200,
+            "message": "Get employee successfully!",
+            "data": {
+                "id": "emp-001",
+                "fullname": "Panda",
+                "nikNumber": "1111111111111111",
+                "address": "Jl. Raya Bandung",
+                "phoneNumber": "081234567890",
+                "gender": "GENDER_MALE",
+                "city": "Bandung",
+                "dateOfBirth": "1990-01-01",
+                "dateOfAppliment": "2025-05-26",
+                "appUserId": "useremp-001",
+                "appUserUsername": "empName1",
+                "appUserEmail": "empName1@flix.com",
+                "theaterId": "theater-001",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 * **`PUT {Employee Base Path}/me` - Update Current Employee's Details (Employee Only)**
@@ -643,24 +963,40 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (UpdateEmployeeRequest):**
         ```json
         {
-            "fullname": "Updated Employee Name",
-            "nikNumber": "1234567890123456",
-            "address": "New Employee Address",
-            "phoneNumber": "11122233344",
+            "fullname": "Jane",
+            "nikNumber": "8888888888888888",
+            "address": "Jl. Raya Jakarta",
+            "phoneNumber": "089876543210",
             "gender": "FEMALE",
-            "city": "Bandung",
-            "dateOfBirth": "1988-03-22",
-            "theaterId": "another-theater-id-456",
-            "dateOfAppliment": "2020-01-01",
-            "username": "updated_employee",
-            "email": "updated.employee@example.com",
-            "password": "newsecurepassword"
+            "city": "Jakarta",
+            "dateOfBirth": "1995-05-05",
+            "dateOfAppliment": "2025-05-19",
+            "theaterId": "theater-002"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(EmployeeResponse)
+            "code": 200,
+            "message": "Employee updated successfully!",
+            "data": {
+                "id": "emp-001",
+                "fullname": "Jane",
+                "nikNumber": "8888888888888888",
+                "address": "Jl. Raya Jakarta",
+                "phoneNumber": "089876543210",
+                "gender": "GENDER_FEMALE",
+                "city": "Jakarta",
+                "dateOfBirth": "1995-05-05",
+                "dateOfAppliment": "2025-05-19",
+                "appUserId": "useremp-001",
+                "appUserUsername": "empName1",
+                "appUserEmail": "empName1@flix.com",
+                "theaterId": "theater-002",
+                "transactionsId": [],
+                "isActive": true
+            },
+            "paging": null
         }
         ```
 </details>
@@ -676,10 +1012,10 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewArtistRequest):**
         ```json
         {
-            "name": "Robert John Downey Jr.",
-            "placeOfBirth": "New York, New York, United States",
-            "birthDate": "1965-04-04",
-            "otherName": "Robert Downey Jr.",
+            "name": "Robert John Downey Sr.",
+            "placeOfBirth": "Garut, United States",
+            "birthDate": "1944-04-04",
+            "otherName": "Robert",
             "bio": "Actor, producer, and philanthropist.",
             "artistTypes": ["Actor", "Producer"]
         }
@@ -687,7 +1023,22 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(ArtistResponse)
+            "code": 201,
+            "message": "Artist created successfully!",
+            "data": {
+                "id": "9a9d6790-e453-498c-9690-591eff9adf96",
+                "name": "Robert John Downey Sr.",
+                "placeOfBirth": "Garut, United States",
+                "birthDate": "1944-04-04",
+                "otherName": "Robert",
+                "bio": "Actor, producer, and philanthropist.",
+                "artistTypes": [
+                    "Actor",
+                    "Producer"
+                ],
+                "productTitle": null
+            },
+            "paging": null
         }
         ```
 * **`GET {Artist Base Path}` - Get All Artists (Admin, Cashier, Customer)**
@@ -705,13 +1056,35 @@ This section details all the available API endpoints. All successful responses w
         * `artistType` (optional): Filter by artist's type (List of artist types, e.g., `["Actor", "Producer"]`).
         * `inProductTitle` (optional): Filter by artist's appearance in products (List of product titles, e.g., `["The Shawshank Redemption", "The Godfather"]`).
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ArtistResponse)
+            "code": 200,
+            "message": "Get all artist successfully!",
+            "data": [
+                {
+                    "id": "00000000-0000-0000-0000-000000000001",
+                    "name": "Chris Evans",
+                    "placeOfBirth": "Boston",
+                    "birthDate": "1981-06-13",
+                    "otherName": null,
+                    "bio": "American actor.",
+                    "artistTypes": [
+                        "Actor"
+                    ],
+                    "productTitle": [
+                        "Avengers: Endgame"
+                    ]
+                }
+            ],
+            "paging": {
+                "totalPages": 2,
+                "totalElement": 17,
+                "page": 1,
+                "size": 10,
+                "hasNext": true,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Artist Base Path}/{id}` - Get Artist By ID (Admin, Cashier, Customer)**
@@ -720,13 +1093,26 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the artist.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ArtistResponse)
+            "code": 200,
+            "message": "Get artist successfully!",
+            "data": {
+                "id": "00000000-0000-0000-0000-000000000001",
+                "name": "Chris Evans",
+                "placeOfBirth": "Boston",
+                "birthDate": "1981-06-13",
+                "otherName": null,
+                "bio": "American actor.",
+                "artistTypes": [
+                    "Actor"
+                ],
+                "productTitle": [
+                    "Avengers: Endgame"
+                ]
+            },
+            "paging": null
         }
         ```
 * **`PUT {Artist Base Path}/{id}` - Update Artist By ID (Admin Only)**
@@ -737,18 +1123,34 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewArtistRequest):**
         ```json
         {
-            "name": "Robert John Downey Jr.",
-            "placeOfBirth": "New York, New York, United States",
-            "birthDate": "1965-04-04",
-            "otherName": "Robert Downey Jr.",
+            "name": "Robert John Downey Sr.",
+            "placeOfBirth": "Garut, United States",
+            "birthDate": "1944-04-04",
+            "otherName": "Robert",
             "bio": "Actor, producer, and philanthropist.",
-            "artistTypes": ["Actor", "Producer"]
+            "artistTypes": ["Actor"]
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ArtistResponse)
+            "code": 200,
+            "message": "Artist updated successfully!",
+            "data": {
+                "id": "00000000-0000-0000-0000-000000000001",
+                "name": "Robert John Downey Sr.",
+                "placeOfBirth": "Garut, United States",
+                "birthDate": "1944-04-04",
+                "otherName": "Robert",
+                "bio": "Actor, producer, and philanthropist.",
+                "artistTypes": [
+                    "Actor"
+                ],
+                "productTitle": [
+                    "Avengers: Endgame"
+                ]
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Artist Base Path}/{id}` - Delete Artist By ID (Admin Only)**
@@ -757,13 +1159,13 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the artist to delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ArtistResponse)
+            "code": 200,
+            "message": "Artist deleted successfully!",
+            "data": null,
+            "paging": null
         }
         ```
 </details>
@@ -781,20 +1183,38 @@ This section details all the available API endpoints. All successful responses w
         {
             "name": "Warner Bros. Pictures",
             "logoUrl": "[http://example.com/warner_logo.png](http://example.com/warner_logo.png)",
-            "originCountry": "USA",
+            "originCountry": "United States",
             "websiteUrl": "[http://www.warnerbros.com](http://www.warnerbros.com)",
             "headquarters": "Burbank, California",
             "ceo": "Ann Sarnoff",
             "description": "An American film production and distribution company.",
             "contactEmail": "info@warnerbros.com",
             "contactNumber": "1-818-954-6000",
-            "foundedYear": "1923"
+            "foundedYear": "1923-01-01"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductionCompanyResponse)
+            "code": 201,
+            "message": "Create production company success",
+            "data": {
+                "id": "91fac1aa-27ec-4266-8cdd-6115ef2f98f8",
+                "name": "Warner Bros. Pictures",
+                "logoUrl": "[http://example.com/warner_logo.png](http://example.com/warner_logo.png)",
+                "originCountry": "United States",
+                "websiteUrl": "[http://www.warnerbros.com](http://www.warnerbros.com)",
+                "headquarters": "Burbank, California",
+                "ceo": "Ann Sarnoff",
+                "description": "An American film production and distribution company.",
+                "contactEmail": "info@warnerbros.com",
+                "contactNumber": "1-818-954-6000",
+                "foundedYear": "1923-01-01",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "productTitle": []
+            },
+            "paging": null
         }
         ```
 * **`GET {Production Company Base Path}` - Get All Production Companies (Admin, Cashier, Customer)**
@@ -817,13 +1237,39 @@ This section details all the available API endpoints. All successful responses w
         * `updatedAtMax` (optional): Filter by production company's updated date (get companies updated before this date).
         * `hasProducts` (optional): Filter by production company's presence of products (List of product IDs, e.g., `["product-001", "product-002"]`).
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<ProductionCompanyResponse> with paging)
+            "code": 200,
+            "message": "Get all production company success",
+            "data": [
+                {
+                    "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+                    "name": "Marvel Studios",
+                    "logoUrl": "https://example.com/marvel_logo.png",
+                    "originCountry": "United States",
+                    "websiteUrl": "https://www.marvel.com",
+                    "headquarters": "Burbank, California",
+                    "ceo": "Kevin Feige",
+                    "description": "American film and television production company.",
+                    "contactEmail": "contact@marvel.com",
+                    "contactNumber": "1-800-MARVEL",
+                    "foundedYear": "1993-09-08",
+                    "createdAt": "2025-05-26",
+                    "updatedAt": "2025-05-26",
+                    "productTitle": [
+                        "Avengers: Endgame"
+                    ]
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 3,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Production Company Base Path}/{id}` - Get Production Company By ID (Admin, Cashier, Customer)**
@@ -832,13 +1278,30 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the production company.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductionCompanyResponse)
+            "code": 200,
+            "message": "Get production company success",
+            "data": {
+                "id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+                "name": "Marvel Studios",
+                "logoUrl": "https://example.com/marvel_logo.png",
+                "originCountry": "United States",
+                "websiteUrl": "https://www.marvel.com",
+                "headquarters": "Burbank, California",
+                "ceo": "Kevin Feige",
+                "description": "American film and television production company.",
+                "contactEmail": "contact@marvel.com",
+                "contactNumber": "1-800-MARVEL",
+                "foundedYear": "1993-09-08",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "productTitle": [
+                    "Avengers: Endgame"
+                ]
+            },
+            "paging": null
         }
         ```
 * **`PUT {Production Company Base Path}/{id}` - Update Production Company By ID (Admin Only)**
@@ -849,22 +1312,40 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewProductionCompanyRequest):**
         ```json
         {
-            "name": "Warner Bros. Pictures",
+            "name": "Warner Bros Pict.",
             "logoUrl": "[http://example.com/warner_logo.png](http://example.com/warner_logo.png)",
-            "originCountry": "USA",
+            "originCountry": "United States",
             "websiteUrl": "[http://www.warnerbros.com](http://www.warnerbros.com)",
             "headquarters": "Burbank, California",
             "ceo": "Ann Sarnoff",
             "description": "An American film production and distribution company.",
             "contactEmail": "info@warnerbros.com",
             "contactNumber": "1-818-954-6000",
-            "foundedYear": "1923"
+            "foundedYear": "1923-01-01"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductionCompanyResponse)
+            "code": 200,
+            "message": "Update production company success",
+            "data": {
+                "id": "91fac1aa-27ec-4266-8cdd-6115ef2f98f8",
+                "name": "Warner Bro Pict.",
+                "logoUrl": "[http://example.com/warner_logo.png](http://example.com/warner_logo.png)",
+                "originCountry": "United States",
+                "websiteUrl": "[http://www.warnerbros.com](http://www.warnerbros.com)",
+                "headquarters": "Burbank, California",
+                "ceo": "Ann Sarnoff",
+                "description": "An American film production and distribution company.",
+                "contactEmail": "info@warnerbros.com",
+                "contactNumber": "1-818-954-6000",
+                "foundedYear": "1923-01-01",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "productTitle": []
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Production Company Base Path}/{id}` - Delete Production Company By ID (Admin Only)**
@@ -873,13 +1354,13 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the production company to delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductionCompanyResponse)
+            "code": 200,
+            "message": "Production company deleted successfully!",
+            "data": null,
+            "paging": null
         }
         ```
 </details>
@@ -894,24 +1375,7 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Request Example (NewProductRequest):**
         ```json
-        {
-            "title": "The Matrix",
-            "duration": 136,
-            "language": "English",
-            "country": "USA",
-            "releaseDate": "1999-03-31",
-            "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
-            "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
-            "rated": "R",
-            "budget": 63000000,
-            "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-            "tagline": "Welcome to the Real World.",
-            "imdbRating": 8.7,
-            "rottenTomatoesRating": 88,
-            "productionCompanyId": "some-production-company-id",
-            "movieGenre": ["Action", "Sci-Fi"],
-            "artistId": ["artist-001", "artist-002"]
-        }
+        // Will be added later
         ```
     * **Response Example:**
         ```json
@@ -949,9 +1413,6 @@ This section details all the available API endpoints. All successful responses w
         * `artistsName` (optional): Filter by product's artists (List of artist names, e.g., `["John Doe", "Jane Smith"]`).
         * `productionCompany` (optional): Filter by product's production company.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
@@ -964,9 +1425,6 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the product.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
@@ -980,25 +1438,7 @@ This section details all the available API endpoints. All successful responses w
         * `id` (string, required): The ID of the product to update.
     * **Request Example (NewProductRequest):**
         ```json
-        {
-            "title": "The Matrix",
-            "duration": 136,
-            "language": "English",
-            "country": "USA",
-            "releaseDate": "1999-03-31",
-            "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
-            "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
-            "rated": "R",
-            "budget": 63000000,
-            "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-            "tagline": "Welcome to the Real World.",
-            "imdbRating": 8.7,
-            "rottenTomatoesRating": 88,
-            "productionCompanyId": "some-production-company-id",
-            "movieGenre": ["Action", "Sci-Fi"],
-            "artistId": ["artist-001", "artist-002"],
-            "showingOnTheaters": ["theater-001", "theater-002"]
-        }
+        // Will be added later
         ```
     * **Response Example:**
         ```json
@@ -1012,9 +1452,6 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the product to hard delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
@@ -1027,9 +1464,6 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the product to soft delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
@@ -1049,16 +1483,33 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewTheaterRequest):**
         ```json
         {
-            "name": "Mega Cinema Plaza",
-            "city": "123 Main Street, Cityville",
-            "contactNumber": "1-555-123-4567",
-            "contactEmail": "info@megacinema.com"
+            "name": "CGV Bandung Electronic Center",
+            "city": "Bandung",
+            "address": "Jl. Purnawarman No.13-15",
+            "contactNumber": "022-82060901",
+            "contactEmail": "bec@cgv.id"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TheaterResponse)
+            "code": 201,
+            "message": "Create theater success",
+            "data": {
+                "id": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                "name": "CGV Bandung Electronic Center",
+                "city": "Bandung",
+                "address": "Jl. Purnawarman No.13-15",
+                "contactNumber": "022-82060901",
+                "contactEmail": "bec@cgv.id",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "oprationalStatus": true,
+                "studios": [],
+                "nowShowing": [],
+                "employees": []
+            },
+            "paging": null
         }
         ```
 * **`GET {Theater Base Path}` - Get All Theaters (Admin, Cashier, Customer)**
@@ -1081,13 +1532,166 @@ This section details all the available API endpoints. All successful responses w
         * `employeesName` (optional): Filter by employee name associated with the theater.
         * `productsTitle` (optional): Filter by product title shown in the theater.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<TheaterResponse> with paging)
+            "code": 200,
+            "message": "Get all theater success",
+            "data": [
+                {
+                    "id": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                    "name": "CGV Bandung Electronic Center",
+                    "city": "Bandung",
+                    "address": "Jl. Purnawarman No.13-15",
+                    "contactNumber": "022-82060901",
+                    "contactEmail": "bec@cgv.id",
+                    "createdAt": "2025-05-26",
+                    "updatedAt": "2025-05-26",
+                    "oprationalStatus": true,
+                    "studios": [
+                        {
+                            "id": "studio-001",
+                            "name": "Studio 1",
+                            "studioSize": "Reguler Small",
+                            "seatLayout": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ],
+                            "studioSeatSchedule": [
+                                {
+                                    "id": "studio_seat_schedule-001",
+                                    "studioId": "studio-001",
+                                    "productSchedulingId": "psched-001",
+                                    "bookedSeat": [],
+                                    "availableSeat": [
+                                        "A1",
+                                        "A2",
+                                        "B1",
+                                        "B2"
+                                    ]
+                                },
+                                {
+                                    "id": "studio_seat_schedule-002",
+                                    "studioId": "studio-001",
+                                    "productSchedulingId": "psched-002",
+                                    "bookedSeat": [],
+                                    "availableSeat": [
+                                        "A1",
+                                        "A2",
+                                        "B1",
+                                        "B2"
+                                    ]
+                                }
+                            ],
+                            "productPricing": [
+                                {
+                                    "id": "pprice-001",
+                                    "weekdayPrice": 50000.0,
+                                    "weekendPrice": 75000.0,
+                                    "priceDate": "2025-05-24",
+                                    "isPriceActive": true,
+                                    "productId": "prod-001"
+                                },
+                                {
+                                    "id": "pprice-002",
+                                    "weekdayPrice": 45000.0,
+                                    "weekendPrice": 65000.0,
+                                    "priceDate": "2025-05-24",
+                                    "isPriceActive": true,
+                                    "productId": "prod-002"
+                                }
+                            ],
+                            "productScheduling": [
+                                {
+                                    "id": "psched-001",
+                                    "schedule": "9:00",
+                                    "productId": "prod-001"
+                                },
+                                {
+                                    "id": "psched-002",
+                                    "schedule": "12:30",
+                                    "productId": "prod-001"
+                                }
+                            ],
+                            "isActive": true,
+                            "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                            "theaterName": "CGV Bandung Electronic Center"
+                        },
+                        {
+                            "id": "studio-002",
+                            "name": "Studio 2",
+                            "studioSize": "Reguler Medium",
+                            "seatLayout": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ],
+                            "studioSeatSchedule": [
+                                {
+                                    "id": "studio_seat_schedule-003",
+                                    "studioId": "studio-002",
+                                    "productSchedulingId": "psched-003",
+                                    "bookedSeat": [],
+                                    "availableSeat": [
+                                        "C1",
+                                        "C2",
+                                        "D1"
+                                    ]
+                                }
+                            ],
+                            "productPricing": [
+                                {
+                                    "id": "pprice-002",
+                                    "weekdayPrice": 45000.0,
+                                    "weekendPrice": 65000.0,
+                                    "priceDate": "2025-05-24",
+                                    "isPriceActive": true,
+                                    "productId": "prod-002"
+                                }
+                            ],
+                            "productScheduling": [
+                                {
+                                    "id": "psched-003",
+                                    "schedule": "15:00",
+                                    "productId": "prod-002"
+                                }
+                            ],
+                            "isActive": true,
+                            "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                            "theaterName": "CGV Bandung Electronic Center"
+                        }
+                    ],
+                    "nowShowing": [
+                        {
+                            "id": "prod-001",
+                            "title": "Avengers: Endgame",
+                            "posterUrl": "https://example.com/avengers_poster.png"
+                        },
+                        {
+                            "id": "prod-002",
+                            "title": "The Lion King",
+                            "posterUrl": "https://example.com/lionking_poster.png"
+                        },
+                        {
+                            "id": "prod-003",
+                            "title": "Inception",
+                            "posterUrl": "https://example.com/inception_poster.png"
+                        }
+                    ],
+                    "employees": []
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 3,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Theater Base Path}/{id}` - Get Theater By ID (Admin, Cashier, Customer)**
@@ -1096,13 +1700,157 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the theater.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TheaterResponse)
+            "code": 200,
+            "message": "Get theater success",
+            "data": {
+                "id": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                "name": "CGV Bandung Electronic Center",
+                "city": "Bandung",
+                "address": "Jl. Purnawarman No.13-15",
+                "contactNumber": "022-82060901",
+                "contactEmail": "bec@cgv.id",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "oprationalStatus": true,
+                "studios": [
+                    {
+                        "id": "studio-001",
+                        "name": "Studio 1",
+                        "studioSize": "Reguler Small",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-001",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-001",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            },
+                            {
+                                "id": "studio_seat_schedule-002",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-002",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-001",
+                                "weekdayPrice": 50000.0,
+                                "weekendPrice": 75000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-001",
+                                "schedule": "9:00",
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "psched-002",
+                                "schedule": "12:30",
+                                "productId": "prod-001"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    },
+                    {
+                        "id": "studio-002",
+                        "name": "Studio 2",
+                        "studioSize": "Reguler Medium",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-003",
+                                "studioId": "studio-002",
+                                "productSchedulingId": "psched-003",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "C1",
+                                    "C2",
+                                    "D1"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-003",
+                                "schedule": "15:00",
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    }
+                ],
+                "nowShowing": [
+                    {
+                        "id": "prod-001",
+                        "title": "Avengers: Endgame",
+                        "posterUrl": "https://example.com/avengers_poster.png"
+                    },
+                    {
+                        "id": "prod-002",
+                        "title": "The Lion King",
+                        "posterUrl": "https://example.com/lionking_poster.png"
+                    },
+                    {
+                        "id": "prod-003",
+                        "title": "Inception",
+                        "posterUrl": "https://example.com/inception_poster.png"
+                    }
+                ],
+                "employees": []
+            },
+            "paging": null
         }
         ```
 * **`PUT {Theater Base Path}/{id}` - Update Theater By ID (Admin Only)**
@@ -1113,19 +1861,174 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewTheaterRequest):**
         ```json
         {
-            "name": "Mega Cinema Plaza",
-            "city": "123 Main Street, Cityville",
-            "contactNumber": "1-555-123-4567",
-            "contactEmail": "info@megacinema.com",
-            "operationalStatus": "true",
-            "studiosId": ["studio1Id", "studio2Id"],
-            "nowShowingId": ["product1Id", "product2Id"]
+            "name": "CGV Bandung Electronic Center",
+            "city": "Bandung",
+            "address": "Jl. Purnawarman No.13-15",
+            "contactNumber": "022-82060901",
+            "contactEmail": "bec@cgv.id",
+            "oprationalStatus": true,
+            "studiosId": [
+                "studio-001",
+                "studio-002"
+            ],
+            "nowShowingId": [
+                "prod-001",
+                "prod-002",
+                "prod-003"
+            ]
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TheaterResponse)
+            "code": 200,
+            "message": "Update theater success",
+            "data": {
+                "id": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                "name": "CGV Bandung Electronic Center",
+                "city": "Bandung",
+                "address": "Jl. Purnawarman No.13-15",
+                "contactNumber": "022-82060901",
+                "contactEmail": "bec@cgv.id",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "oprationalStatus": true,
+                "studios": [
+                    {
+                        "id": "studio-001",
+                        "name": "Studio 1",
+                        "studioSize": "Reguler Small",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-001",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-001",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            },
+                            {
+                                "id": "studio_seat_schedule-002",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-002",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-001",
+                                "weekdayPrice": 50000.0,
+                                "weekendPrice": 75000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-001",
+                                "schedule": "9:00",
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "psched-002",
+                                "schedule": "12:30",
+                                "productId": "prod-001"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    },
+                    {
+                        "id": "studio-002",
+                        "name": "Studio 2",
+                        "studioSize": "Reguler Medium",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-003",
+                                "studioId": "studio-002",
+                                "productSchedulingId": "psched-003",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "C1",
+                                    "C2",
+                                    "D1"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-003",
+                                "schedule": "15:00",
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "02b9fc24-7013-4e7b-a30f-fe4bde4c85ea",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    }
+                ],
+                "nowShowing": [
+                    {
+                        "id": "prod-001",
+                        "title": "Avengers: Endgame",
+                        "posterUrl": "https://example.com/avengers_poster.png"
+                    },
+                    {
+                        "id": "prod-002",
+                        "title": "The Lion King",
+                        "posterUrl": "https://example.com/lionking_poster.png"
+                    },
+                    {
+                        "id": "prod-003",
+                        "title": "Inception",
+                        "posterUrl": "https://example.com/inception_poster.png"
+                    }
+                ],
+                "employees": []
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Theater Base Path}/{id}` - Hard Delete Theater By ID (Admin Only)**
@@ -1134,13 +2037,13 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the theater to soft delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TheaterResponse)
+            "code": 200,
+            "message": "Soft delete theater success",
+            "data": null,
+            "paging": null
         }
         ```
 * **`PUT {Theater Base Path}/{id}/refresh-all-seat` - Refresh All Seats (Admin Only)**
@@ -1149,13 +2052,166 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the theater.
     * **Request Example:** (No request body)
-        ```
-        PUT /api/v1/theater/theater-001/refresh-all-seat
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Refresh all seat success",
+            "data": {
+                "id": "theater-001",
+                "name": "CGV Bandung Electronic Center",
+                "city": "Bandung",
+                "address": "Jl. Purnawarman No.13-15",
+                "contactNumber": "02282060901",
+                "contactEmail": "bec@cgv.id",
+                "createdAt": "2025-05-26",
+                "updatedAt": "2025-05-26",
+                "oprationalStatus": true,
+                "studios": [
+                    {
+                        "id": "studio-001",
+                        "name": "Studio 1",
+                        "studioSize": "Reguler Small",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-001",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-001",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            },
+                            {
+                                "id": "studio_seat_schedule-002",
+                                "studioId": "studio-001",
+                                "productSchedulingId": "psched-002",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-001",
+                                "weekdayPrice": 50000.0,
+                                "weekendPrice": 75000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-001",
+                                "schedule": "9:00",
+                                "productId": "prod-001"
+                            },
+                            {
+                                "id": "psched-002",
+                                "schedule": "12:30",
+                                "productId": "prod-001"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "theater-001",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    },
+                    {
+                        "id": "studio-002",
+                        "name": "Studio 2",
+                        "studioSize": "Reguler Medium",
+                        "seatLayout": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ],
+                        "studioSeatSchedule": [
+                            {
+                                "id": "studio_seat_schedule-003",
+                                "studioId": "studio-002",
+                                "productSchedulingId": "psched-003",
+                                "bookedSeat": [],
+                                "availableSeat": [
+                                    "A1",
+                                    "A2",
+                                    "B1",
+                                    "B2"
+                                ]
+                            }
+                        ],
+                        "productPricing": [
+                            {
+                                "id": "pprice-002",
+                                "weekdayPrice": 45000.0,
+                                "weekendPrice": 65000.0,
+                                "priceDate": "2025-05-24",
+                                "isPriceActive": true,
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "productScheduling": [
+                            {
+                                "id": "psched-003",
+                                "schedule": "15:00",
+                                "productId": "prod-002"
+                            }
+                        ],
+                        "isActive": true,
+                        "theaterId": "theater-001",
+                        "theaterName": "CGV Bandung Electronic Center"
+                    }
+                ],
+                "nowShowing": [
+                    {
+                        "id": "prod-001",
+                        "title": "Avengers: Endgame",
+                        "posterUrl": "https://example.com/avengers_poster.png"
+                    },
+                    {
+                        "id": "prod-002",
+                        "title": "The Lion King",
+                        "posterUrl": "https://example.com/lionking_poster.png"
+                    }
+                ],
+                "employees": [
+                    {
+                        "id": "emp-001",
+                        "fullname": "Panda"
+                    },
+                    {
+                        "id": "emp-002",
+                        "fullname": "Beruang"
+                    },
+                    {
+                        "id": "emp-005",
+                        "fullname": "Cashier"
+                    }
+                ]
+            },
+            "paging": null
         }
         ```
 </details>
@@ -1171,16 +2227,40 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewStudioRequest):**
         ```json
         {
-            "name": "Studio 1 - Regular",
+            "name" : "Studio 1",
             "theaterId": "theater-001",
-            "studioSize": "REGULAR MEDIUM",
-            "seatLayout": ["A1", "A2", "B1", "B2"],
+            "studioSize" : "REGULER SMALL",
+            "seatLayout": [
+                "A1",
+                "A2",
+                "B1",
+                "B2"
+            ]
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(StudioResponse)
+            "code": 201,
+            "message": "Create studio success",
+            "data": {
+                "id": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
+                "name": "Studio 1",
+                "studioSize": "Reguler Small",
+                "seatLayout": [
+                    "A1",
+                    "A2",
+                    "B1",
+                    "B2"
+                ],
+                "studioSeatSchedule": [],
+                "productPricing": [],
+                "productScheduling": [],
+                "isActive": true,
+                "theaterId": "theater-001",
+                "theaterName": "CGV Bandung Electronic Center"
+            },
+            "paging": null
         }
         ```
 * **`GET {Studio Base Path}` - Get All Studios (Admin, Cashier, Customer)**
@@ -1196,7 +2276,7 @@ This section details all the available API endpoints. All successful responses w
         * `studioSize` (optional): Filter by studio's size (e.g., `REGULAR MEDIUM`, `REGULAR LARGE`, `REGULAR SMALL`).
         * `theaterName` (optional): Filter by studio's theater name.
         * `theaterCity` (optional): Filter by studio's theater city.
-    * **Reqest body example:**
+    * **Reqest body example:** 
         ```json
         {
             "seatLayout": ["A1", "A2", "B1", "B2"],
@@ -1209,7 +2289,88 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<StudioResponse> with paging)
+            "code": 200,
+            "message": "Get all studio success",
+            "data": [
+                {
+                    "id": "studio-001",
+                    "name": "Studio 1",
+                    "studioSize": "Reguler Small",
+                    "seatLayout": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ],
+                    "studioSeatSchedule": [
+                        {
+                            "id": "studio_seat_schedule-001",
+                            "studioId": "studio-001",
+                            "productSchedulingId": "psched-001",
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        },
+                        {
+                            "id": "studio_seat_schedule-002",
+                            "studioId": "studio-001",
+                            "productSchedulingId": "psched-002",
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        }
+                    ],
+                    "productPricing": [
+                        {
+                            "id": "pprice-001",
+                            "weekdayPrice": 50000.0,
+                            "weekendPrice": 75000.0,
+                            "priceDate": "2025-05-24",
+                            "isPriceActive": true,
+                            "productId": "prod-001"
+                        },
+                        {
+                            "id": "pprice-002",
+                            "weekdayPrice": 45000.0,
+                            "weekendPrice": 65000.0,
+                            "priceDate": "2025-05-24",
+                            "isPriceActive": true,
+                            "productId": "prod-002"
+                        }
+                    ],
+                    "productScheduling": [
+                        {
+                            "id": "psched-001",
+                            "schedule": "9:00",
+                            "productId": "prod-001"
+                        },
+                        {
+                            "id": "psched-002",
+                            "schedule": "12:30",
+                            "productId": "prod-001"
+                        }
+                    ],
+                    "isActive": true,
+                    "theaterId": "theater-001",
+                    "theaterName": "CGV Bandung Electronic Center"
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 3,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Studio Base Path}/{id}` - Get Studio By ID (Admin, Cashier, Customer)**
@@ -1218,13 +2379,82 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the studio.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(StudioResponse)
+            "code": 200,
+            "message": "Get studio success",
+            "data": {
+                "id": "studio-001",
+                "name": "Studio 1",
+                "studioSize": "Reguler Small",
+                "seatLayout": [
+                    "A1",
+                    "A2",
+                    "B1",
+                    "B2"
+                ],
+                "studioSeatSchedule": [
+                    {
+                        "id": "studio_seat_schedule-001",
+                        "studioId": "studio-001",
+                        "productSchedulingId": "psched-001",
+                        "bookedSeat": [],
+                        "availableSeat": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ]
+                    },
+                    {
+                        "id": "studio_seat_schedule-002",
+                        "studioId": "studio-001",
+                        "productSchedulingId": "psched-002",
+                        "bookedSeat": [],
+                        "availableSeat": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ]
+                    }
+                ],
+                "productPricing": [
+                    {
+                        "id": "pprice-001",
+                        "weekdayPrice": 50000.0,
+                        "weekendPrice": 75000.0,
+                        "priceDate": "2025-05-24",
+                        "isPriceActive": true,
+                        "productId": "prod-001"
+                    },
+                    {
+                        "id": "pprice-002",
+                        "weekdayPrice": 45000.0,
+                        "weekendPrice": 65000.0,
+                        "priceDate": "2025-05-24",
+                        "isPriceActive": true,
+                        "productId": "prod-002"
+                    }
+                ],
+                "productScheduling": [
+                    {
+                        "id": "psched-001",
+                        "schedule": "9:00",
+                        "productId": "prod-001"
+                    },
+                    {
+                        "id": "psched-002",
+                        "schedule": "12:30",
+                        "productId": "prod-001"
+                    }
+                ],
+                "isActive": true,
+                "theaterId": "theater-001",
+                "theaterName": "CGV Bandung Electronic Center"
+            },
+            "paging": null
         }
         ```
 * **`GET {Studio Base Path}/{theaterId}/{productId}` - Get Studios by Product and Theater ID (Cashier, Customer)**
@@ -1234,13 +2464,91 @@ This section details all the available API endpoints. All successful responses w
         * `theaterId` (string, required): The ID of the theater.
         * `productId` (string, required): The ID of the product.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Get studio success",
+            "data": [
+                {
+                    "id": "studio-001",
+                    "name": "Studio 1",
+                    "studioSize": "Reguler Small",
+                    "seatLayout": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ],
+                    "studioSeatSchedule": [
+                        {
+                            "id": "studio_seat_schedule-001",
+                            "studioId": "studio-001",
+                            "productScheduling": {
+                                "id": "psched-001",
+                                "schedule": "9:00",
+                                "productId": "prod-001"
+                            },
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        },
+                        {
+                            "id": "studio_seat_schedule-002",
+                            "studioId": "studio-001",
+                            "productScheduling": {
+                                "id": "psched-002",
+                                "schedule": "12:30",
+                                "productId": "prod-001"
+                            },
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        }
+                    ],
+                    "productPricing": [
+                        {
+                            "id": "pprice-001",
+                            "weekdayPrice": 50000.0,
+                            "weekendPrice": 75000.0,
+                            "priceDate": "2025-05-24",
+                            "isPriceActive": true,
+                            "productId": "prod-001"
+                        }
+                    ],
+                    "productScheduling": [
+                        {
+                            "id": "psched-001",
+                            "schedule": "9:00",
+                            "productId": "prod-001"
+                        },
+                        {
+                            "id": "psched-002",
+                            "schedule": "12:30",
+                            "productId": "prod-001"
+                        }
+                    ],
+                    "isActive": true,
+                    "theaterId": "theater-001",
+                    "theaterName": "CGV Bandung Electronic Center"
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 1,
+                "page": 1,
+                "size": 1,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`PUT {Studio Base Path}/{id}` - Update Studio By ID (Admin Only)**
@@ -1251,17 +2559,37 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewStudioRequest):**
         ```json
         {
-            "name": "Studio 1 - Regular",
+            "name" : "Studio 1",
             "theaterId": "theater-001",
-            "studioSize": "REGULAR MEDIUM",
-            "seatLayout": ["A1", "A2", "B1", "B2"],
-            "studioSeatScheduleRequests": [
+            "studioSize" : "REGULER SMALL",
+            "seatLayout": [
+                "A1",
+                "A2",
+                "B1",
+                "B2"
+            ],
+            "studioSeatScheduleRequests" : [
                 {
-                    "studioId": "studio-001",
+                    "studioId": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
                     "productSchedulingId": "psched-001",
                     "bookedSeat": [],
-                    "availableSeat": ["A1", "A2", "B1", "B2"],
-                    "productSchedulingId": "psched-001"
+                    "availableSeat": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ]
+                },
+                {
+                    "studioId": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
+                    "productSchedulingId": "psched-002",
+                    "bookedSeat": [],
+                    "availableSeat": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ]
                 }
             ],
             "productPricingRequests": [
@@ -1269,13 +2597,17 @@ This section details all the available API endpoints. All successful responses w
                     "weekdayPrice": 45000.0,
                     "weekendPrice": 65000.0,
                     "isPriceActive": true,
-                    "productId": "prod-001"
+                    "productId": "prod-002"
                 }
             ],
             "productSchedulingRequests": [
                 {
-                    "schedule": "10.00",
-                    "productId": "prod-001"
+                    "schedule": "15:00",
+                    "productId": "prod-002"
+                },
+                {
+                    "schedule": "17:00",
+                    "productId": "prod-002"
                 }
             ]
         }
@@ -1283,7 +2615,71 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(StudioResponse)
+            "code": 200,
+            "message": "Update studio success",
+            "data": {
+                "id": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
+                "name": "Studio 1",
+                "studioSize": "Reguler Small",
+                "seatLayout": [
+                    "A1",
+                    "A2",
+                    "B1",
+                    "B2"
+                ],
+                "studioSeatSchedule": [
+                    {
+                        "id": "f0fff93e-dfa5-4f8d-b174-af1b3b8719f5",
+                        "studioId": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
+                        "productSchedulingId": "psched-001",
+                        "bookedSeat": [],
+                        "availableSeat": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ]
+                    },
+                    {
+                        "id": "08134e29-0ec9-4980-809f-e33412671448",
+                        "studioId": "7a7d8384-4d8b-4653-a5c1-00e2137842a8",
+                        "productSchedulingId": "psched-002",
+                        "bookedSeat": [],
+                        "availableSeat": [
+                            "A1",
+                            "A2",
+                            "B1",
+                            "B2"
+                        ]
+                    }
+                ],
+                "productPricing": [
+                    {
+                        "id": "pprice-002",
+                        "weekdayPrice": 45000.0,
+                        "weekendPrice": 65000.0,
+                        "priceDate": "2025-05-24",
+                        "isPriceActive": true,
+                        "productId": "prod-002"
+                    }
+                ],
+                "productScheduling": [
+                    {
+                        "id": "psched-003",
+                        "schedule": "15:00",
+                        "productId": "prod-002"
+                    },
+                    {
+                        "id": "67adfef4-54d9-41ca-9257-a8d4343a9422",
+                        "schedule": "17:00",
+                        "productId": "prod-002"
+                    }
+                ],
+                "isActive": true,
+                "theaterId": "theater-001",
+                "theaterName": "CGV Bandung Electronic Center"
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Studio Base Path}/{id}` - Delete Studio By ID (Admin Only)**
@@ -1292,26 +2688,112 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the studio to delete.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(StudioResponse)
+            "code": 200,
+            "message": "Delete studio success",
+            "data": null,
+            "paging": null
         }
         ```
 * **`GET {Studio Base Path}/me` - Get Current Studio's Details (Cashier Only)**
     * **Description:** Retrieves the details of the current studio.
     * **Roles:** Cashier
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(StudioResponse)
+            "code": 200,
+            "message": "Get studio success",
+            "data": [
+                {
+                    "id": "studio-001",
+                    "name": "Studio 1",
+                    "studioSize": "Reguler Small",
+                    "seatLayout": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ],
+                    "studioSeatSchedule": [
+                        {
+                            "id": "studio_seat_schedule-001",
+                            "studioId": "studio-001",
+                            "productScheduling": {
+                                "id": "psched-001",
+                                "schedule": "9:00",
+                                "productId": "prod-001"
+                            },
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        },
+                        {
+                            "id": "studio_seat_schedule-002",
+                            "studioId": "studio-001",
+                            "productScheduling": {
+                                "id": "psched-002",
+                                "schedule": "12:30",
+                                "productId": "prod-001"
+                            },
+                            "bookedSeat": [],
+                            "availableSeat": [
+                                "A1",
+                                "A2",
+                                "B1",
+                                "B2"
+                            ]
+                        }
+                    ],
+                    "productPricing": [
+                        {
+                            "id": "pprice-001",
+                            "weekdayPrice": 50000.0,
+                            "weekendPrice": 75000.0,
+                            "priceDate": "2025-05-24",
+                            "isPriceActive": true,
+                            "productId": "prod-001"
+                        },
+                        {
+                            "id": "pprice-002",
+                            "weekdayPrice": 45000.0,
+                            "weekendPrice": 65000.0,
+                            "priceDate": "2025-05-24",
+                            "isPriceActive": true,
+                            "productId": "prod-002"
+                        }
+                    ],
+                    "productScheduling": [
+                        {
+                            "id": "psched-001",
+                            "schedule": "9:00",
+                            "productId": "prod-001"
+                        },
+                        {
+                            "id": "psched-002",
+                            "schedule": "12:30",
+                            "productId": "prod-001"
+                        }
+                    ],
+                    "isActive": true,
+                    "theaterId": "theater-001",
+                    "theaterName": "CGV Bandung Electronic Center"
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 2,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 
@@ -1328,24 +2810,51 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example (NewTransactionRequest):**
         ```json
         {
-            "theaterId" : "theater-001",
-            "studioId" : "studio-001",
-            "productId" : "prod-001",
-            "productPricingId" : "ppricing-001",
-            "productSchedulingId" : "psched-001",
-            "qty" : 1,
-            "tax" : 10,
-            "transactionDateTime" : "2023-08-01T10:00:00",
-            "watchDate" : "2023-08-01",
-            "paymentDateTime" : "2023-08-01T10:00:00",
-            "paymentMethod" : "CASH",
-            "seats" : ["A1"],
+            "theaterId": "theater-001",
+            "studioId": "studio-001",
+            "productId": "prod-001",
+            "productPricingId": "pprice-001",
+            "productSchedulingId": "psched-001",
+            "qty": 1,
+            "tax": 10,
+            "transactionDateTime": "2025-12-12 12:10:12",
+            "watchDate": "2025-12-12",
+            "paymentDateTime": "2025-12-12 12:12:12",
+            "paymentMethod": "CASH",
+            "seats": [
+                "A1"
+            ]
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TransactionResponse)
+            "code": 201,
+            "message": "Create transaction success",
+            "data": {
+                "id": "b2befd9a-2619-477d-aaf1-ecbd80999aa6",
+                "customerId": null,
+                "employeeCashierId": "emp-005",
+                "theaterId": "theater-001",
+                "studioId": "studio-001",
+                "productId": "prod-001",
+                "productPricingId": "pprice-001",
+                "productSchedulingId": "psched-001",
+                "qty": 1,
+                "tax": 10,
+                "transactionDateTime": "2025-12-12T12:10:12",
+                "paymentStatus": "Pending",
+                "paymentDateTime": "2025-12-12T12:12:12",
+                "paymentMethod": "Cash",
+                "seats": [
+                    "A1"
+                ],
+                "createdAt": "2025-05-26T23:27:22.819025600",
+                "updatedAt": "2025-05-26T23:27:22.819025600",
+                "total": 55000.00,
+                "watchDate": "2025-12-12"
+            },
+            "paging": null
         }
         ```
 * **`GET {Transaction Base Path}` - Get All Transactions (Admin)**
@@ -1385,13 +2894,44 @@ This section details all the available API endpoints. All successful responses w
         * `expirationDateMin` (optional): Filter by transaction's expiration date (e.g., "2023-08-01T10:00:00").
         * `expirationDateMax` (optional): Filter by transaction's expiration date.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Get all transaction success",
+            "data": [
+                {
+                    "id": "b2befd9a-2619-477d-aaf1-ecbd80999aa6",
+                    "customerId": null,
+                    "employeeCashierId": "emp-005",
+                    "theaterId": "theater-001",
+                    "studioId": "studio-001",
+                    "productId": "prod-001",
+                    "productPricingId": "pprice-001",
+                    "productSchedulingId": "psched-001",
+                    "qty": 1,
+                    "tax": 10,
+                    "transactionDateTime": "2025-12-12T12:10:12",
+                    "paymentStatus": "Pending",
+                    "paymentDateTime": "2025-12-12T12:12:12",
+                    "paymentMethod": "Cash",
+                    "seats": [
+                        "A1"
+                    ],
+                    "createdAt": "2025-05-26T23:27:22.819026",
+                    "updatedAt": "2025-05-26T23:27:22.819026",
+                    "total": 55000.00,
+                    "watchDate": "2025-12-12"
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 1,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Transaction Base Path}/me` - Get All Transactions (Customer, Cashier)**
@@ -1427,13 +2967,44 @@ This section details all the available API endpoints. All successful responses w
         * `expirationDateMin` (optional): Filter by transaction's expiration date (e.g., "2023-08-01T10:00:00").
         * `expirationDateMax` (optional): Filter by transaction's expiration date.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Get all transaction success",
+            "data": [
+                {
+                    "id": "b2befd9a-2619-477d-aaf1-ecbd80999aa6",
+                    "customerId": null,
+                    "employeeCashierId": "emp-005",
+                    "theaterId": "theater-001",
+                    "studioId": "studio-001",
+                    "productId": "prod-001",
+                    "productPricingId": "pprice-001",
+                    "productSchedulingId": "psched-001",
+                    "qty": 1,
+                    "tax": 10,
+                    "transactionDateTime": "2025-12-12T12:10:12",
+                    "paymentStatus": "Pending",
+                    "paymentDateTime": "2025-12-12T12:12:12",
+                    "paymentMethod": "Cash",
+                    "seats": [
+                        "A1"
+                    ],
+                    "createdAt": "2025-05-26T23:27:22.819026",
+                    "updatedAt": "2025-05-26T23:27:22.819026",
+                    "total": 55000.00,
+                    "watchDate": "2025-12-12"
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 1,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Transaction Base Path}/{id}` - Get Transaction By ID (Admin, Cashier, Customer)**
@@ -1442,13 +3013,35 @@ This section details all the available API endpoints. All successful responses w
     * **Path Parameters:**
         * `id` (string, required): The ID of the transaction.
     * **Request Example:** (No request body)
-        ```json
-        {}
-        ```
     * **Response Example:**
         ```json
         {
-            // Will be added later
+            "code": 200,
+            "message": "Get transaction success",
+            "data": {
+                "id": "b2befd9a-2619-477d-aaf1-ecbd80999aa6",
+                "customerId": null,
+                "employeeCashierId": "emp-005",
+                "theaterId": "theater-001",
+                "studioId": "studio-001",
+                "productId": "prod-001",
+                "productPricingId": "pprice-001",
+                "productSchedulingId": "psched-001",
+                "qty": 1,
+                "tax": 10,
+                "transactionDateTime": "2025-12-12T12:10:12",
+                "paymentStatus": "Success",
+                "paymentDateTime": "2025-12-12T12:12:12",
+                "paymentMethod": "Cash",
+                "seats": [
+                    "A1"
+                ],
+                "createdAt": "2025-05-26T23:27:22.819026",
+                "updatedAt": "2025-05-26T23:27:22.819026",
+                "total": 55000.00,
+                "watchDate": "2025-12-12"
+            },
+            "paging": null
         }
         ```
 * **`PUT {Transaction Base Path}/{id}` - Update Payment Status (Admin, Cashier)**
@@ -1459,25 +3052,52 @@ This section details all the available API endpoints. All successful responses w
     * **Request Example:**
         ```json
         {
-            "theaterId" : "theater-001",
-            "studioId" : "studio-001",
-            "productId" : "prod-001",
-            "productPricingId" : "ppricing-001",
-            "productSchedulingId" : "psched-001",
-            "qty" : 1,
-            "tax" : 10,
-            "transactionDateTime" : "2023-08-01T10:00:00",
-            "watchDate" : "2023-08-01",
-            "paymentDateTime" : "2023-08-01T10:00:00",
-            "paymentMethod" : "CASH",
-            "paymentStatus" : "PAID",
-            "seats" : ["A1"],
+            "theaterId": "theater-001",
+            "studioId": "studio-001",
+            "productId": "prod-001",
+            "productPricingId": "pprice-001",
+            "productSchedulingId": "psched-001",
+            "qty": 1,
+            "tax": 10,
+            "transactionDateTime": "2025-12-12 12:10:12",
+            "watchDate": "2025-12-12",
+            "paymentDateTime": "2025-12-12 12:12:12",
+            "paymentMethod": "CASH",
+            "seats": [
+                "A1"
+            ],
+            "paymentStatus": "Success"
         }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(TransactionResponse)
+            "code": 200,
+            "message": "Update transaction success",
+            "data": {
+                "id": "b2befd9a-2619-477d-aaf1-ecbd80999aa6",
+                "customerId": null,
+                "employeeCashierId": "emp-005",
+                "theaterId": "theater-001",
+                "studioId": "studio-001",
+                "productId": "prod-001",
+                "productPricingId": "pprice-001",
+                "productSchedulingId": "psched-001",
+                "qty": 1,
+                "tax": 10,
+                "transactionDateTime": "2025-12-12T12:10:12",
+                "paymentStatus": "Success",
+                "paymentDateTime": "2025-12-12T12:12:12",
+                "paymentMethod": "Cash",
+                "seats": [
+                    "A1"
+                ],
+                "createdAt": "2025-05-26T23:27:22.819026",
+                "updatedAt": "2025-05-26T23:27:22.819026",
+                "total": 55000.00,
+                "watchDate": "2025-12-12"
+            },
+            "paging": null
         }
         ```
 </details>

@@ -70,7 +70,7 @@ public class TheaterController {
         CommonResponse<TheaterResponse> response = CommonResponse.<TheaterResponse>builder()
             .code(HttpStatus.OK.value())
             .message(ApiBash.SOFT_DELETE_THEATER_SUCCESS)
-            .data(theaterService.getById(id))
+            .data(null)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

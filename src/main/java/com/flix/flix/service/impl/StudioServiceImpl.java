@@ -36,6 +36,7 @@ import com.flix.flix.model.request.search.SearchStudioRequest;
 import com.flix.flix.model.response.ProductPricingResponse;
 import com.flix.flix.model.response.ProductSchedulingResponse;
 import com.flix.flix.model.response.StudioResponse;
+import com.flix.flix.model.response.StudioSeatScheduleResponse;
 import com.flix.flix.repository.StudioRepository;
 import com.flix.flix.repository.TheaterRepository;
 import com.flix.flix.service.ProductPricingService;
@@ -177,6 +178,9 @@ public class StudioServiceImpl implements StudioService {
             List<StudioSeatSchedule> newStudioSeatSchedules = new ArrayList<>();
             for (NewStudioSeatScheduleRequest studioSeatScheduleRequest : studioRequest.getStudioSeatScheduleRequests()) {
                 if (studioSeatScheduleService.getStudioSeatScheduleByAttribute(studio.getId(), studioSeatScheduleRequest.getProductSchedulingId()) == null) {
+                    if (!studioSeatScheduleRequest.getStudioId().equals(id)) {
+                        throw new RuntimeException(DbBash.STUDIO_ID_NOT_MATCH);
+                    };
                     studioSeatScheduleRequest.setAvailableSeat(ESeat.toESeatStringList(studio.getSeatLayout()));
                     studioSeatScheduleRequest.setBookedSeat(new ArrayList<>());
                     StudioSeatSchedule studioSeatSchedule = studioSeatScheduleService.create(studioSeatScheduleRequest, studio.getSeatLayout());
@@ -217,13 +221,14 @@ public class StudioServiceImpl implements StudioService {
     }
 
     @Override
-    public Page<StudioResponse> getByProductIdAndTheaterId(String productId, String theaterId) {
+    public Page<StudioResponse> getByProductIdAndTheaterId(String theaterId, String productId) {
         try {
             SearchStudioRequest searchStudioRequest = SearchStudioRequest.builder().theaterId(theaterId).productId(productId).build();
             List<StudioResponse> studios = getAllActive(searchStudioRequest).getContent();
             List<StudioResponse> filteredStudios = studios.stream().map(studio -> {
                 List<ProductPricingResponse> productPricings = new ArrayList<>();
                 List<ProductSchedulingResponse> productSchedulings = new ArrayList<>();
+                List<StudioSeatScheduleResponse> studioSeatSchedules = new ArrayList<>();
                 for (ProductPricingResponse productPricingResponse : studio.getProductPricing()) {
                     if (productPricingResponse.getProductId().equals(productId)) {
                         productPricings.add(productPricingResponse);
@@ -234,6 +239,12 @@ public class StudioServiceImpl implements StudioService {
                         productSchedulings.add(productSchedulingResponse);
                     }
                 }
+                for (StudioSeatScheduleResponse studioSeatScheduleResponse : studio.getStudioSeatSchedule()) {
+                    if (studioSeatScheduleResponse.getProductScheduling().getProductId().equals(productId)) {
+                        studioSeatSchedules.add(studioSeatScheduleResponse);
+                    }
+                }
+                studio.setStudioSeatSchedule(studioSeatSchedules);
                 studio.setProductPricing(productPricings);
                 studio.setProductScheduling(productSchedulings);
                 return studio;
@@ -258,7 +269,7 @@ public class StudioServiceImpl implements StudioService {
     @Override
     public StudioResponse refreshAllSeat(String id) {
         try {
-            if (LocalDateTime.now().getHour() >= 8 && LocalDateTime.now().getHour() <= 22) throw new RuntimeException(DbBash.SEAT_CAN_ONLY_REFRESHED_AFTER_22_BEFORE_8);
+            if (LocalDateTime.now().getHour() > 8 && LocalDateTime.now().getHour() < 22) throw new RuntimeException(DbBash.SEAT_CAN_ONLY_REFRESHED_AFTER_22_BEFORE_8);
             Studio studio = getStudioById(id);
             studio.getStudioSeatSchedule().forEach(studioSeatSchedule -> {
                 studioSeatSchedule.setAvailableSeat(ESeat.toESeatList(ESeat.toESeatStringList(studio.getSeatLayout())));

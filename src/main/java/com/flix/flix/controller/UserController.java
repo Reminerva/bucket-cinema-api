@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flix.flix.constant.ApiBash;
-import com.flix.flix.constant.DbBash;
 import com.flix.flix.model.request.LoginRequest;
 import com.flix.flix.model.request.NewCustomerRequest;
 import com.flix.flix.model.request.search.SearchAppUserRequest;
@@ -43,24 +42,12 @@ public class UserController {
         @RequestBody
         NewCustomerRequest newCustomerRequest
     ) {
-        try {
-            CommonResponse<CustomerResponse> response = CommonResponse.<CustomerResponse>builder()
-                .code(HttpStatus.CREATED.value())
-                .message(ApiBash.SIGN_UP_SUCCESS)
-                .data(customerService.create(newCustomerRequest))
-                .build();
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            String message = e.getMessage();
-            if (e.getMessage().contains(DbBash.EMAIL_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.EMAIL_ALREADY_EXISTS);};
-            if (e.getMessage().contains(DbBash.USERNAME_ALREADY_EXISTS_CONSTRAINT)) {message = (DbBash.USERNAME_ALREADY_EXISTS);};
-            CommonResponse<CustomerResponse> response = CommonResponse.<CustomerResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(ApiBash.SIGN_UP_FAILED + ": " + message)
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<CustomerResponse> response = CommonResponse.<CustomerResponse>builder()
+            .code(HttpStatus.CREATED.value())
+            .message(ApiBash.SIGN_UP_SUCCESS)
+            .data(customerService.create(newCustomerRequest))
+            .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping(ApiBash.AUTH + ApiBash.SIGN_IN)

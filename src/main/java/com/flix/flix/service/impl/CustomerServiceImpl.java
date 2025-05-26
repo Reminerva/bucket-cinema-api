@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
                     .email(newCustomerRequest.getEmail())
                     .password(newCustomerRequest.getPassword())
                     .username(newCustomerRequest.getUsername())
-                    .role(newCustomerRequest.getRole())
+                    .role(List.of(ERole.ROLE_CUSTOMER.getDescription()))
                     .build();
             SignupResponse signupResponse = appUserService.signup(userRequest);
             AppUser appUser = appUserService.getAppUserById(signupResponse.getAccountId());
@@ -294,10 +294,6 @@ public class CustomerServiceImpl implements CustomerService {
         // cek duplikasi dislikeProductId
         if (newCustomerRequest.getDislikeProductId().size() != new HashSet<>(newCustomerRequest.getDislikeProductId()).size()) {
             throw new RuntimeException(DbBash.DUPLICATE_PRODUCT_REQUEST);
-        }
-        // cek duplikasi role
-        if (newCustomerRequest.getRole().size() != new HashSet<>(newCustomerRequest.getRole()).size()) {
-            throw new RuntimeException(DbBash.DUPLICATE_ROLE_REQUEST);
         }
     }
 

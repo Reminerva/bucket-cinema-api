@@ -49,6 +49,7 @@ public class DbBash {
     public static final String PRODUCT_ALREADY_PRICED = "The product has already been priced in the studio";
     public static final String PRODUCT_ALREADY_SCHEDULED = "The product has already been scheduled in exact time in the studio";
 
+    public static final String STUDIO_ID_NOT_MATCH = "Studio id not match";
     public static final String THEATER_AND_STUDIO_NOT_MATCH = "Theater and studio not match";
 
     public static final String STUDIO_SEAT_NOT_MATCH = "Studio seat not match";
@@ -74,14 +75,19 @@ public class DbBash {
 
     public static final String UNAUTHORIZED = "Unauthorized";
 
-    public static final String NIK_NUMBER_ALREADY_EXISTS_CONSTRAINT = "m_employee_nik_number_key";
+    public static final String ALREADY_EXISTS_CONSTRAINT = "duplicate key value violates unique constraint";
+    public static final String IS_STILL_REFERENCED_CONSTRAINT = "is still referenced from table";
+
+    public static final String NIK_NUMBER_ALREADY_EXISTS_CONSTRAINT = "Detail: Key (nik_number)=";
     public static final String NIK_NUMBER_ALREADY_EXISTS = "NIK number already exists";
 
-    public static final String EMAIL_ALREADY_EXISTS_CONSTRAINT = "m_user_email_key";
+    public static final String EMAIL_ALREADY_EXISTS_CONSTRAINT = "Detail: Key (email)=";
     public static final String EMAIL_ALREADY_EXISTS = "Email already exists";
 
-    public static final String USERNAME_ALREADY_EXISTS_CONSTRAINT = "m_user_username_key";
+    public static final String USERNAME_ALREADY_EXISTS_CONSTRAINT = "Detail: Key (username)=";
     public static final String USERNAME_ALREADY_EXISTS = "Username already exists";
+
+    public static final String IS_STILL_REFERENCED = "The record is still referenced from table ";
 
     public static final String ONLY_CASHIER_OR_CUSTOMER_CAN_CREATE_TRANSACTION = "Only cashier or customer can create transaction";
     public static final String ONLY_ADMIN_CAN_UPDATE_TRANSACTION = "Only admin can update transaction";

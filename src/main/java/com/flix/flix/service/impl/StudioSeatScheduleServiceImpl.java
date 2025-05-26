@@ -12,10 +12,12 @@ import com.flix.flix.entity.ProductScheduling;
 import com.flix.flix.entity.Studio;
 import com.flix.flix.entity.StudioSeatSchedule;
 import com.flix.flix.model.request.NewStudioSeatScheduleRequest;
+import com.flix.flix.model.response.ProductSchedulingResponse;
 import com.flix.flix.model.response.StudioSeatScheduleResponse;
 import com.flix.flix.repository.ProductSchedulingRepository;
 import com.flix.flix.repository.StudioRepository;
 import com.flix.flix.repository.StudioSeatScheduleRepository;
+import com.flix.flix.service.ProductSchedulingService;
 import com.flix.flix.service.StudioSeatScheduleService;
 
 import jakarta.transaction.Transactional;
@@ -28,6 +30,7 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
     private final StudioSeatScheduleRepository studioSeatScheduleRepository;
     private final StudioRepository studioRepository;
     private final ProductSchedulingRepository productSchedulingRepository;
+    private final ProductSchedulingService productSchedulingService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -140,10 +143,14 @@ public class StudioSeatScheduleServiceImpl implements StudioSeatScheduleService 
     @Override
     public StudioSeatScheduleResponse toStudioSeatScheduleResponse(StudioSeatSchedule studioSeatSchedule) {
         try {
+            ProductSchedulingResponse productSchedulingResponse = null;
+            if (studioSeatSchedule.getProductScheduling() != null) {
+                productSchedulingResponse = productSchedulingService.toProductSchedulingResponse(studioSeatSchedule.getProductScheduling());
+            };
             return StudioSeatScheduleResponse.builder()
                     .id(studioSeatSchedule.getId())
                     .studioId(studioSeatSchedule.getStudio().getId())
-                    .productSchedulingId(studioSeatSchedule.getProductScheduling().getId())
+                    .productScheduling(productSchedulingResponse)
                     .availableSeat(ESeat.toESeatStringList(studioSeatSchedule.getAvailableSeat()))
                     .bookedSeat(ESeat.toESeatStringList(studioSeatSchedule.getBookedSeat()))
                     .build();

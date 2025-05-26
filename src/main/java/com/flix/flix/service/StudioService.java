@@ -18,7 +18,7 @@ public interface StudioService {
     StudioResponse update(String id, NewStudioRequest studioRequest);
     void softDelete(String id);
     Page<StudioResponse> getByTheaterId(String theaterId);
-    Page<StudioResponse> getByProductIdAndTheaterId(String productId, String theaterId);
+    Page<StudioResponse> getByProductIdAndTheaterId(String theaterId, String productId);
     Page<StudioResponse> getByCredentials(HttpServletRequest httpServletRequest);
     StudioResponse refreshAllSeat(String id);
     StudioResponse toStudioResponse(Studio studio);

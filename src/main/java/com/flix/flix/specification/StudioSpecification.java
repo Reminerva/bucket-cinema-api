@@ -34,9 +34,11 @@ public class StudioSpecification {
                 }
             }
             if (request.getProductId() != null) {
-                predicates.add(cb.equal(root.join("productPricing").get("productIdPricing"), request.getProductId()));
+                System.out.println("ASDF1" + request.getProductId());
+                predicates.add(cb.equal(root.join("productPricing").get("productIdPricing").get("id"), request.getProductId()));
             }
             if (request.getTheaterId() != null) {
+                System.out.println("ASDF1" + request.getTheaterId());
                 predicates.add(cb.equal(root.get("theater").get("id"), request.getTheaterId()));
             }
             if (request.getTheaterName() != null) {

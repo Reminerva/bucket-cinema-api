@@ -16,7 +16,7 @@ import lombok.Setter;
 public class StudioSeatScheduleResponse {
     private String id;
     private String studioId;
-    private String productSchedulingId;
+    private ProductSchedulingResponse productScheduling;
     private List<String> bookedSeat;
     private List<String> availableSeat;
 }

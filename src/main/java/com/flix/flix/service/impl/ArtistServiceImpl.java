@@ -113,6 +113,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public void delete(String id) {
         try {
+            getArtistById(id);
             artistRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException(ApiBash.DELETE_ARTIST_FAILED + ": " + e.getMessage());

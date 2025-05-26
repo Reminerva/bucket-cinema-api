@@ -119,12 +119,11 @@ public class ProductionCompanyController {
     public ResponseEntity<CommonResponse<ProductionCompanyResponse>> deleteProductionCompany(
         @PathVariable String id
     ) {
-        ProductionCompanyResponse productionCompanyResponse = productionCompanyService.getById(id);
         productionCompanyService.delete(id);
         CommonResponse<ProductionCompanyResponse> response = CommonResponse.<ProductionCompanyResponse>builder()
             .code(HttpStatus.OK.value())
             .message(ApiBash.DELETE_PRODUCTION_COMPANY_SUCCESS)
-            .data(productionCompanyResponse)
+            .data(null)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

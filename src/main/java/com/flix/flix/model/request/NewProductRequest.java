@@ -1,5 +1,6 @@
 package com.flix.flix.model.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.Min;
@@ -39,12 +40,16 @@ public class NewProductRequest {
     private String synopsis;
     @NotBlank(message = "tagline is required")
     private String tagline;
-    private Double imdbRating;
-    private Integer rottenTomatoesRating;
+    @Builder.Default
+    private Double imdbRating = 0.0;
+    @Builder.Default
+    private Integer rottenTomatoesRating = 0;
     @NotBlank(message = "production company id is required")
     private String productionCompanyId;
     @NotEmpty(message = "movie genre is required")
     private List<String> movieGenre;
+    @NotEmpty(message = "artist id is required")
     private List<String> artistId;
-    private List<String> showingOnTheaters;
+    @Builder.Default
+    private List<String> showingOnTheaters = new ArrayList<>();
 }

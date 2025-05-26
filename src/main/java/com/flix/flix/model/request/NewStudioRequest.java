@@ -1,5 +1,6 @@
 package com.flix.flix.model.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -25,7 +26,10 @@ public class NewStudioRequest {
     @NotBlank(message = "theater id is required")
     private String theaterId;
 
-    private List<NewStudioSeatScheduleRequest> studioSeatScheduleRequests;
-    private List<NewProductPricingRequest> productPricingRequests;
-    private List<NewProductSchedulingRequest> productSchedulingRequests;
+    @Builder.Default
+    private List<NewStudioSeatScheduleRequest> studioSeatScheduleRequests = new ArrayList<>();
+    @Builder.Default
+    private List<NewProductPricingRequest> productPricingRequests = new ArrayList<>();
+    @Builder.Default
+    private List<NewProductSchedulingRequest> productSchedulingRequests = new ArrayList<>();
 }

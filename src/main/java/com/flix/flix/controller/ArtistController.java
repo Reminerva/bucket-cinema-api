@@ -110,12 +110,11 @@ public class ArtistController {
     public ResponseEntity<CommonResponse<ArtistResponse>> delete (
         @PathVariable String id
     ) {
-        ArtistResponse artistResponse = artistService.getById(id);
         artistService.delete(id);
         CommonResponse<ArtistResponse> response = CommonResponse.<ArtistResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message(ApiBash.DELETE_ARTIST_SUCCESS)
-                .data(artistResponse)
+                .data(null)
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
