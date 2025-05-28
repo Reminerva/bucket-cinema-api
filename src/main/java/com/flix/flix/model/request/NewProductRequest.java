@@ -48,8 +48,8 @@ public class NewProductRequest {
     private String productionCompanyId;
     @NotEmpty(message = "movie genre is required")
     private List<String> movieGenre;
-    @NotEmpty(message = "artist id is required")
-    private List<String> artistId;
+    @NotEmpty(message = "product artist is required")
+    private List<NewProductArtistRequest> productArtistRequests;
     @Builder.Default
     private List<String> showingOnTheaters = new ArrayList<>();
 }

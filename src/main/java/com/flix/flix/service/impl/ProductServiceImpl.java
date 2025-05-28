@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,20 +21,23 @@ import com.flix.flix.constant.custom_enum.ECountry;
 import com.flix.flix.constant.custom_enum.EGenre;
 import com.flix.flix.constant.custom_enum.ELanguage;
 import com.flix.flix.constant.custom_enum.ERated;
-import com.flix.flix.entity.Artist;
 import com.flix.flix.entity.MovieGenre;
 import com.flix.flix.entity.Product;
+import com.flix.flix.entity.ProductArtist;
 import com.flix.flix.entity.ProductionCompany;
 import com.flix.flix.entity.Theater;
+import com.flix.flix.model.request.NewProductArtistRequest;
 import com.flix.flix.model.request.NewProductRequest;
 import com.flix.flix.model.request.search.SearchProductRequest;
+import com.flix.flix.model.response.ProductArtistResponse;
 import com.flix.flix.model.response.ProductResponse;
-import com.flix.flix.repository.ArtistRepository;
+import com.flix.flix.repository.ProductArtistRepository;
 import com.flix.flix.repository.ProductRepository;
 import com.flix.flix.repository.ProductionCompanyRepository;
 import com.flix.flix.repository.TheaterRepository;
 import com.flix.flix.service.ArtistService;
 import com.flix.flix.service.MovieGenreService;
+import com.flix.flix.service.ProductArtistService;
 import com.flix.flix.service.ProductService;
 import com.flix.flix.service.ProductionCompanyService;
 import com.flix.flix.specification.ProductSpecification;
@@ -49,10 +53,11 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final MovieGenreService movieGenreService;
     private final ArtistService artistService;
-    private final ArtistRepository artistRepository;
     private final ProductionCompanyService productionCompanyService;
     private final ProductionCompanyRepository productionCompanyRepository;
     private final TheaterRepository theaterRepository;
+    private final ProductArtistService productArtistService;
+    private final ProductArtistRepository productArtistRepository;
 
 
     @Override
@@ -93,13 +98,25 @@ public class ProductServiceImpl implements ProductService {
                         .build()))
                 .toList();
             
-            List<Artist> artists = productRequest.getArtistId().stream().map(artistId -> artistService.getArtistById(artistId)).toList();
-            product.getArtists().addAll(artists);
+            List<ProductArtist> productArtists = new ArrayList<>();
+            productArtists = productRequest.getProductArtistRequests().stream()
+                .map(productArtistRequest -> productArtistService.create(
+                    ProductArtist.builder()
+                        .product(product)
+                        .artist(artistService.getArtistById(productArtistRequest.getArtistId()))
+                        .artistType(EArtistType.toEArtistTypeList(productArtistRequest.getArtistTypes()))
+                        .build()
+                ))
+                .map(productArtistResponse -> productArtistService.getProductArtistById(productArtistResponse.getId()))
+                .collect(Collectors.toCollection(ArrayList::new));;
+            product.getProductArtists().clear();
+            product.getProductArtists().addAll(productArtists);
 
             product.getMovieGenre().addAll(genres);
 
             return toProductResponse(productRepository.saveAndFlush(product));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(ApiBash.CREATE_PRODUCT_FAILED + ": " + e.getMessage());
         }
     }
@@ -216,19 +233,33 @@ public class ProductServiceImpl implements ProductService {
                     .build()))
                 .toList());
 
-            List<Artist> artists = new ArrayList<>();
-            if (updatedProduct.getArtists() == null) updatedProduct.setArtists(new ArrayList<>());
-            if (productRequest.getArtistId() != null) {
-                for (String artistId : productRequest.getArtistId()) {
-                    Artist artist = artistService.getArtistById(artistId);
-                    if (!updatedProduct.containsArtist(artist)) {
-                        artist.getInProduct().add(updatedProduct);
-                        artists.add(artist);
+            List<ProductArtist> productArtists = new ArrayList<>();
+            if (updatedProduct.getProductArtists() == null) updatedProduct.setProductArtists(new ArrayList<>());
+            if (productRequest.getProductArtistRequests() != null) {
+                for (NewProductArtistRequest productArtistRequest : productRequest.getProductArtistRequests()) {
+                    if (!productArtistRequest.getProductId().equals(id)) throw new RuntimeException(DbBash.PRODUCT_ID_MISMATCH);
+                    ProductArtist productArtist = productArtistService.getProductArtistByProductIdAndArtistId(productArtistRequest.getProductId(), productArtistRequest.getArtistId());
+                    if (productArtist == null) {
+                        ProductArtist productArtistNew = ProductArtist.builder()
+                        .product(updatedProduct)
+                        .artist(artistService.getArtistById(productArtistRequest.getArtistId()))
+                        .artistType(EArtistType.toEArtistTypeList(productArtistRequest.getArtistTypes()))
+                        .build();
+                        ProductArtistResponse productArtistResponse = productArtistService.create(productArtistNew);
+                        productArtists.add(productArtistService.getProductArtistById(productArtistResponse.getId()));
+                    } else {
+                        ProductArtist productArtistUpdate = ProductArtist.builder()
+                            .product(updatedProduct)
+                            .artist(artistService.getArtistById(productArtistRequest.getArtistId()))
+                            .artistType(EArtistType.toEArtistTypeList(productArtistRequest.getArtistTypes()))
+                            .build();
+                        ProductArtistResponse productArtistResponse = productArtistService.update(productArtist.getId(), productArtistUpdate);
+                        productArtists.add(productArtistService.getProductArtistById(productArtistResponse.getId()));
                     }
                 }
             }
-            updatedProduct.setArtists(artists);
-            artistRepository.saveAllAndFlush(artists);
+            updatedProduct.setProductArtists(productArtists);
+            productArtistRepository.saveAllAndFlush(productArtists);
 
             newProductionCompany.getHasProduct().add(updatedProduct);
             productionCompanyRepository.save(newProductionCompany);
@@ -311,12 +342,7 @@ public class ProductServiceImpl implements ProductService {
                 .tagline(product.getTagline())
                 .imdbRating(product.getImdbRating())
                 .rottenTomatoesRating(product.getRottenTomatoesRating())
-                .directorsId(getSecifiedsArtist(product, EArtistType.TYPE_DIRECTOR))
-                .writersId(getSecifiedsArtist(product, EArtistType.TYPE_WRITER))
-                .actorsId(getSecifiedsArtist(product, EArtistType.TYPE_ACTOR))
-                .producersId(getSecifiedsArtist(product, EArtistType.TYPE_PRODUCER))
-                .musicDirectorsId(getSecifiedsArtist(product, EArtistType.TYPE_MUSIC_DIRECTOR))
-                .editorsId(getSecifiedsArtist(product, EArtistType.TYPE_EDITOR))
+                .productArtists(product.getProductArtists().stream().map(productArtist -> productArtistService.toProductArtistResponse(productArtist)).toList())
                 .productionCompanyId(product.getProductionCompany() == null ? null : product.getProductionCompany().getId())
                 .movieGenre(product.getMovieGenre().stream().map(movieGenre -> movieGenre.getGenre().getDescription()).toList())
                 .lastUpdated(product.getLastUpdated().toString())
@@ -329,23 +355,21 @@ public class ProductServiceImpl implements ProductService {
 
     private void validateProductRequest(NewProductRequest productRequest) {
         // cek duplikasi Artist
-        if (productRequest.getArtistId().size() != new HashSet<>(productRequest.getArtistId()).size()) {
+        List<String> artistIds = productRequest.getProductArtistRequests().stream().map(productArtistRequest -> productArtistRequest.getArtistId()).toList();
+        if (artistIds.size() != new HashSet<>(artistIds).size()) {
             throw new RuntimeException(DbBash.DUPLICATE_ARTIST_REQUEST);
         }
+
+        // cek duplikasi artist type
+        productRequest.getProductArtistRequests().forEach(productArtistRequest -> {
+            if (productArtistRequest.getArtistTypes().size() != new HashSet<>(productArtistRequest.getArtistTypes()).size()) {
+                throw new RuntimeException(DbBash.DUPLICATE_ARTIST_TYPE_REQUEST);
+            }
+        });
 
         // cek duplikasi Theater
         if (productRequest.getShowingOnTheaters().size() != new HashSet<>(productRequest.getShowingOnTheaters()).size()) {
             throw new RuntimeException(DbBash.DUPLICATE_THEATER_REQUEST);
         }
-    }
-
-    private List<String> getSecifiedsArtist(Product product, EArtistType artistType) {
-        List<String> artistIds = new ArrayList<>();
-        for (Artist artist : product.getArtists()) {
-            if (artist.getArtistTypes().contains(artistType)) {
-                artistIds.add(artist.getId());
-            }
-        }
-        return artistIds;
     }
 }

@@ -9,6 +9,7 @@ public class DbBash {
     public static final String MOVIE_GENRE_DB = "m_movie_genre";
     public static final String PRODUCT_DB = "m_product";
     public static final String PRODUCT_ARTIST_DB = "t_product_artist";
+    public static final String PRODUCT_ARTIST_TYPE_DB = "t_product_artist_type";
     public static final String PRODUCT_CUSTOMER_LIKE_DB = "t_customer_like_product";
     public static final String PRODUCT_CUSTOMER_DISLIKE_DB = "t_customer_dislike_product";
     public static final String PRODUCT_THEATER_DB = "t_product_theater";
@@ -45,6 +46,7 @@ public class DbBash {
     public static final String STUDIO_SEAT_SCHEDULE_NOT_FOUND = "Studio seat schedule not found";
     public static final String PRODUCT_PRICING_SCHEDULING_ALREADY_EXISTS = "Product pricing scheduling already exists";
     public static final String TRANSACTION_NOT_FOUND = "Transaction not found";
+    public static final String PRODUCT_ARTIST_NOT_FOUND = "Product artist not found";
     
     public static final String PRODUCT_ALREADY_PRICED = "The product has already been priced in the studio";
     public static final String PRODUCT_ALREADY_SCHEDULED = "The product has already been scheduled in exact time in the studio";
@@ -110,5 +112,7 @@ public class DbBash {
     public static final String DUPLICATE_SEAT_REQUEST = "Duplicate seat request";
 
     public static final String SEAT_NOT_IN_REQUEST = "Missing seat in request. Available seat and Booked seat should contains any seat from seat layout";
+
+    public static final String PRODUCT_ID_MISMATCH = "Product id mismatch";
 
 }

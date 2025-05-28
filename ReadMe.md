@@ -1375,12 +1375,76 @@ This section details all the available API endpoints. All successful responses w
     * **Roles:** Admin
     * **Request Example (NewProductRequest):**
         ```json
-        // Will be added later
+        {
+            "title": "The Matrix",
+            "duration": 136,
+            "language": "English",
+            "country": "United States",
+            "releaseDate": "1999-03-31",
+            "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
+            "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
+            "rated": "R",
+            "budget": 63000000,
+            "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+            "tagline": "Welcome to the Real World.",
+            "imdbRating": 8.7,
+            "rottenTomatoesRating": 88,
+            "productionCompanyId": "f9e8d7c6-b5a4-3210-fedc-ba9876543210",
+            "movieGenre": ["Action", "Sci-Fi"],
+            "productArtistRequests": [
+                {
+                    "artistId": "00000000-0000-0000-0000-000000000001",
+                    "productId": null,
+                    "artistTypes": [
+                        "producer"
+                    ] 
+                }
+            ]
+        }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductResponse)
+            "code": 201,
+            "message": "Create product product success",
+            "data": {
+                "id": "d217cc1e-9f2a-426b-b63b-a01b9431f3de",
+                "title": "The Matrix",
+                "duration": 136,
+                "language": "English",
+                "country": "United States",
+                "releaseDate": "1999-03-31",
+                "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
+                "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
+                "rated": "R",
+                "budget": 63000000,
+                "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+                "tagline": "Welcome to the Real World.",
+                "imdbRating": 8.7,
+                "rottenTomatoesRating": 88,
+                "productArtists": [
+                    {
+                        "id": "59e13910-a16f-43a4-a007-1b3e1c9b9dd9",
+                        "productId": "d217cc1e-9f2a-426b-b63b-a01b9431f3de",
+                        "productTitle": "The Matrix",
+                        "artistId": "00000000-0000-0000-0000-000000000001",
+                        "artistName": "Chris Evans",
+                        "artistType": [
+                            "Producer"
+                        ]
+                    }
+                ],
+                "productionCompanyId": "f9e8d7c6-b5a4-3210-fedc-ba9876543210",
+                "movieGenre": [
+                    "Action",
+                    "Sci-Fi"
+                ],
+                "lastUpdated": "2025-05-28",
+                "customerLikeId": null,
+                "customerDislikeId": null,
+                "showingOnTheaters": []
+            },
+            "paging": null
         }
         ```
 * **`GET {Product Base Path}` - Get All Products (Admin, Cashier, Customer)**
@@ -1416,7 +1480,64 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(List<ProductResponse> with paging)
+            "code": 200,
+            "message": "Get all product product success",
+            "data": [
+                {
+                    "id": "prod-001",
+                    "title": "Avengers: Endgame",
+                    "duration": 181,
+                    "language": "English",
+                    "country": "United States",
+                    "releaseDate": "2019-04-26",
+                    "posterUrl": "https://example.com/avengers_poster.png",
+                    "trailerUrl": "https://example.com/avengers_trailer.mp4",
+                    "rated": "PG-13",
+                    "budget": 356000000,
+                    "synopsis": "The culmination of 22 interconnected films.",
+                    "tagline": "Part of the journey is the end.",
+                    "imdbRating": 8.4,
+                    "rottenTomatoesRating": 94,
+                    "productArtists": [
+                        {
+                            "id": "prod_art-01",
+                            "productId": "prod-001",
+                            "productTitle": "Avengers: Endgame",
+                            "artistId": "11111111-2222-3333-4444-555555555555",
+                            "artistName": "Robert Downey Jr.",
+                            "artistType": [
+                                "Actor"
+                            ]
+                        }
+                    ],
+                    "productionCompanyId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+                    "movieGenre": [
+                        "Action",
+                        "Science Fiction"
+                    ],
+                    "lastUpdated": "2025-05-28",
+                    "customerLikeId": null,
+                    "customerDislikeId": null,
+                    "showingOnTheaters": [
+                        {
+                            "id": "theater-001",
+                            "name": "CGV Bandung Electronic Center",
+                            "city": "Bandung",
+                            "address": "Jl. Purnawarman No.13-15",
+                            "contactNumber": "02282060901",
+                            "contactEmail": "bec@cgv.id"
+                        }
+                    ]
+                }
+            ],
+            "paging": {
+                "totalPages": 1,
+                "totalElement": 5,
+                "page": 1,
+                "size": 10,
+                "hasNext": false,
+                "hasPrevious": false
+            }
         }
         ```
 * **`GET {Product Base Path}/{id}` - Get Product By ID (Admin, Cashier, Customer)**
@@ -1428,7 +1549,95 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductResponse)
+            "code": 200,
+            "message": "Get product product success",
+            "data": {
+                "id": "prod-001",
+                "title": "Avengers: Endgame",
+                "duration": 181,
+                "language": "English",
+                "country": "United States",
+                "releaseDate": "2019-04-26",
+                "posterUrl": "https://example.com/avengers_poster.png",
+                "trailerUrl": "https://example.com/avengers_trailer.mp4",
+                "rated": "PG-13",
+                "budget": 356000000,
+                "synopsis": "The culmination of 22 interconnected films.",
+                "tagline": "Part of the journey is the end.",
+                "imdbRating": 8.4,
+                "rottenTomatoesRating": 94,
+                "productArtists": [
+                    {
+                        "id": "prod_art-01",
+                        "productId": "prod-001",
+                        "productTitle": "Avengers: Endgame",
+                        "artistId": "11111111-2222-3333-4444-555555555555",
+                        "artistName": "Robert Downey Jr.",
+                        "artistType": [
+                            "Actor"
+                        ]
+                    },
+                    {
+                        "id": "prod_art-02",
+                        "productId": "prod-001",
+                        "productTitle": "Avengers: Endgame",
+                        "artistId": "66666666-7777-8888-9999-000000000000",
+                        "artistName": "Scarlett Johansson",
+                        "artistType": [
+                            "Actor"
+                        ]
+                    },
+                    {
+                        "id": "prod_art-03",
+                        "productId": "prod-001",
+                        "productTitle": "Avengers: Endgame",
+                        "artistId": "00000000-0000-0000-0000-000000000001",
+                        "artistName": "Chris Evans",
+                        "artistType": [
+                            "Actor"
+                        ]
+                    },
+                    {
+                        "id": "prod_art-04",
+                        "productId": "prod-001",
+                        "productTitle": "Avengers: Endgame",
+                        "artistId": "00000000-0000-0000-0000-000000000002",
+                        "artistName": "Mark Ruffalo",
+                        "artistType": [
+                            "Director"
+                        ]
+                    },
+                    {
+                        "id": "prod_art-05",
+                        "productId": "prod-001",
+                        "productTitle": "Avengers: Endgame",
+                        "artistId": "00000000-0000-0000-0000-000000000003",
+                        "artistName": "Russo Brothers",
+                        "artistType": [
+                            "Producer"
+                        ]
+                    }
+                ],
+                "productionCompanyId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+                "movieGenre": [
+                    "Action",
+                    "Science Fiction"
+                ],
+                "lastUpdated": "2025-05-28",
+                "customerLikeId": null,
+                "customerDislikeId": null,
+                "showingOnTheaters": [
+                    {
+                        "id": "theater-001",
+                        "name": "CGV Bandung Electronic Center",
+                        "city": "Bandung",
+                        "address": "Jl. Purnawarman No.13-15",
+                        "contactNumber": "02282060901",
+                        "contactEmail": "bec@cgv.id"
+                    }
+                ]
+            },
+            "paging": null
         }
         ```
 * **`PUT {Product Base Path}/{id}` - Update Product By ID (Admin Only)**
@@ -1438,12 +1647,97 @@ This section details all the available API endpoints. All successful responses w
         * `id` (string, required): The ID of the product to update.
     * **Request Example (NewProductRequest):**
         ```json
-        // Will be added later
+        {
+            "title": "The Matrix",
+            "duration": 136,
+            "language": "English",
+            "country": "United States",
+            "releaseDate": "1999-03-31",
+            "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
+            "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
+            "rated": "R",
+            "budget": 63000000,
+            "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+            "tagline": "Welcome to the Real World.",
+            "imdbRating": 8.7,
+            "rottenTomatoesRating": 88,
+            "productionCompanyId": "f9e8d7c6-b5a4-3210-fedc-ba9876543210",
+            "movieGenre": ["Action", "Sci-Fi"],
+            "productArtistRequests": [
+                {
+                    "artistId": "00000000-0000-0000-0000-000000000001",
+                    "productId": "c33a23ea-5127-4b91-a0ee-59bf82ad0d69",
+                    "artistTypes": [
+                        "producer"
+                    ] 
+                }
+            ],
+            "showingOnTheaters": [
+                "theater-001",
+                "theater-002"
+            ]
+        }
         ```
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductResponse)
+            "code": 200,
+            "message": "Update product product success",
+            "data": {
+                "id": "c33a23ea-5127-4b91-a0ee-59bf82ad0d69",
+                "title": "The Matrix",
+                "duration": 136,
+                "language": "English",
+                "country": "United States",
+                "releaseDate": "1999-03-31",
+                "posterUrl": "[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)",
+                "trailerUrl": "[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)",
+                "rated": "R",
+                "budget": 63000000,
+                "synopsis": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+                "tagline": "Welcome to the Real World.",
+                "imdbRating": 8.7,
+                "rottenTomatoesRating": 88,
+                "productArtists": [
+                    {
+                        "id": "69131831-ae49-4993-8c35-b3599fa73224",
+                        "productId": "c33a23ea-5127-4b91-a0ee-59bf82ad0d69",
+                        "productTitle": "The Matrix",
+                        "artistId": "00000000-0000-0000-0000-000000000001",
+                        "artistName": "Chris Evans",
+                        "artistType": [
+                            "Producer"
+                        ]
+                    }
+                ],
+                "productionCompanyId": "f9e8d7c6-b5a4-3210-fedc-ba9876543210",
+                "movieGenre": [
+                    "Action",
+                    "Sci-Fi"
+                ],
+                "lastUpdated": "2025-05-28",
+                "customerLikeId": null,
+                "customerDislikeId": null,
+                "showingOnTheaters": [
+                    {
+                        "id": "theater-001",
+                        "name": "CGV Bandung Electronic Center",
+                        "city": "Bandung",
+                        "address": "Jl. Purnawarman No.13-15",
+                        "contactNumber": "02282060901",
+                        "contactEmail": "bec@cgv.id"
+                    },
+                    {
+                        "id": "theater-002",
+                        "name": "XXI Ciwalk",
+                        "city": "Bandung",
+                        "address": "Jl. Cihampelas Walk No.160",
+                        "contactNumber": "0222061021",
+                        "contactEmail": "ciwalk@xxi.co.id"
+                    }
+                ]
+            },
+            "paging": null
         }
         ```
 * **`DELETE {Product Base Path}/{id}/hard-delete` - Hard Delete Product By ID (Admin Only)**
@@ -1455,7 +1749,10 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductResponse)
+            "code": 200,
+            "message": "Hard delete product product success",
+            "data": null,
+            "paging": null
         }
         ```
 * **`DELETE {Product Base Path}/{id}/soft-delete` - Soft Delete Product By ID (Admin Only)**
@@ -1467,7 +1764,10 @@ This section details all the available API endpoints. All successful responses w
     * **Response Example:**
         ```json
         {
-            // Will be added later(ProductResponse)
+            "code": 200,
+            "message": "Soft delete product product success",
+            "data": null,
+            "paging": null
         }
         ```
 </details>

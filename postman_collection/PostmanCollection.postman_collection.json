@@ -17,7 +17,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "// signin request example:\r\n{\r\n    \"email\" : \"admin@flix.com\",\r\n    \"password\" : \"password\"\r\n}\r\n// {\r\n//     \"email\" : \"empName5@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"budi@example.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"empName1@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n\r\n// signup request example:\r\n// {\r\n//     \"fullname\": \"John Doe\",\r\n//     \"country\": \"United States\",\r\n//     \"phoneNumber\": \"1234567890\",\r\n//     \"city\": \"New York\",\r\n//     \"gender\": \"MALE\",\r\n//     \"birthDate\": \"1990-01-15\",\r\n//     \"username\": \"johndoe123\",\r\n//     \"email\": \"john.doe@example.com\",\r\n//     \"password\": \"securepassword123\"\r\n// }",
+					"raw": "// signin request example:\r\n// {\r\n//     \"email\" : \"admin@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"empName5@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"budi@example.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n// {\r\n//     \"email\" : \"empName1@flix.com\",\r\n//     \"password\" : \"password\"\r\n// }\r\n\r\n// signup request example:\r\n// {\r\n//     \"fullname\": \"John Doe\",\r\n//     \"country\": \"United States\",\r\n//     \"phoneNumber\": \"1234567890\",\r\n//     \"city\": \"New York\",\r\n//     \"gender\": \"MALE\",\r\n//     \"birthDate\": \"1990-01-15\",\r\n//     \"username\": \"johndoe123\",\r\n//     \"email\": \"john.doe@example.com\",\r\n//     \"password\": \"securepassword123\"\r\n// }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -433,7 +433,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "// this request will be refactored\r\n{\r\n    \"title\": \"The Matrix\",\r\n    \"duration\": 136,\r\n    \"language\": \"English\",\r\n    \"country\": \"United States\",\r\n    \"releaseDate\": \"1999-03-31\",\r\n    \"posterUrl\": \"[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)\",\r\n    \"trailerUrl\": \"[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)\",\r\n    \"rated\": \"R\",\r\n    \"budget\": 63000000,\r\n    \"synopsis\": \"A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.\",\r\n    \"tagline\": \"Welcome to the Real World.\",\r\n    \"imdbRating\": 8.7,\r\n    \"rottenTomatoesRating\": 88,\r\n    \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n    \"movieGenre\": [\"Action\", \"Sci-Fi\"],\r\n    \"artistId\": [\"00000000-0000-0000-0000-000000000001\", \"abcdef01-2345-6789-abcd-ef0123456789\"]\r\n}",
+					"raw": "// create product request example\r\n// {\r\n//     \"title\": \"The Matrix\",\r\n//     \"duration\": 136,\r\n//     \"language\": \"English\",\r\n//     \"country\": \"United States\",\r\n//     \"releaseDate\": \"1999-03-31\",\r\n//     \"posterUrl\": \"[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)\",\r\n//     \"trailerUrl\": \"[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)\",\r\n//     \"rated\": \"R\",\r\n//     \"budget\": 63000000,\r\n//     \"synopsis\": \"A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.\",\r\n//     \"tagline\": \"Welcome to the Real World.\",\r\n//     \"imdbRating\": 8.7,\r\n//     \"rottenTomatoesRating\": 88,\r\n//     \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n//     \"movieGenre\": [\"Action\", \"Sci-Fi\"],\r\n//     \"productArtistRequests\": [\r\n//         {\r\n//             \"artistId\": \"00000000-0000-0000-0000-000000000001\",\r\n//             \"productId\": null,\r\n//             \"artistTypes\": [\r\n//                 \"producer\"\r\n//             ] \r\n//         }\r\n//     ]\r\n// }\r\n\r\n// update product request example\r\n// {\r\n//     \"title\": \"The Matrix\",\r\n//     \"duration\": 136,\r\n//     \"language\": \"English\",\r\n//     \"country\": \"United States\",\r\n//     \"releaseDate\": \"1999-03-31\",\r\n//     \"posterUrl\": \"[http://example.com/matrix_poster.jpg](http://example.com/matrix_poster.jpg)\",\r\n//     \"trailerUrl\": \"[http://example.com/matrix_trailer.mp4](http://example.com/matrix_trailer.mp4)\",\r\n//     \"rated\": \"R\",\r\n//     \"budget\": 63000000,\r\n//     \"synopsis\": \"A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.\",\r\n//     \"tagline\": \"Welcome to the Real World.\",\r\n//     \"imdbRating\": 8.7,\r\n//     \"rottenTomatoesRating\": 88,\r\n//     \"productionCompanyId\": \"f9e8d7c6-b5a4-3210-fedc-ba9876543210\",\r\n//     \"movieGenre\": [\"Action\", \"Sci-Fi\"],\r\n//     \"productArtistRequests\": [\r\n//         {\r\n//             \"artistId\": \"00000000-0000-0000-0000-000000000001\",\r\n//             \"productId\": \"c33a23ea-5127-4b91-a0ee-59bf82ad0d69\",\r\n//             \"artistTypes\": [\r\n//                 \"producer\"\r\n//             ] \r\n//         }\r\n//     ],\r\n//     \"showingOnTheaters\": [\r\n//         \"theater-001\",\r\n//         \"theater-002\"\r\n//     ]\r\n// }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -441,7 +441,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{SERVER_PORT}}/api/v1/product",
+					"raw": "http://{{SERVER_PORT}}/api/v1/product/c33a23ea-5127-4b91-a0ee-59bf82ad0d69",
 					"protocol": "http",
 					"host": [
 						"{{SERVER_PORT}}"
@@ -449,7 +449,8 @@
 					"path": [
 						"api",
 						"v1",
-						"product"
+						"product",
+						"c33a23ea-5127-4b91-a0ee-59bf82ad0d69"
 					],
 					"query": [
 						{

@@ -2,6 +2,7 @@ package com.flix.flix.service.impl;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import com.flix.flix.model.request.search.SearchArtistRequest;
 import com.flix.flix.model.response.ArtistResponse;
 import com.flix.flix.repository.ArtistRepository;
 import com.flix.flix.service.ArtistService;
+import com.flix.flix.service.ProductArtistService;
 import com.flix.flix.specification.ArtistSpecification;
 import com.flix.flix.util.DateUtil;
 
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class ArtistServiceImpl implements ArtistService {
     
     private final ArtistRepository artistRepository;
+    private final ProductArtistService productArtistService;
 
     @Transactional(rollbackOn = Exception.class)
     @Override
@@ -129,7 +132,7 @@ public class ArtistServiceImpl implements ArtistService {
                 .otherName(artist.getOtherName())
                 .bio(artist.getBio())
                 .artistTypes(artist.getArtistTypes() == null ? null : EArtistType.toEArtistTypeStringList(artist.getArtistTypes()))
-                .productTitle(artist.getInProduct() == null ? null : artist.getInProduct().stream().map(product -> product.getTitle()).toList())
+                .productArtists(artist.getProductArtists() == null ? null : artist.getProductArtists().stream().map(productArtist -> productArtistService.toProductArtistResponse(productArtist)).collect(Collectors.toList()))
                 .build();
     }
 

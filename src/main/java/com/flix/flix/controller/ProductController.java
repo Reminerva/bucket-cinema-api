@@ -133,12 +133,11 @@ public class ProductController {
     public ResponseEntity<CommonResponse<ProductResponse>> hardDeleteProduct(
         @PathVariable String id
     ) {
-        ProductResponse productResponse = productService.getById(id);
         productService.hardDelete(id);
         CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
             .code(HttpStatus.OK.value())
             .message(ApiBash.HARD_DELETE_PRODUCT_SUCCESS)
-            .data(productResponse)
+            .data(null)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -148,12 +147,11 @@ public class ProductController {
     public ResponseEntity<CommonResponse<ProductResponse>> softDeleteProduct(
         @PathVariable String id
     ) {
-        ProductResponse productResponse = productService.getById(id);
         productService.softDelete(id);
         CommonResponse<ProductResponse> response = CommonResponse.<ProductResponse>builder()
             .code(HttpStatus.OK.value())
             .message(ApiBash.SOFT_DELETE_PRODUCT_SUCCESS)
-            .data(productResponse)
+            .data(null)
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

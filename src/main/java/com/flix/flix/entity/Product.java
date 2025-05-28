@@ -95,14 +95,9 @@ public class Product {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Schema(type = "string", example = "2023-03-15")
     private LocalDate lastUpdated;
-    @ManyToMany
-    @JoinTable(
-        name = DbBash.PRODUCT_ARTIST_DB,
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "artist_id")
-    )
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Artist> artists = new ArrayList<>();
+    private List<ProductArtist> productArtists = new ArrayList<>();
     @ManyToMany
     @JoinTable(
         name = DbBash.PRODUCT_CUSTOMER_LIKE_DB,
@@ -135,15 +130,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @Builder.Default
     private List<Transaction> transactions = new ArrayList<>();
-
-    public Boolean containsArtist(Artist artist) {
-        for (int i = 0; i < this.artists.size(); i++) {
-            if (this.artists.get(i).equalsTo(artist)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Boolean containsCustomerLike(Customer customer) {
         for (int i = 0; i < this.customerLike.size(); i++) {

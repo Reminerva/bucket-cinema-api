@@ -28,12 +28,7 @@ public class ProductResponse {
     private String tagline;
     private Double imdbRating;
     private Integer rottenTomatoesRating;
-    private List<String> actorsId;
-    private List<String> directorsId;
-    private List<String> producersId;
-    private List<String> writersId;
-    private List<String> editorsId;
-    private List<String> musicDirectorsId;
+    private List<ProductArtistResponse> productArtists;
     private String productionCompanyId;
     private List<String> movieGenre;
     private String lastUpdated;

@@ -34,6 +34,7 @@ public class FlixDataSeeder implements CommandLineRunner {
     private static final String SEAT_LAYOUT_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.STUDIO_SEAT_LAYOUT_DB + " WHERE studio_id = :studio_id";
     private static final String PRODUCT_SCHEDULING_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_SCHEDULING_DB + " WHERE id = :id";
     private static final String PRODUCT_PRICING_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_PRICING_DB + " WHERE id = :id";
+    private static final String PRODUCT_ARTIST_TYPE_CHECK_QUERY = "SELECT COUNT(*) FROM " + DbBash.PRODUCT_ARTIST_TYPE_DB + " WHERE product_artist_id = :product_artist_id";
 
     private final PasswordEncoder passwordEncoder;
 
@@ -348,59 +349,82 @@ public class FlixDataSeeder implements CommandLineRunner {
 
         // Additional artists for Avengers: Endgame
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "11111111-2222-3333-4444-555555555555")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '11111111-2222-3333-4444-555555555555')").executeUpdate();
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-01', 'prod-001', '11111111-2222-3333-4444-555555555555')").executeUpdate();
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "66666666-7777-8888-9999-000000000000")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '66666666-7777-8888-9999-000000000000')").executeUpdate();
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-02', 'prod-001', '66666666-7777-8888-9999-000000000000')").executeUpdate();
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "00000000-0000-0000-0000-000000000001")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '00000000-0000-0000-0000-000000000001')").executeUpdate(); // Chris Evans
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-03', 'prod-001', '00000000-0000-0000-0000-000000000001')").executeUpdate(); // Chris Evans
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "00000000-0000-0000-0000-000000000002")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '00000000-0000-0000-0000-000000000002')").executeUpdate(); // Mark Ruffalo
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-04', 'prod-001', '00000000-0000-0000-0000-000000000002')").executeUpdate(); // Mark Ruffalo
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-001", "artist_id", "00000000-0000-0000-0000-000000000003")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-001', '00000000-0000-0000-0000-000000000003')").executeUpdate(); // Russo Brothers (Director)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-05', 'prod-001', '00000000-0000-0000-0000-000000000003')").executeUpdate(); // Russo Brothers (Director)
         }
         
         // Artists for The Lion King
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000004")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000004')").executeUpdate(); // Jon Favreau (Director)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-06', 'prod-002', '00000000-0000-0000-0000-000000000004')").executeUpdate(); // Jon Favreau (Director)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000005")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000005')").executeUpdate(); // Hans Zimmer (Music Director)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-07', 'prod-002', '00000000-0000-0000-0000-000000000005')").executeUpdate(); // Hans Zimmer (Music Director)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000006")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000006')").executeUpdate(); // Pharrell Williams (Producer)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-08', 'prod-002', '00000000-0000-0000-0000-000000000006')").executeUpdate(); // Pharrell Williams (Producer)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000007")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000007')").executeUpdate(); // Donald Glover (Actor)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-09', 'prod-002', '00000000-0000-0000-0000-000000000007')").executeUpdate(); // Donald Glover (Actor)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "00000000-0000-0000-0000-000000000008")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '00000000-0000-0000-0000-000000000008')").executeUpdate(); // James Earl Jones (Actor)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-10', 'prod-002', '00000000-0000-0000-0000-000000000008')").executeUpdate(); // James Earl Jones (Actor)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-002", "artist_id", "66666666-7777-8888-9999-000000000000")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-002', '66666666-7777-8888-9999-000000000000')").executeUpdate();
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-11', 'prod-002', '66666666-7777-8888-9999-000000000000')").executeUpdate();
         }
         
         // Artists for Inception
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "abcdef01-2345-6789-abcd-ef0123456789")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-12', 'prod-003', 'abcdef01-2345-6789-abcd-ef0123456789')").executeUpdate();
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000009")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000009')").executeUpdate(); // Leonardo DiCaprio (Actor)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-13', 'prod-003', '00000000-0000-0000-0000-000000000009')").executeUpdate(); // Leonardo DiCaprio (Actor)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000010")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000010')").executeUpdate(); // Joseph Gordon-Levitt (Actor)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-14', 'prod-003', '00000000-0000-0000-0000-000000000010')").executeUpdate(); // Joseph Gordon-Levitt (Actor)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000005")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000005')").executeUpdate(); // Hans Zimmer (Music Director)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-15', 'prod-003', '00000000-0000-0000-0000-000000000005')").executeUpdate(); // Hans Zimmer (Music Director)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000011")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000011')").executeUpdate(); // Emma Thomas (Producer)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-16', 'prod-003', '00000000-0000-0000-0000-000000000011')").executeUpdate(); // Emma Thomas (Producer)
         }
         if (isRelationAbsent(DbBash.PRODUCT_ARTIST_DB, "product_id", "prod-003", "artist_id", "00000000-0000-0000-0000-000000000012")) {
-            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (product_id, artist_id) VALUES ('prod-003', '00000000-0000-0000-0000-000000000012')").executeUpdate(); // Lee Smith (Editor)
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_DB + " (id, product_id, artist_id) VALUES ('prod_art-17', 'prod-003', '00000000-0000-0000-0000-000000000012')").executeUpdate(); // Lee Smith (Editor)
+        }
+
+        // isert artist type for each product artist
+        if (isProductArtistTypeDataAbsent(PRODUCT_ARTIST_TYPE_CHECK_QUERY, "prod_art-01")) {
+            entityManager.createNativeQuery("INSERT INTO " + DbBash.PRODUCT_ARTIST_TYPE_DB + " (product_artist_id, artist_type) VALUES " + 
+                "('prod_art-01', 'TYPE_ACTOR'), " +
+                "('prod_art-02', 'TYPE_ACTOR'), " +
+                "('prod_art-03', 'TYPE_ACTOR'), " +
+                "('prod_art-04', 'TYPE_DIRECTOR'), " +
+                "('prod_art-05', 'TYPE_PRODUCER'), " +
+                "('prod_art-06', 'TYPE_DIRECTOR'), " +
+                "('prod_art-07', 'TYPE_MUSIC_DIRECTOR'), " +
+                "('prod_art-08', 'TYPE_PRODUCER'), " +
+                "('prod_art-09', 'TYPE_ACTOR'), " +
+                "('prod_art-10', 'TYPE_ACTOR'), " +
+                "('prod_art-11', 'TYPE_ACTOR'), " +
+                "('prod_art-12', 'TYPE_DIRECTOR'), " +
+                "('prod_art-13', 'TYPE_ACTOR'), " +
+                "('prod_art-14', 'TYPE_ACTOR'), " +
+                "('prod_art-15', 'TYPE_MUSIC_DIRECTOR'), " +
+                "('prod_art-16', 'TYPE_PRODUCER'), " +
+                "('prod_art-17', 'TYPE_EDITOR') "
+            ).executeUpdate();
         }
     }
 
@@ -442,6 +466,13 @@ public class FlixDataSeeder implements CommandLineRunner {
     private boolean isStudioSeatScheduleDataAbsent(String query, String param) {
         Long count = (Long) entityManager.createNativeQuery(query)
             .setParameter("studio_seat_schedule_id", param)
+            .getSingleResult();
+        return count == 0;
+    }
+
+    private boolean isProductArtistTypeDataAbsent(String query, String param) {
+        Long count = (Long) entityManager.createNativeQuery(query)
+            .setParameter("product_artist_id", param)
             .getSingleResult();
         return count == 0;
     }

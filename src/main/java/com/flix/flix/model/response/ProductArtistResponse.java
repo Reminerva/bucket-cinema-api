@@ -13,13 +13,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ArtistResponse {
+public class ProductArtistResponse {
+
     private String id;
-    private String name;
-    private String placeOfBirth;
-    private String birthDate;
-    private String otherName;
-    private String bio;
-    private List<String> artistTypes;
-    private List<ProductArtistResponse> productArtists;
+    private String productId;
+    private String productTitle;
+    private String artistId;
+    private String artistName;
+    private List<String> artistType;
 }
