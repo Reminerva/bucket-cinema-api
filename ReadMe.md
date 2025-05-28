@@ -2,6 +2,8 @@
 
 This document provides a comprehensive guide to using the Flix API/Bucket Cinema API, including available endpoints, request/response formats, and setup instructions.
 
+**ERD** : https://app.eraser.io/workspace/n9mFfFTEmnOXXWOSxBbY?origin=share
+
 ## Table of Contents
 
 1.  [Getting Started](#1-getting-started)
