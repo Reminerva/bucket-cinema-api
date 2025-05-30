@@ -227,21 +227,12 @@ public class TransactionController {
     @GetMapping("/{id}")
     @PreAuthorize(ApiBash.HAS_ROLE_ADMIN + " || " + ApiBash.HAS_ROLE_CASHIER + " || " + ApiBash.HAS_ROLE_CUSTOMER)
     public ResponseEntity<CommonResponse<TransactionResponse>> getById(@PathVariable String id) {
-        try {
-            CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message(ApiBash.GET_TRANSACTION_SUCCESS)
-                .data(transactionService.getById(id))
-                .build();
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message(e.getMessage())
-                .data(null)
-                .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        CommonResponse<TransactionResponse> response = CommonResponse.<TransactionResponse>builder()
+            .code(HttpStatus.OK.value())
+            .message(ApiBash.GET_TRANSACTION_SUCCESS)
+            .data(transactionService.getById(id))
+            .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

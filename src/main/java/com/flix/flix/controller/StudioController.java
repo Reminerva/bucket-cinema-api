@@ -121,11 +121,12 @@ public class StudioController {
     public ResponseEntity<CommonResponse<List<StudioResponse>>> getMyStudios(
         HttpServletRequest httpServletRequest
     ) {
+        Page<StudioResponse> studios = studioService.getByCredentials(httpServletRequest);
         CommonResponse<List<StudioResponse>> response = CommonResponse.<List<StudioResponse>>builder()
             .code(HttpStatus.OK.value())
-            .message(ApiBash.GET_STUDIO_SUCCESS)
-            .data(studioService.getByCredentials(httpServletRequest).getContent())
-            .paging(PagingUtils.pageToPagingResponse(studioService.getByCredentials(httpServletRequest)))
+            .message(ApiBash.GET_ALL_STUDIO_SUCCESS)
+            .data(studios.getContent())
+            .paging(PagingUtils.pageToPagingResponse(studios))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -137,11 +138,12 @@ public class StudioController {
         @PathVariable String theaterId,
         @PathVariable String productId
     ) {
+        Page<StudioResponse> studios = studioService.getByProductIdAndTheaterId(theaterId, productId);
         CommonResponse<List<StudioResponse>> response = CommonResponse.<List<StudioResponse>>builder()
             .code(HttpStatus.OK.value())
             .message(ApiBash.GET_STUDIO_SUCCESS)
-            .data(studioService.getByProductIdAndTheaterId(theaterId, productId).getContent())
-            .paging(PagingUtils.pageToPagingResponse(studioService.getByProductIdAndTheaterId(theaterId, productId)))
+            .data(studios.getContent())
+            .paging(PagingUtils.pageToPagingResponse(studios))
             .build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

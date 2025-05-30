@@ -24,6 +24,7 @@ import com.flix.flix.service.CustomerService;
 import com.flix.flix.util.PagingUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +40,7 @@ public class UserController {
 
     @PostMapping(ApiBash.AUTH + ApiBash.SIGN_UP)
     public ResponseEntity<CommonResponse<CustomerResponse>> signup(
+        @Valid
         @RequestBody
         NewCustomerRequest newCustomerRequest
     ) {
@@ -52,6 +54,7 @@ public class UserController {
 
     @PostMapping(ApiBash.AUTH + ApiBash.SIGN_IN)
     public ResponseEntity<CommonResponse<SigninResponse>> signin(
+        @Valid
         @RequestBody
         LoginRequest loginRequest
     ) {
