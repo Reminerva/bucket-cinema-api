@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.flix.flix.entity.Employee;
+import com.flix.flix.entity.Product;
 import com.flix.flix.entity.Theater;
 import com.flix.flix.model.request.search.SearchTheaterRequest;
 import com.flix.flix.util.DateUtil;
@@ -14,6 +15,9 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 
 public class TheaterSpecification {
+
+    private TheaterSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Theater> getSpecification(SearchTheaterRequest request) {
         return (root, cq, cb) -> {
@@ -60,13 +64,13 @@ public class TheaterSpecification {
                 havingPredicates.add(cb.equal(cb.countDistinct(employeeJoin), request.getEmployeesName().size()));
             }
             if (request.getProductsTitle() != null && !request.getProductsTitle().isEmpty()) {
-                Join<Theater, Employee> employeeJoin = root.join("products");
+                Join<Theater, Product> productJoin = root.join("products");
                 List<Predicate> hasProductPredicates = new ArrayList<>();
                 for (String product : request.getProductsTitle()) {
-                    hasProductPredicates.add(cb.like(cb.lower(employeeJoin.get("title")), "%" + product.toLowerCase() + "%"));
+                    hasProductPredicates.add(cb.like(cb.lower(productJoin.get("title")), "%" + product.toLowerCase() + "%"));
                 }
                 predicates.add(cb.or(hasProductPredicates.toArray(new Predicate[hasProductPredicates.size()])));
-                havingPredicates.add(cb.equal(cb.countDistinct(employeeJoin), request.getProductsTitle().size()));
+                havingPredicates.add(cb.equal(cb.countDistinct(productJoin), request.getProductsTitle().size()));
             }
 
             cq.groupBy(root.get("id"));

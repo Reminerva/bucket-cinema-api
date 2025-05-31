@@ -17,6 +17,9 @@ import com.flix.flix.util.DateUtil;
 import jakarta.persistence.criteria.Predicate;
 
 public class TransactionSpecification {
+
+    private TransactionSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Transaction> getSpecification(SearchTransactionRequest request) {
         return (root, cq, cb) -> {
@@ -90,9 +93,6 @@ public class TransactionSpecification {
             }
             if (request.getPaymentMethod() != null) {
                 predicates.add(cb.equal(root.get("paymentMethod"), EPaymentMethod.findByDescription(request.getPaymentMethod())));
-            }
-            if (request.getPaymentDateTimeMax() != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("paymentDateTime"), DateUtil.parseDateTime(request.getPaymentDateTimeMax())));
             }
             if (request.getSeats() != null) {
                 for (String seat : request.getSeats()) {

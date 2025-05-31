@@ -20,6 +20,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class CustomerSpecification {
 
+    private CustomerSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Customer> getSpecification(SearchCustomerRequest request) {
         return (root, cq, cb) -> {

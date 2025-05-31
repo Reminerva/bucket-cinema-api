@@ -16,6 +16,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class ArtistSpecification {
 
+    private ArtistSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Artist> getSpecification(SearchArtistRequest request) {
         return (root, cq, cb) -> {

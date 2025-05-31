@@ -14,6 +14,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class EmployeeSpecification {
 
+    private EmployeeSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Employee> getSpecification(SearchEmployeeRequest request) {
         return (root, cq, cb) -> {

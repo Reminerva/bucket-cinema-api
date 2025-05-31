@@ -8,13 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import com.flix.flix.constant.custom_enum.EArtistType;
 import com.flix.flix.entity.Artist;
 import com.flix.flix.entity.Product;
 import com.flix.flix.model.request.search.SearchArtistRequest;
-import com.flix.flix.util.DateUtil;
 
 import jakarta.persistence.criteria.*;
 import org.junit.jupiter.api.BeforeEach;

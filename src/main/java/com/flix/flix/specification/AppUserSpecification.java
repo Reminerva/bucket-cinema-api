@@ -14,6 +14,8 @@ import com.flix.flix.model.request.search.SearchAppUserRequest;
 import jakarta.persistence.criteria.Predicate;
 public class AppUserSpecification {
 
+    private AppUserSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<AppUser> getSpecification(SearchAppUserRequest request) {
         return (root, cq, cb) -> {

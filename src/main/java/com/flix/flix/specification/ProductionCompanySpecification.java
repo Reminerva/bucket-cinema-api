@@ -15,6 +15,8 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 public class ProductionCompanySpecification {
 
+    private ProductionCompanySpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<ProductionCompany> getSpecification(SearchProductionCompanyRequest request) {
         return (root, query, cb) -> {

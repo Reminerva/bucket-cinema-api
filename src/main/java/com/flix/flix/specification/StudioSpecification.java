@@ -14,6 +14,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class StudioSpecification {
 
+    private StudioSpecification() {}
+
     @SuppressWarnings("null")
     public static Specification<Studio> getSpecification(SearchStudioRequest request) {
         return (root, cq, cb) -> {
@@ -34,11 +36,9 @@ public class StudioSpecification {
                 }
             }
             if (request.getProductId() != null) {
-                System.out.println("ASDF1" + request.getProductId());
                 predicates.add(cb.equal(root.join("productPricing").get("productIdPricing").get("id"), request.getProductId()));
             }
             if (request.getTheaterId() != null) {
-                System.out.println("ASDF1" + request.getTheaterId());
                 predicates.add(cb.equal(root.get("theater").get("id"), request.getTheaterId()));
             }
             if (request.getTheaterName() != null) {
