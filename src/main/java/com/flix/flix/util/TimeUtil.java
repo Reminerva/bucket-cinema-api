@@ -4,8 +4,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class TimeUtil {
+public final class TimeUtil {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
+    private TimeUtil() {
+        // This utility class should not be instantiated.
+    }
 
     public static Long stringToLongTimeMinutes(String timeString) {
         LocalTime localTime = LocalTime.parse(timeString, FORMATTER);

@@ -7,7 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public class PagingUtils {
+public final class PagingUtils {
+
+    private PagingUtils() {}
+
     public static <T>Page<T> listToPage(List<T> list, Pageable pageable) {
         if (list == null || list.isEmpty()) {
             return Page.empty(pageable);

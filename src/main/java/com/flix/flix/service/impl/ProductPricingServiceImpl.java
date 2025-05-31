@@ -38,7 +38,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
                     .build();
             return productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
             productPricing.setIsPriceActive(productPricingRequest.getIsPriceActive());
             return productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class ProductPricingServiceImpl implements ProductPricingService {
             productPricing.setIsPriceActive(false);
             productPricingRepository.saveAndFlush(productPricing);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

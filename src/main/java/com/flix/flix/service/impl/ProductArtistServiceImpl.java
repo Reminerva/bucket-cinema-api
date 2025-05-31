@@ -122,11 +122,11 @@ public class ProductArtistServiceImpl implements ProductArtistService {
         try {
             return ProductArtistResponse.builder()
                 .id(productArtist.getId())
-                .productId(productArtist.getProduct().getId())
-                .productTitle(productArtist.getProduct().getTitle())
-                .artistId(productArtist.getArtist().getId())
-                .artistName(productArtist.getArtist().getName())
-                .artistType(EArtistType.toEArtistTypeStringList(productArtist.getArtistType()))
+                .productId(productArtist.getProduct() == null ? null : productArtist.getProduct().getId())
+                .productTitle(productArtist.getProduct() == null ? null : productArtist.getProduct().getTitle())
+                .artistId(productArtist.getArtist() == null ? null : productArtist.getArtist().getId())
+                .artistName(productArtist.getArtist() == null ? null : productArtist.getArtist().getName())
+                .artistType(productArtist.getArtistType() == null || productArtist.getArtistType().isEmpty() ? null : EArtistType.toEArtistTypeStringList(productArtist.getArtistType()))
                 .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

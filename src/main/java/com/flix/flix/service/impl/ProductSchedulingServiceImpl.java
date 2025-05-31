@@ -34,7 +34,7 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
                     .build();
             return productSchedulingRepository.saveAndFlush(productScheduling);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
             productScheduling.setSchedule(ESchedule.findByDescription(productSchedulingRequest.getSchedule()));
             return productSchedulingRepository.saveAndFlush(productScheduling);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class ProductSchedulingServiceImpl implements ProductSchedulingService {
             getProductSchedulingById(id);
             productSchedulingRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
