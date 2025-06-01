@@ -37,23 +37,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class) // Enables Mockito annotations for JUnit 5
+@ExtendWith(MockitoExtension.class)
 public class ProductionCompanyServiceImplTest {
 
-    // --- Mocks ---
-    @Mock // Creates a mock instance of ProductionCompanyRepository
+    @Mock
     private ProductionCompanyRepository productionCompanyRepository;
 
-    @InjectMocks // Injects the mocks into ProductionCompanyServiceImpl
+    @InjectMocks
     private ProductionCompanyServiceImpl productionCompanyService;
 
-    // --- Test Data ---
     private ProductionCompany testProductionCompany;
     private NewProductionCompanyRequest newProductionCompanyRequest;
     private SearchProductionCompanyRequest searchProductionCompanyRequest;
 
-    // --- Setup Method ---
-    @BeforeEach // Runs before each test method
+    @BeforeEach
     void setUp() {
         testProductionCompany = ProductionCompany.builder()
                 .id("pc-id-123")
@@ -74,14 +71,14 @@ public class ProductionCompanyServiceImplTest {
         newProductionCompanyRequest = NewProductionCompanyRequest.builder()
                 .name("New Production Co")
                 .logoUrl("http://newco.com/logo.png")
-                .originCountry(ECountry.COUNTRY_CANADA.getDescription()) // Use description for request
+                .originCountry(ECountry.COUNTRY_CANADA.getDescription())
                 .websiteUrl("http://newco.com")
                 .headquarters("Vancouver, BC")
                 .ceo("John Smith")
                 .description("New Canadian studio.")
                 .contactEmail("info@newco.com")
                 .contactNumber("987-654-3210")
-                .foundedYear("2010-05-15") // String for request
+                .foundedYear("2010-05-15")
                 .build();
 
         searchProductionCompanyRequest = SearchProductionCompanyRequest.builder()
@@ -92,7 +89,6 @@ public class ProductionCompanyServiceImplTest {
                 .build();
     }
 
-    // --- Create Tests ---
     @Test
     void create_shouldReturnProductionCompanyResponse_whenSuccessful() {
         when(productionCompanyRepository.saveAndFlush(any(ProductionCompany.class)))
@@ -188,7 +184,6 @@ public class ProductionCompanyServiceImplTest {
         }
     }
 
-    // --- GetById Tests ---
     @Test
     void getById_shouldReturnProductionCompanyResponse_whenFound() {
         when(productionCompanyRepository.findById(testProductionCompany.getId()))
@@ -217,7 +212,6 @@ public class ProductionCompanyServiceImplTest {
         verify(productionCompanyRepository, times(1)).findById(anyString());
     }
 
-    // --- GetProductionCompanyById Tests (internal helper method) ---
     @Test
     void getProductionCompanyById_shouldReturnProductionCompany_whenFound() {
         when(productionCompanyRepository.findById(testProductionCompany.getId()))
@@ -244,7 +238,6 @@ public class ProductionCompanyServiceImplTest {
         verify(productionCompanyRepository, times(1)).findById(anyString());
     }
 
-    // --- Update Tests ---
     @Test
     void update_shouldReturnProductionCompanyResponse_whenSuccessful() {
         NewProductionCompanyRequest updateRequest = NewProductionCompanyRequest.builder()
@@ -337,7 +330,6 @@ public class ProductionCompanyServiceImplTest {
         }
     }
 
-    // --- Delete Tests ---
     @Test
     void delete_shouldCompleteSuccessfully_whenFound() {
         when(productionCompanyRepository.findById(testProductionCompany.getId()))
@@ -382,7 +374,6 @@ public class ProductionCompanyServiceImplTest {
         verify(productionCompanyRepository, times(1)).deleteById(testProductionCompany.getId());
     }
 
-    // --- GetAll Tests ---
     @Test
     void getAll_shouldReturnPageOfProductionCompanyResponses_whenFound() {
         searchProductionCompanyRequest.setPage(1);

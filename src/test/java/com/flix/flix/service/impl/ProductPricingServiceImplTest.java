@@ -67,7 +67,6 @@ public class ProductPricingServiceImplTest {
                 .build();
     }
 
-    // --- Create Tests ---
     @Test
     void create_shouldReturnProductPricing_whenSuccessful() {
         when(productService.getProductById(testProduct.getId())).thenReturn(testProduct);
@@ -121,7 +120,6 @@ public class ProductPricingServiceImplTest {
         verify(productPricingRepository, times(1)).saveAndFlush(any(ProductPricing.class));
     }
 
-    // --- GetAll Tests ---
     @Test
     void getAll_shouldReturnListOfProductPricings() {
         ProductPricing anotherPricing = ProductPricing.builder()
@@ -158,7 +156,6 @@ public class ProductPricingServiceImplTest {
         verify(productPricingRepository, times(1)).findAll();
     }
 
-    // --- GetProductPricingById Tests ---
     @Test
     void getProductPricingById_shouldReturnProductPricing_whenFound() {
         when(productPricingRepository.findById(testProductPricing.getId()))
@@ -185,7 +182,6 @@ public class ProductPricingServiceImplTest {
         verify(productPricingRepository, times(1)).findById(anyString());
     }
 
-    // --- Update Tests ---
     @Test
     void update_shouldReturnUpdatedProductPricing_whenSuccessful() {
         NewProductPricingRequest updateRequest = NewProductPricingRequest.builder()
@@ -247,7 +243,6 @@ public class ProductPricingServiceImplTest {
         verify(productPricingRepository, times(1)).saveAndFlush(testProductPricing);
     }
 
-    // --- SoftDelete Tests ---
     @Test
     void softDelete_shouldSetIsPriceActiveToFalse_whenSuccessful() {
         when(productPricingRepository.findById(testProductPricing.getId()))
@@ -294,7 +289,6 @@ public class ProductPricingServiceImplTest {
         verify(productPricingRepository, times(1)).saveAndFlush(testProductPricing);
     }
 
-    // --- ToProductPricingResponse Tests ---
     @Test
     void toProductPricingResponse_shouldCorrectlyConvertEntityToResponse() {
         ProductPricingResponse response = productPricingService.toProductPricingResponse(testProductPricing);
@@ -326,7 +320,6 @@ public class ProductPricingServiceImplTest {
         assertNull(response.getProductId()); // Should be null
     }
 
-    // --- GetProductPricingByAttribute Tests ---
     @Test
     void getProductPricingByAttribute_shouldReturnProductPricing_whenFound() {
         when(productService.getProductById(newProductPricingRequest.getProductId())).thenReturn(testProduct);

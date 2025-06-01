@@ -61,12 +61,9 @@ public class MovieGenreServiceImplTest {
                 .build();
     }
 
-    // --- create Tests ---
     @Test
     void create_shouldSaveNewMovieGenre_whenNoDuplicateExists() {
-        // Mock getAll() untuk mengembalikan tidak ada genre film yang sudah ada
         when(movieGenreRepository.findAll()).thenReturn(Collections.emptyList());
-        // Mock saveAndFlush untuk mengembalikan movieGenre yang dilewatkan dengan ID simulasi
         when(movieGenreRepository.saveAndFlush(any(MovieGenre.class))).thenAnswer(invocation -> {
             MovieGenre mg = invocation.getArgument(0);
             mg.setId("new-mg-id"); // Simulasikan pembuatan ID
@@ -86,7 +83,6 @@ public class MovieGenreServiceImplTest {
 
     @Test
     void create_shouldReturnExistingMovieGenre_whenDuplicateExists() {
-        // Mock getAll() untuk mengembalikan daftar yang berisi duplikasi
         when(movieGenreRepository.findAll()).thenReturn(Arrays.asList(movieGenre1, movieGenre2));
 
         MovieGenre result = movieGenreService.create(movieGenreDuplicate);
@@ -113,7 +109,6 @@ public class MovieGenreServiceImplTest {
         verify(movieGenreRepository, times(1)).saveAndFlush(movieGenre1);
     }
 
-    // --- getAll Tests ---
     @Test
     void getAll_shouldReturnListOfAllMovieGenres() {
         List<MovieGenre> expectedMovieGenres = Arrays.asList(movieGenre1, movieGenre2);
@@ -150,7 +145,6 @@ public class MovieGenreServiceImplTest {
         verify(movieGenreRepository, times(1)).findAll();
     }
 
-    // --- getById Tests ---
     @Test
     void getById_shouldReturnMovieGenre_whenFound() {
         when(movieGenreRepository.findById(movieGenre1.getId())).thenReturn(Optional.of(movieGenre1));
@@ -173,7 +167,6 @@ public class MovieGenreServiceImplTest {
         verify(movieGenreRepository, times(1)).findById(anyString());
     }
 
-    // --- update Tests ---
     @Test
     void update_shouldSaveUpdatedMovieGenre_whenFound() {
         MovieGenre updatedMovieGenre = MovieGenre.builder()
@@ -197,7 +190,6 @@ public class MovieGenreServiceImplTest {
 
     @Test
     void update_shouldThrowRuntimeException_whenMovieGenreToUpdateNotFound() {
-        // Mock getById untuk melempar exception
         when(movieGenreRepository.findById(anyString())).thenReturn(Optional.empty());
 
         RuntimeException thrown = assertThrows(RuntimeException.class, () ->
@@ -221,7 +213,6 @@ public class MovieGenreServiceImplTest {
         verify(movieGenreRepository, times(1)).saveAndFlush(movieGenre1);
     }
 
-    // --- delete Tests ---
     @Test
     void delete_shouldDeleteMovieGenre_whenFound() {
         when(movieGenreRepository.findById(movieGenre1.getId())).thenReturn(Optional.of(movieGenre1)); // Untuk panggilan getById
@@ -235,7 +226,6 @@ public class MovieGenreServiceImplTest {
 
     @Test
     void delete_shouldThrowRuntimeException_whenMovieGenreNotFound() {
-        // Mock getById untuk melempar exception
         when(movieGenreRepository.findById(anyString())).thenReturn(Optional.empty());
 
         RuntimeException thrown = assertThrows(RuntimeException.class, () ->

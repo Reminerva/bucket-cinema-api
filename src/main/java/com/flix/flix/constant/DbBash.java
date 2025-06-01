@@ -1,6 +1,9 @@
 package com.flix.flix.constant;
 
 public class DbBash {
+
+    private DbBash() {}
+
     public static final String USER_DB = "m_app_user";
     public static final String APP_USER_ROLE_DB = "t_app_user_role";
     public static final String CUSTOMER_DB = "m_customer";

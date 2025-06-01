@@ -61,7 +61,6 @@ public class FavGenreServiceImplTest {
                 .build();
     }
 
-    // --- create Tests ---
     @Test
     void create_shouldSaveNewFavGenre_whenNoDuplicateExists() {
         when(favGenreRepository.findAll()).thenReturn(Collections.emptyList());
@@ -112,7 +111,6 @@ public class FavGenreServiceImplTest {
         verify(favGenreRepository, times(1)).saveAndFlush(favGenre1);
     }
 
-    // --- getAll Tests ---
     @Test
     void getAll_shouldReturnListOfAllFavGenres() {
         List<FavGenre> expectedFavGenres = Arrays.asList(favGenre1, favGenre2);
@@ -149,7 +147,6 @@ public class FavGenreServiceImplTest {
         verify(favGenreRepository, times(1)).findAll();
     }
 
-    // --- getFavGenreById Tests ---
     @Test
     void getFavGenreById_shouldReturnFavGenre_whenFound() {
         when(favGenreRepository.findById(favGenre1.getId())).thenReturn(Optional.of(favGenre1));
@@ -172,7 +169,6 @@ public class FavGenreServiceImplTest {
         verify(favGenreRepository, times(1)).findById(anyString());
     }
 
-    // --- getById Tests (similar to getFavGenreById) ---
     @Test
     void getById_shouldReturnFavGenre_whenFound() {
         when(favGenreRepository.findById(favGenre1.getId())).thenReturn(Optional.of(favGenre1));
@@ -195,7 +191,6 @@ public class FavGenreServiceImplTest {
         verify(favGenreRepository, times(1)).findById(anyString());
     }
 
-    // --- update Tests ---
     @Test
     void update_shouldSaveUpdatedFavGenre_whenFound() {
         FavGenre updatedFavGenre = FavGenre.builder()
@@ -242,7 +237,6 @@ public class FavGenreServiceImplTest {
         verify(favGenreRepository, times(1)).saveAndFlush(favGenre1);
     }
 
-    // --- delete Tests ---
     @Test
     void delete_shouldDeleteFavGenre_whenFound() {
         when(favGenreRepository.findById(favGenre1.getId())).thenReturn(Optional.of(favGenre1)); // For getById call

@@ -285,30 +285,6 @@ class TheaterServiceImplTest {
     }
 
     @Test
-    void getAll_shouldSetDefaultPageAndSize() {
-        // SearchTheaterRequest searchRequest = new SearchTheaterRequest(); // page and size are 0 by default
-
-        // Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id")); // Default sort is "id"
-        // Page<Theater> theaterPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
-
-        // try (MockedStatic<TheaterSpecification> mockedSpecification = mockStatic(TheaterSpecification.class)) {
-        //     mockedSpecification.when(() -> TheaterSpecification.getSpecification(any(SearchTheaterRequest.class)))
-        //             .thenReturn(mock(Specification.class));
-
-        //     when(httpServletRequest.isUserInRole("ROLE_ADMIN")).thenReturn(true);
-        //     when(theaterRepository.findAll(any(Specification.class), any(Pageable.class)))
-        //             .thenReturn(theaterPage);
-
-        //     theaterService.getAll(searchRequest, httpServletRequest);
-
-        //     assertEquals(1, searchRequest.getPage()); // Should be set to 1
-        //     assertEquals(10, searchRequest.getSize()); // Should be set to 10
-        //     verify(theaterRepository, times(1)).findAll(any(Specification.class), any(Pageable.class));
-        // }
-    }
-
-
-    @Test
     void getAll_shouldThrowRuntimeException_whenCreatedAtMinMaxInvalid() {
         SearchTheaterRequest searchRequest = new SearchTheaterRequest();
         searchRequest.setPage(1);

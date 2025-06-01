@@ -153,7 +153,6 @@ public class EmployeeServiceImplTest {
                 .build();
     }
 
-    // --- create (Employee) Tests ---
     @Test
     void create_shouldReturnEmployeeResponse_whenSuccessful() {
         AppUser newAppUserForCreate = AppUser.builder()
@@ -240,7 +239,6 @@ public class EmployeeServiceImplTest {
         }
     }
 
-    // --- createAdmin Tests ---
     @Test
     void createAdmin_shouldReturnSignupResponse_whenSuccessful() {
         SignupResponse adminSignupResponse = SignupResponse.builder()
@@ -273,7 +271,6 @@ public class EmployeeServiceImplTest {
     }
 
 
-    // --- createCashier Tests ---
     @Test
     void createCashier_shouldReturnEmployeeResponse_whenSuccessful() {
         SignupResponse cashierSignupResponse = SignupResponse.builder()
@@ -346,7 +343,6 @@ public class EmployeeServiceImplTest {
     }
 
 
-    // --- getEmployeeById Tests ---
     @Test
     void getEmployeeById_shouldReturnEmployee_whenFound() {
         when(employeeRepository.findById(testEmployee.getId())).thenReturn(Optional.of(testEmployee));
@@ -369,10 +365,8 @@ public class EmployeeServiceImplTest {
         verify(employeeRepository, times(1)).findById(anyString());
     }
 
-    // --- getById Tests ---
     @Test
     void getById_shouldReturnEmployeeResponse_whenFound() {
-        // Mock toEmployeeResponse dependencies
         try (MockedStatic<EGender> mockedEGender = mockStatic(EGender.class)) {
             mockedEGender.when(() -> EGender.valueOf(anyString())).thenReturn(EGender.GENDER_MALE); // Or whatever conversion logic is needed
             when(employeeRepository.findById(testEmployee.getId())).thenReturn(Optional.of(testEmployee));
@@ -388,7 +382,6 @@ public class EmployeeServiceImplTest {
             assertEquals("trx1", response.getTransactionsId().get(0));
 
             verify(employeeRepository, times(1)).findById(testEmployee.getId());
-            // Implicitly verifies toEmployeeResponse by checking the fields
         }
     }
 
@@ -403,7 +396,6 @@ public class EmployeeServiceImplTest {
         verify(employeeRepository, times(1)).findById(anyString());
     }
 
-    // --- getAll Tests ---
     @Test
     void getAll_shouldReturnPageOfEmployeeResponses_withDefaultPagingAndSorting() {
         SearchEmployeeRequest searchRequest = SearchEmployeeRequest.builder()
@@ -506,7 +498,6 @@ public class EmployeeServiceImplTest {
         }
     }
 
-    // --- update Tests ---
     @Test
     void update_shouldReturnEmployeeResponse_whenSuccessful() {
         Theater updatedTheater = Theater.builder().id(updateEmployeeRequest.getTheaterId()).name("Updated Theater").build();
@@ -562,7 +553,6 @@ public class EmployeeServiceImplTest {
     }
 
 
-    // --- getByCredentials Tests ---
     @Test
     void getByCredentials_shouldReturnEmployeeResponse_whenSuccessful() {
         when(tokenUtil.getAppUserByToken(httpServletRequest)).thenReturn(testAppUser);
@@ -592,7 +582,6 @@ public class EmployeeServiceImplTest {
         verifyNoInteractions(employeeRepository);
     }
 
-    // --- updateByCredentials Tests ---
     @Test
     void updateByCredentials_shouldReturnEmployeeResponse_whenSuccessfulAndAuthorized() {
         AppUser authorizedAppUser = AppUser.builder()
@@ -663,7 +652,6 @@ public class EmployeeServiceImplTest {
         verifyNoInteractions(employeeRepository, theaterService);
     }
 
-    // --- softDelete Tests ---
     @Test
     void softDelete_shouldSetIsActiveToFalse_whenFound() {
         Employee activeEmployee = Employee.builder()
@@ -712,7 +700,6 @@ public class EmployeeServiceImplTest {
         verify(employeeRepository, times(1)).saveAndFlush(any(Employee.class));
     }
 
-    // --- toEmployeeResponse related tests (implicit and explicit) ---
     @Test
     void toEmployeeResponse_shouldHandleNullFields() {
         Employee employeeWithNulls = Employee.builder()
@@ -731,7 +718,6 @@ public class EmployeeServiceImplTest {
                 .transactions(null)
                 .build();
 
-        // Use getById to implicitly call toEmployeeResponse
         when(employeeRepository.findById(employeeWithNulls.getId())).thenReturn(Optional.of(employeeWithNulls));
         EmployeeResponse response = employeeService.getById(employeeWithNulls.getId());
 
@@ -763,7 +749,6 @@ public class EmployeeServiceImplTest {
                 .build();
         employeeWithTransactions.setAppUser(testAppUser); // Set minimal required for toEmployeeResponse
 
-        // Use getById to implicitly call toEmployeeResponse
         when(employeeRepository.findById(employeeWithTransactions.getId())).thenReturn(Optional.of(employeeWithTransactions));
         EmployeeResponse response = employeeService.getById(employeeWithTransactions.getId());
 

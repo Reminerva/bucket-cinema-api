@@ -1,6 +1,9 @@
 package com.flix.flix.constant;
 
 public class ApiBash {
+
+    private ApiBash() {}
+
     public static final String USER = "/api/v1/user";
     public static final String AUTH = "/auth";
     public static final String SIGN_UP = "/signup";

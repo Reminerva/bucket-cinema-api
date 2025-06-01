@@ -95,8 +95,8 @@ public class CustomerServiceImpl implements CustomerService {
             if (searchCustomerRequest.getSize() <= 0) {
                 searchCustomerRequest.setSize(10);
             }
-            if (searchCustomerRequest.getRegistrationDateMin() != null && searchCustomerRequest.getRegistrationDateMin() != null) {
-                if (DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMin()).isAfter(DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMin()))) {
+            if (searchCustomerRequest.getRegistrationDateMin() != null && searchCustomerRequest.getRegistrationDateMax() != null) {
+                if (DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMin()).isAfter(DateUtil.parseDate(searchCustomerRequest.getRegistrationDateMax()))) {
                     throw new RuntimeException(DbBash.MIN_MAX_INVALID);
                 }
             }

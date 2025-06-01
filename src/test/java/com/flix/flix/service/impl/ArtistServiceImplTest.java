@@ -75,10 +75,8 @@ public class ArtistServiceImplTest {
                 .build();
     }
 
-    // --- create Tests ---
     @Test
     void create_shouldReturnArtistResponse_whenSuccessful() {
-        // Mock static utility methods
         try (MockedStatic<DateUtil> mockedDateUtil = mockStatic(DateUtil.class);
                 MockedStatic<EArtistType> mockedEArtistType = mockStatic(EArtistType.class)) {
 
@@ -145,7 +143,6 @@ public class ArtistServiceImplTest {
             mockedDateUtil.when(() -> DateUtil.parseDate(anyString())).thenReturn(LocalDate.now());
             mockedEArtistType.when(() -> EArtistType.toEArtistTypeList(anyList())).thenReturn(Collections.emptyList());
 
-            // Simulate a database error
             doThrow(new RuntimeException("DB Error")).when(artistRepository).saveAndFlush(any(Artist.class));
 
             RuntimeException thrown = assertThrows(RuntimeException.class, () ->
@@ -157,7 +154,6 @@ public class ArtistServiceImplTest {
         }
     }
 
-    // --- getAll Tests ---
     @Test
     void getAll_shouldReturnPageOfArtistResponses_withDefaultPagingAndSorting() {
         SearchArtistRequest searchRequest = SearchArtistRequest.builder()
@@ -224,7 +220,6 @@ public class ArtistServiceImplTest {
             
             mockedStaticSpec.when(() -> ArtistSpecification.getSpecification(searchRequest)).thenReturn(mock(Specification.class));
             
-            // Mock to prevent NPE if map(this::toArtistResponse) is called
             mockedEArtistType.when(() -> EArtistType.toEArtistTypeStringList(anyList())).thenReturn(Collections.emptyList());
 
             doThrow(new RuntimeException("DB access error")).when(artistRepository).findAll(any(Specification.class), any(Pageable.class));
@@ -240,7 +235,6 @@ public class ArtistServiceImplTest {
     }
 
 
-    // --- getById Tests ---
     @Test
     void getById_shouldReturnArtistResponse_whenFound() {
         try (MockedStatic<EArtistType> mockedEArtistType = mockStatic(EArtistType.class)) {
@@ -270,7 +264,6 @@ public class ArtistServiceImplTest {
         verify(artistRepository, times(1)).findById(anyString());
     }
 
-    // --- getArtistById Tests ---
     @Test
     void getArtistById_shouldReturnArtist_whenFound() {
         when(artistRepository.findById(testArtist.getId())).thenReturn(Optional.of(testArtist));
@@ -293,7 +286,6 @@ public class ArtistServiceImplTest {
         verify(artistRepository, times(1)).findById(anyString());
     }
 
-    // --- update Tests ---
     @Test
     void update_shouldReturnArtistResponse_whenSuccessful() {
         NewArtistRequest updatedRequest = NewArtistRequest.builder()
@@ -370,7 +362,6 @@ public class ArtistServiceImplTest {
     }
 
 
-    // --- delete Tests ---
     @Test
     void delete_shouldDeleteArtist_whenFound() {
         when(artistRepository.findById(testArtist.getId())).thenReturn(Optional.of(testArtist));
@@ -408,14 +399,12 @@ public class ArtistServiceImplTest {
         verify(artistRepository, times(1)).deleteById(testArtist.getId());
     }
 
-    // --- toArtistResponse related tests (implicit and explicit) ---
     @Test
     void toArtistResponse_shouldHandleNullBirthDate() {
         Artist artistWithNullDate = Artist.builder().id("id").name("name").birthDate(null).build();
         try (MockedStatic<EArtistType> mockedEArtistType = mockStatic(EArtistType.class)) {
             mockedEArtistType.when(() -> EArtistType.toEArtistTypeStringList(anyList())).thenReturn(Collections.emptyList());
 
-            // Call via getById for simplicity, ensures toArtistResponse is called
             when(artistRepository.findById(artistWithNullDate.getId())).thenReturn(Optional.of(artistWithNullDate));
             ArtistResponse response = artistService.getById(artistWithNullDate.getId());
             assertNull(response.getBirthDate());
@@ -426,11 +415,9 @@ public class ArtistServiceImplTest {
     void toArtistResponse_shouldHandleNullArtistTypes() {
         Artist artistWithNullTypes = Artist.builder().id("id").name("name").artistTypes(null).build();
         
-        // Call via getById for simplicity, ensures toArtistResponse is called
         when(artistRepository.findById(artistWithNullTypes.getId())).thenReturn(Optional.of(artistWithNullTypes));
         ArtistResponse response = artistService.getById(artistWithNullTypes.getId());
         assertNull(response.getArtistTypes());
-        // No need to mock EArtistType.toEArtistTypeStringList because it won't be called if artistTypes is null
     }
 
     @Test
@@ -466,7 +453,4 @@ public class ArtistServiceImplTest {
         }
     }
 
-    // --- validateArtistRequest tests (implicit) ---
-    // Test for this is covered in create_shouldThrowRuntimeException_whenDuplicateArtistType
-    // and update_shouldThrowRuntimeException_whenDuplicateArtistType
 }

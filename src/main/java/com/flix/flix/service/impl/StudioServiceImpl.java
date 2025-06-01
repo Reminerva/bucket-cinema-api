@@ -311,7 +311,7 @@ public class StudioServiceImpl implements StudioService {
         }
     }
 
-    private void validateAvailabilityProduct(NewStudioRequest studioRequest, Studio studio) {
+    protected void validateAvailabilityProduct(NewStudioRequest studioRequest, Studio studio) {
         Theater theater = studio.getTheater();
 
         List<Product> allProducts = studioRequest.getProductPricingRequests().stream()
@@ -325,7 +325,7 @@ public class StudioServiceImpl implements StudioService {
         }
     }
 
-    private Set<String> validateProductPricingRequest(NewStudioRequest studioRequest) {
+    protected Set<String> validateProductPricingRequest(NewStudioRequest studioRequest) {
         Set<String> uniqueProductIds = new HashSet<>();
         List<String> allProductIds = studioRequest.getProductPricingRequests().stream()
             .map(productPricing -> productPricing.getProductId())
@@ -338,7 +338,7 @@ public class StudioServiceImpl implements StudioService {
         return uniqueProductIds;
     }
 
-    private Set<String> validateProductSchedulingRequest(NewStudioRequest studioRequest) {
+    protected Set<String> validateProductSchedulingRequest(NewStudioRequest studioRequest) {
         Set<HashMap<String, String>> uniqueProductSchedules = new HashSet<>();
         Set<String> uniqueProductIds = new HashSet<>();
 
@@ -358,7 +358,7 @@ public class StudioServiceImpl implements StudioService {
         return uniqueProductIds;
     }
 
-    private void validateProductSchedulingRequestSchedule(NewStudioRequest studioRequest) {
+    protected void validateProductSchedulingRequestSchedule(NewStudioRequest studioRequest) {
         Long minNextScheduleInLong = 0L;
         for (NewProductSchedulingRequest productSchedulingRequest : studioRequest.getProductSchedulingRequests()) {
             Product product = productService.getProductById(productSchedulingRequest.getProductId());
@@ -374,14 +374,14 @@ public class StudioServiceImpl implements StudioService {
         }
     }
 
-    private void validateProductPricingAndScheduling(Set<String> uniqueProductIdsInPricing, Set<String> uniqueProductIdsInScheduling) {
+    protected void validateProductPricingAndScheduling(Set<String> uniqueProductIdsInPricing, Set<String> uniqueProductIdsInScheduling) {
         uniqueProductIdsInPricing.removeAll(uniqueProductIdsInScheduling);
         if (!uniqueProductIdsInPricing.isEmpty()) {
             throw new RuntimeException(DbBash.PRODUCT_PRICING_AND_PRODUCT_SCHEDULING_NOT_MATCH);
         }
     }
 
-    private List<ProductPricing> getNewProductPricings(NewStudioRequest studioRequest, Studio studio) {
+    protected List<ProductPricing> getNewProductPricings(NewStudioRequest studioRequest, Studio studio) {
         for (ProductPricing productPricing : studio.getProductPricing()) {
             productPricing.getStudios().remove(studio);
         }
@@ -403,7 +403,7 @@ public class StudioServiceImpl implements StudioService {
         return newProductPricings;
     }
 
-    private List<ProductScheduling> getNewProductSchedulings(NewStudioRequest studioRequest, Studio studio) {
+    protected List<ProductScheduling> getNewProductSchedulings(NewStudioRequest studioRequest, Studio studio) {
         for (ProductScheduling productScheduling : studio.getProductScheduling()) {
             productScheduling.getStudios().remove(studio);
         }
