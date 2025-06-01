@@ -2,6 +2,9 @@
 
 This document provides a comprehensive guide to using the Flix API/Bucket Cinema API, including available endpoints, request/response formats, and setup instructions.
 
+## Flix API/Bucket Cinema API
+A robust Java-based RESTful API for managing a comprehensive movie theater system — from users and films to studios and transactions — tested with JUnit & Mockito, achieving 90% unit test coverage.
+
 **ERD** : https://app.eraser.io/workspace/n9mFfFTEmnOXXWOSxBbY?origin=share
 
 ## Table of Contents
