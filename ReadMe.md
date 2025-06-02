@@ -1,4 +1,4 @@
-# Flix API Documentation
+# Flix/Bucket Cinema API Documentation
 
 This document provides a comprehensive guide to using the Flix API/Bucket Cinema API, including available endpoints, request/response formats, and setup instructions.
 
